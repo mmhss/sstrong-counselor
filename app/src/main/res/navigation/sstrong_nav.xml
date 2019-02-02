@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sstrong_nav"
+    app:startDestination="@id/tab_posts">
+
+    <fragment
+        android:id="@+id/tab_awards"
+        android:name="com.hsd.avh.standstrong.fragments.AwardFragment"
+        android:label="Sample"
+        tools:layout="@layout/fragment_awards" />
+
+    <fragment
+        android:id="@+id/tab_posts"
+        android:name="com.hsd.avh.standstrong.fragments.PostListFragment"
+        android:label="Sample"
+        tools:layout="@layout/fragment_post" >
+        <action
+            android:id="@+id/action_post_list_to_post_detail"
+            app:destination="@id/post_detail_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/tab_people"
+        android:name="com.hsd.avh.standstrong.fragments.PeopleFragment"
+        android:label="Sample"
+        tools:layout="@layout/fragment_people" >
+        <action
+            android:id="@+id/action_people_list_to_person_detail"
+            app:destination="@id/people_detail_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/people_detail_fragment"
+        android:name="com.hsd.avh.standstrong.fragments.PeopleDetailFragment"
+        android:label="Sample"
+        tools:layout="@layout/fragment_people_details">
+        <argument
+            android:name="personId"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/post_detail_fragment"
+        android:name="com.hsd.avh.standstrong.fragments.PostDetailFragment"
+        android:label="Sample"
+        tools:layout="@layout/fragment_post_details">
+        <argument
+            android:name="postId"
+            app:argType="string" />
+    </fragment>
+
+
+</navigation>

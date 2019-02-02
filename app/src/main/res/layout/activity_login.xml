@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="userAuthentication"
+            type="com.hsd.avh.standstrong.utilities.UserAuthentication" />
+    </data>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/gradient_background"
+        android:fillViewport="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@drawable/gradient_background"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/activity_horizontal_margin">
+
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_gravity="center"
+                    android:alpha="0.2"
+                    android:src="@drawable/shadow" />
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ganesh" />
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:gravity="top|center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:gravity="center"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:text="@string/login_code"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/activity_horizontal_margin2"
+                        android:backgroundTint="@android:color/white"
+                        android:hint="*"
+                        android:id="@+id/otp1"
+                        android:inputType="number"
+                        android:maxLength="1"
+                        android:paddingStart="8dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="16dp"
+                        android:textColor="@android:color/white"
+                        android:textColorHint="@color/lightgrey"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:text="@={userAuthentication.t1}"/>
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/activity_horizontal_margin2"
+                        android:backgroundTint="@android:color/white"
+                        android:hint="*"
+                        android:id="@+id/otp2"
+                        android:inputType="number"
+                        android:maxLength="1"
+                        android:paddingStart="8dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="16dp"
+                        android:textColor="@android:color/white"
+                        android:textColorHint="@color/lightgrey"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:text="@={userAuthentication.t2}"/>
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/activity_horizontal_margin2"
+                        android:backgroundTint="@android:color/white"
+                        android:hint="*"
+                        android:id="@+id/otp3"
+                        android:inputType="number"
+                        android:maxLength="1"
+                        android:paddingStart="8dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="16dp"
+                        android:textColor="@android:color/white"
+                        android:textColorHint="@color/lightgrey"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:text="@={userAuthentication.t3}"/>
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/activity_horizontal_margin2"
+                        android:backgroundTint="@android:color/white"
+                        android:hint="*"
+                        android:id="@+id/otp4"
+                        android:inputType="number"
+                        android:maxLength="1"
+                        android:paddingStart="8dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="16dp"
+                        android:textColor="@android:color/white"
+                        android:textColorHint="@color/lightgrey"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:text="@={userAuthentication.t4}"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/activity_horizontal_margin2"
+                    android:gravity="center"
+                    android:padding="@dimen/activity_horizontal_margin2"
+                    android:text="@string/login_message"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+                    android:textColor="@android:color/white" />
+
+                <ImageButton
+                    android:id="@+id/verify_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/activity_horizontal_margin"
+                    android:background="@drawable/background_circle"
+                    android:backgroundTint="@android:color/white"
+                    android:elevation="10dp"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    app:srcCompat="@drawable/ic_arrow_forward_black_24dp"
+                    android:tint="@color/indigo_blue"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+</layout>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--<color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+-->
+    <!-- Gradient Colors -->
+    <!--<color name="startGradient">#ffffee</color>
+    <color name="centerGradient">#ffccbc</color>
+    <color name="endGradient">#cb9b8c</color>
+-->
+
+    <color name="colorPrimary">#bf360c</color>
+    <color name="colorPrimaryDark">#870000</color>
+    <color name="colorAccent">#fb360c</color>
+    <color name="colorPrimaryLight">#f9683a</color>
+    <color name="primaryTextColor">#ffffff</color>
+
+
+    <color name="startGradient">#f9683a</color>
+    <color name="centerGradient">#fb360c</color>
+    <color name="endGradient">#870000</color>
+
+
+
+    <!-- Other Colors -->
+    <color name="fontColor">#616161</color>
+    <color name="light500">#FF9E9E9E</color>
+    <color name="custom">#546e7a</color>
+    <color name="red">#f44336</color>
+    <color name="green">#7fb546</color>
+    <color name="transparent">#00000000</color>
+    <color name="lightgrey">#FFE0E0E0</color>
+    <color name="light200">#FFEEEEEE</color>
+    <color name="light100">#FFF5F5F5</color>
+    <color name="darkBlue">#1976d2</color> <!-- 700 -->
+    <color name="materialBlue">#448aff</color>  <!-- 200 -->
+    <color name="materialBlue900">#2979ff</color> <!-- 400 -->
+    <color name="blueTransparent">#28448aff</color>
+    <color name="blueAccent">#536dfe</color>
+    <color name="blue">#8c9eff</color>
+    <color name="amber">#FFFFAB00</color>
+    <color name="amber_trans">#32FFAB00</color>
+    <color name="dark">#FFE0E0E0</color>
+
+    <color name="purple">#aa00ff</color>
+    <color name="purpleAccent">#6200ea</color>
+    <color name="purpleDark">#4C00D5</color>
+    <color name="cranePurpleDark">#5c1349</color>
+    <color name="cranePurple">#FF6E1958</color>
+    <color name="pink">#f06292</color>
+    <color name="material_purple">#e1bee7</color>
+    <color name="icon_blue">#448aff</color>
+    <color name="indigo_blue">#FF1A237E</color>
+    <color name="indigo700">#FF303F9F</color>
+
+
+    <color name="basilPrimary">#fffde7</color>
+    <color name="basilPrimaryDark">#fff3e0</color>
+    <color name="basilAccent">#d84315</color>
+    <color name="basilTextPrimary">#37474f</color>
+    <color name="basilTextSecondary">#43a047</color>
+    <color name="basilTextAccent">#c8e6c9</color>
+    <color name="greenAccent">#69f0ae</color>
+
+
+    <color name="whatsAppPrimary">#00695c</color>
+    <color name="whatsAppDark">#004d40</color>
+    <color name="whatsAppAccent">#25D366</color>
+
+    <color name="colorPrimary2">#3F51B5</color>
+    <color name="colorPrimaryDark2">#26A773</color>
+    <color name="colorAccent2">#1D3F65</color>
+
+    <color name="colorGrey">#c2c2c2</color>
+
+
+    <color name="shrineColorPrimary">#E0E0E0</color>
+    <color name="shrineColorPrimaryDark">#FBB8AC</color>
+    <color name="shrineColorAccent">#FEDBD0</color>
+
+</resources>

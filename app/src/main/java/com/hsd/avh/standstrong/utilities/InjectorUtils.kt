@@ -1,0 +1,73 @@
+package com.hsd.avh.standstrong.utilities
+
+import android.content.Context
+
+import com.hsd.avh.standstrong.data.AppDatabase
+import com.hsd.avh.standstrong.data.awards.AwardRepository
+import com.hsd.avh.standstrong.data.people.PersonRepository
+import com.hsd.avh.standstrong.data.posts.PostRepository
+import com.hsd.avh.standstrong.viewmodels.*
+
+/**
+ * Static methods used to inject classes needed for various Activities and Fragments.
+ */
+object InjectorUtils {
+
+    private fun getPostRepository(context: Context): PostRepository {
+        return PostRepository.getInstance(AppDatabase.getInstance(context).postDao())
+    }
+    private fun getAwardRepository(context: Context): AwardRepository {
+        return AwardRepository.getInstance(AppDatabase.getInstance(context).awardDao())
+    }
+    private fun getPeopleRepository(context: Context): PersonRepository {
+        return PersonRepository.getInstance(AppDatabase.getInstance(context).personDao())
+    }
+
+
+    fun providePostListViewModelFactory(
+        context: Context
+    ): PostListViewModelFactory {
+        val repository = getPostRepository(context)
+        return PostListViewModelFactory(repository)
+    }
+
+    fun provideAwardListViewModelFactory(
+            context: Context
+    ): AwardViewModelFactory {
+        val repository = getAwardRepository(context)
+        return AwardViewModelFactory(repository)
+    }
+
+    fun providePersonViewModelFactory(
+            context: Context
+    ): PeopleViewModelFactory {
+        val repository = getPeopleRepository(context)
+        return PeopleViewModelFactory(repository)
+    }
+
+    fun providePersonDetailViewModelFactory(
+        context: Context,
+        personId: String
+    ): PersonDetailViewModelFactory {
+        return PersonDetailViewModelFactory(getPeopleRepository(context), personId)
+    }
+
+    fun providePostDetailViewModelFactory(
+            context: Context,
+            postId: String
+    ): PostDetailViewModelFactory {
+        return PostDetailViewModelFactory(getPostRepository(context), postId)
+    }
+
+    fun getResourceID(resName: String, resType: String, ctx: Context): Int {
+        val ResourceID = ctx.resources.getIdentifier(resName, resType,
+                ctx.applicationInfo.packageName)
+        return if (ResourceID == 0) {
+            throw IllegalArgumentException(
+                    "No resource string found with name $resName"
+            )
+        } else {
+            ResourceID
+        }
+    }
+}

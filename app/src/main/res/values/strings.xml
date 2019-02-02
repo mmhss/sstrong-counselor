@@ -1,0 +1,48 @@
+<resources>
+    <string name="app_name">StandStrong</string>
+    <string name="home">Home</string>
+    <string name="people">People</string>
+    <string name="awards">Awards</string>
+
+    <string name="no_posts">No posts yet available...</string>
+    <string name="no_posts_long">New posts will show up here as data begins to be collected from your clients.</string>
+
+    <string name="no_people">No people</string>
+    <string name="no_people_long">No people are yet connected to your account. People will show up as they are connected to you.</string>
+
+    <string name="no_awards">No Awards</string>
+    <string name="no_awards_long">None of your participants have unlocked awards yet. Keep checking back and be the first to congratulate them.</string>
+
+    <string name="login_code">LOGIN CODE</string>
+    <string name="login_message">Please enter your 4 digit password to begin.</string>
+
+
+    <string name="notification_title">StandStrong</string>
+    <string name="notification_description_people">New clients added.</string>
+    <string name="notification_description_award">New awards issued.</string>
+    <string name="notification_ticker">{New data from StandStrong clients.}</string>
+
+
+    <!-- String plurals and their related prefix / suffix strings -->
+    <string name="post_prefix">Posts:</string>
+    <plurals name="post_suffix">
+        <item quantity="one" >post</item>
+        <item quantity="other" >%d posts</item>
+    </plurals>
+
+
+
+    <!-- Temp -->
+    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
+    <string name="lorem2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."\n""\n"
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
+    <string name="no_translate_post_frag_label">post list nav fragment</string>
+    <string name="no_translate_post_detail_label">post detail label</string>
+
+
+</resources>

@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "62729010876",
+    "firebase_url": "https://standstrong-chw.firebaseio.com",
+    "project_id": "standstrong-chw",
+    "storage_bucket": "standstrong-chw.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:62729010876:android:f99ae8f35fd175a5",
+        "android_client_info": {
+          "package_name": "com.hsd.avh.standstrong"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "62729010876-9a75r70qp53qlrke6ahuihb8rao71343.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZ6q70vKqGAcddqY4Pf-cx8g3Pr_flGQw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:62729010876:android:97d3d5564deaae62",
+        "android_client_info": {
+          "package_name": "com.hsd.avh.standstrong.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "62729010876-9a75r70qp53qlrke6ahuihb8rao71343.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZ6q70vKqGAcddqY4Pf-cx8g3Pr_flGQw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
