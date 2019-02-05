@@ -9,6 +9,9 @@
             name="clickListener"
             type="android.view.View.OnClickListener"/>
         <variable
+            name="commentClickListener"
+            type="android.view.View.OnClickListener"/>
+        <variable
             name="post"
             type="com.hsd.avh.standstrong.data.posts.Post"/>
 
@@ -44,7 +47,7 @@
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_weight="0.1"
-                        app:imageFromUrl="@{post.mediaUrl}" />
+                        app:imageFromUrl="@{post.avatarUrl}" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -59,7 +62,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="2dp"
-                            android:text="@{post.postTxtHeader}"
+                            android:text="@{post.cardHeader}"
                             android:textColor="@color/colorPrimary"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -69,11 +72,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="2dp"
-                            android:text="Chitwan, Nepal"
+                            android:text="@{post.cardSubHeader}"
                             android:textColor="@color/colorPrimary"
                             android:textSize="12sp" />
 
                     </LinearLayout>
+<!--
 
                     <ImageView
                         android:id="@+id/more_vertical"
@@ -83,6 +87,7 @@
                         android:layout_weight="0.15"
                         app:srcCompat="@drawable/ic_more_vert_black_24dp"
                         android:tint="@color/colorPrimaryDark" />
+-->
 
                 </LinearLayout>
 
@@ -99,7 +104,7 @@
                     android:adjustViewBounds="true"
                     android:background="@color/lightgrey"
                     android:scaleType="centerCrop"
-                    app:imageFromUrl="@{post.mediaUrl}" />
+                    app:srcFromDrawable="@{post.mediaUrl}" />
 
                 <LinearLayout
                     android:id="@+id/linearlayout1"
@@ -110,6 +115,7 @@
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:padding="@dimen/activity_horizontal_margin2">
+<!--
 
                     <ImageView
                         android:id="@+id/like_feed1"
@@ -120,6 +126,18 @@
                         app:srcCompat="@drawable/ic_favorite_border_black_24dp"
                         android:backgroundTint="@color/fontColor"
                         tools:ignore="NestedWeights" />
+-->
+
+                    <com.varunest.sparkbutton.SparkButton
+                        android:id="@+id/spark_button"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:checked="@{post.liked}"
+                        app:sparkbutton_activeImage="@drawable/ic_heart_on"
+                        app:sparkbutton_inActiveImage="@drawable/ic_heart_off"
+                        app:sparkbutton_iconSize="20dp"
+
+                        />
 
                     <ImageView
                         android:id="@+id/comment_feed1"
@@ -129,31 +147,25 @@
                         android:layout_weight="0.25"
                         android:padding="2dp"
                         app:srcCompat="@drawable/ic_chat_black_24dp"
-                        android:tint="@color/fontColor" />
+                        android:tint="@color/fontColor"
+                        android:onClick="@{commentClickListener}"/>
 
-                    <ImageView
-                        android:id="@+id/share_feed1"
-                        android:layout_width="0dp"
+                    <TextView
+                        android:id="@+id/comment_count"
+                        android:layout_width="wrap_content"
                         android:layout_height="36dp"
                         android:layout_marginStart="@dimen/activity_horizontal_margin2"
                         android:layout_weight="0.25"
                         android:padding="2dp"
-                        app:srcCompat="@drawable/ic_outline_near_me_24"
+                        android:text="@{`` + post.commentCount + ` comments`}"
                         android:tint="@color/fontColor" />
+
 
                     <View
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1" />
 
-                    <ImageView
-                        android:id="@+id/save_feed1"
-                        android:layout_width="0dp"
-                        android:layout_height="36dp"
-                        android:layout_weight="0.25"
-                        android:padding="2dp"
-                        app:srcCompat="@drawable/ic_bookmark_border_black_24dp"
-                        android:tint="@color/fontColor" />
 
                 </LinearLayout>
 
@@ -169,7 +181,7 @@
                         android:id="@+id/subName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Sharath Babu"
+                        android:text="@{post.postHeader}"
                         android:textColor="@color/colorPrimary"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -178,7 +190,7 @@
                         android:id="@+id/subDescription"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/lorem"
+                        android:text="@{post.postSubHeader}"
                         android:textColor="@color/colorPrimary"
                         android:textSize="14sp" />
 
@@ -186,7 +198,7 @@
                         android:id="@+id/date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="8 September 2016"
+                        app:readableDate="@{post.postDate}"
                         android:textColor="@color/fontColor"
                         android:textSize="12sp" />
                 </LinearLayout>

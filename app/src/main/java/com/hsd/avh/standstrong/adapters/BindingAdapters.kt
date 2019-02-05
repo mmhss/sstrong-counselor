@@ -7,8 +7,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.hsd.avh.standstrong.StandStrong
 import com.hsd.avh.standstrong.utilities.InjectorUtils
-
-
+import android.widget.TextView
+import androidx.annotation.NonNull
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 @BindingAdapter("isGone")
@@ -40,4 +42,10 @@ fun setImageDrawable(view: ImageView, imageStr: String?) {
         val resId = InjectorUtils.getResourceID(imageStr,"drawable", StandStrong.applicationContext())
         view.setImageResource(resId)
     }
+}
+
+@BindingAdapter("readableDate")
+fun bindServerDate(textView: TextView, date: Date) {
+    var sdfDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+    textView.text = sdfDate.format(date)
 }

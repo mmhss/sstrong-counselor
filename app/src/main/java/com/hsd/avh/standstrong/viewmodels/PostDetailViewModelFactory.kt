@@ -11,7 +11,7 @@ import com.hsd.avh.standstrong.data.posts.PostRepository
  */
 class PostDetailViewModelFactory(
     private val repository: PostRepository,
-    private val postId: String
+    private val postId: Int
 ) : ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")

@@ -22,16 +22,17 @@ import com.hsd.avh.standstrong.workers.SeedDatabaseWorker
 /**
  * The Room database for this app
  */
-@Database(entities = [Person::class, Post::class, Award::class, Message::class], version = 1, exportSchema = false)
+@Database(entities = [Person::class, Post::class, Award::class, Message::class,ApiActivity::class,ApiProximity::class,ApiGPS::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun personDao(): PersonDao
     abstract fun postDao(): PostDao
     abstract fun awardDao(): AwardDao
     abstract fun messageDao(): MessageDao
-   // abstract fun counsellorDao(): CounsellorDao
-    /*abstract fun supervisorDao(): SupervisorDao
-*/
+    abstract fun activityDao(): ActivityDao
+    abstract fun proximityDao(): ProximityDao
+    abstract fun gpsDao(): GPSDao
+
     companion object {
 
         // For Singleton instantiation

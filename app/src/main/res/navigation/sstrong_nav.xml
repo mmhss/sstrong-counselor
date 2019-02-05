@@ -23,6 +23,13 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_post_list_to_messages"
+            app:destination="@id/message_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/tab_people"
@@ -51,12 +58,26 @@
     <fragment
         android:id="@+id/post_detail_fragment"
         android:name="com.hsd.avh.standstrong.fragments.PostDetailFragment"
-        android:label="Sample"
+        android:label="Post Details"
         tools:layout="@layout/fragment_post_details">
         <argument
             android:name="postId"
-            app:argType="string" />
+            app:argType="integer" />
     </fragment>
+
+    <fragment
+        android:id="@+id/message_fragment"
+        android:name="com.hsd.avh.standstrong.fragments.MessageFragment"
+        android:label="Messages"
+        tools:layout="@layout/fragment_message">
+        <argument
+            android:name="motherId"
+            app:argType="integer" />
+        <argument
+            android:name="postId"
+            app:argType="integer" />
+    </fragment>
+
 
 
 </navigation>

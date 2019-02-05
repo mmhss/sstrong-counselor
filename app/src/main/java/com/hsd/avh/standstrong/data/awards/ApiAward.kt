@@ -1,21 +1,25 @@
 package com.hsd.avh.standstrong.data.awards
 
-
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-//TODO
 class ApiAward {
 
     @SerializedName("id")
     @Expose
     var id: Int? = null
-    @SerializedName("identificationNumber")
+    @SerializedName("awardType")
     @Expose
-    var identificationNumber: String? = null
-    @SerializedName("status")
+    var awardType: String? = null
+    @SerializedName("awardLevel")
     @Expose
-    var status: String? = null
+    var awardLevel: Int? = null
+    @SerializedName("awardForDate")
+    @Expose
+    var awardForDate: String? = null
+    @SerializedName("mother")
+    @Expose
+    var mother: Mother? = null
 
     /**
      * No args constructor for use in serialization
@@ -26,28 +30,38 @@ class ApiAward {
     /**
      *
      * @param id
-     * @param status
-     * @param identificationNumber
+     * @param awardLevel
+     * @param awardType
+     * @param mother
+     * @param awardForDate
      */
-    constructor(id: Int?, identificationNumber: String, status: String) : super() {
+    constructor(id: Int?, awardType: String, awardLevel: Int?, awardForDate: String, mother: Mother) : super() {
         this.id = id
-        this.identificationNumber = identificationNumber
-        this.status = status
+        this.awardType = awardType
+        this.awardLevel = awardLevel
+        this.awardForDate = awardForDate
+        this.mother= mother
     }
 
-    fun withId(id: Int?): ApiAward {
-        this.id = id
-        return this
-    }
+    inner class Mother {
 
-    fun withIdentificationNumber(identificationNumber: String): ApiAward {
-        this.identificationNumber = identificationNumber
-        return this
-    }
+        @SerializedName("id")
+        @Expose
+        var id: Int? = null
 
-    fun withStatus(status: String): ApiAward {
-        this.status = status
-        return this
-    }
+        /**
+         * No args constructor for use in serialization
+         *
+         */
+        constructor() {}
 
+        /**
+         *
+         * @param id
+         */
+        constructor(id: Int?) : super() {
+            this.id = id
+        }
+
+    }
 }

@@ -12,17 +12,23 @@ interface MessageDao {
     @Query("SELECT * FROM messages")
     fun getMessages(): LiveData<List<Message>>
 
-    @Query("SELECT * FROM messages WHERE id = :msgId")
-    fun getMessageById(msgId: String): LiveData<Message>
+    @Query("SELECT * FROM messages WHERE id = :rowId")
+    fun getMessageById(rowId: Long): Message
 
-    @Query("SELECT * FROM messages WHERE person_id = :personId")
-    fun getMessagesForPerson(personId: String): LiveData<Message>
+
+    @Query("SELECT * FROM messages WHERE thread = :postId")
+    fun getMessageByPostId(postId: Int): LiveData<List<Message>>
+
+
+    @Query("SELECT * FROM messages WHERE mother_id = :motherId")
+    fun getMessagesForMotherId(motherId: Int): LiveData<Message>
+
 
     @Insert
-    fun insertAward(message: Message): Long
+    fun insertMessage(message: Message): Long
 
     @Delete
-    fun deleteAward(message: Message)
+    fun deleteMessage(message: Message)
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

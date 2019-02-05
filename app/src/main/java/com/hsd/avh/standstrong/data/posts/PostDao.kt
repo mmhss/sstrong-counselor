@@ -14,10 +14,22 @@ interface PostDao {
     fun getPosts(): LiveData<List<Post>>
 
     @Query("SELECT * FROM posts WHERE id = :postId")
-    fun getPost(postId: String): LiveData<Post>
+    fun getPost(postId: Int): LiveData<Post>
+
+    /*@Query("SELECT id FROM posts WHERE id = :postId")
+    fun getPostId(postId: String): Int
+*/
 
     @Query("SELECT * FROM posts WHERE person_id = :personId")
     fun getPostsForPerson(personId: String): LiveData<Post>
+
+
+    @Query("UPDATE posts SET liked = :heart WHERE id = :postId")
+    fun updateLiked(postId: Int, heart: Boolean): Int
+
+    @Query("UPDATE posts SET comment_count = comment_count + 1 WHERE id = :postId")
+    fun updateCommentCount(postId: Int): Int
+
 
     @Insert
     fun insertPost(post: Post): Long

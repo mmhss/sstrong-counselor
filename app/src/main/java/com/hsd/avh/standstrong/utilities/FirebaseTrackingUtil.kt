@@ -11,7 +11,8 @@ package com.hsd.avh.standstrong.utilities
             Awards,
             AwardDetails,
             Clients,
-            ClientDetail
+            ClientDetail,
+            Messages
         }
 
         fun track(screen: Screens) {

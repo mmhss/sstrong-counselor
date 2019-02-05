@@ -12,7 +12,7 @@ import com.hsd.avh.standstrong.data.posts.PostRepository
  */
 class PostDetailViewModel(
         postRepository: PostRepository,
-        private val postId: String
+        private val postId: Int
 ) : ViewModel() {
 
     val post: LiveData<Post> = postRepository.getPost(postId)

@@ -4,6 +4,7 @@ import android.content.Context
 
 import com.hsd.avh.standstrong.data.AppDatabase
 import com.hsd.avh.standstrong.data.awards.AwardRepository
+import com.hsd.avh.standstrong.data.awards.MessageRepository
 import com.hsd.avh.standstrong.data.people.PersonRepository
 import com.hsd.avh.standstrong.data.posts.PostRepository
 import com.hsd.avh.standstrong.viewmodels.*
@@ -14,13 +15,17 @@ import com.hsd.avh.standstrong.viewmodels.*
 object InjectorUtils {
 
     private fun getPostRepository(context: Context): PostRepository {
-        return PostRepository.getInstance(AppDatabase.getInstance(context).postDao())
+        return PostRepository.getInstance(AppDatabase.getInstance(context).postDao(),AppDatabase.getInstance(context).gpsDao(),AppDatabase.getInstance(context).activityDao(),AppDatabase.getInstance(context).proximityDao())
     }
     private fun getAwardRepository(context: Context): AwardRepository {
         return AwardRepository.getInstance(AppDatabase.getInstance(context).awardDao())
     }
     private fun getPeopleRepository(context: Context): PersonRepository {
         return PersonRepository.getInstance(AppDatabase.getInstance(context).personDao())
+    }
+
+    private fun getMessageRepository(context: Context): MessageRepository {
+        return MessageRepository.getInstance(AppDatabase.getInstance(context).messageDao())
     }
 
 
@@ -54,9 +59,18 @@ object InjectorUtils {
 
     fun providePostDetailViewModelFactory(
             context: Context,
-            postId: String
+            postId: Int
     ): PostDetailViewModelFactory {
         return PostDetailViewModelFactory(getPostRepository(context), postId)
+    }
+
+
+    fun provideMessageViewModelFactory(
+            context: Context,
+            motherId: Int,
+            postId: Int
+    ): MessageViewModelFactory {
+        return MessageViewModelFactory(getMessageRepository(context), motherId, postId)
     }
 
     fun getResourceID(resName: String, resType: String, ctx: Context): Int {

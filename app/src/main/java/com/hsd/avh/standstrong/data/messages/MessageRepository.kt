@@ -10,22 +10,25 @@ class MessageRepository private constructor(
 
     suspend fun createMessage(msg: Message) {
         withContext(IO) {
-            messageDao.insertAward(msg)
+            messageDao.insertMessage(msg)
+
+
         }
     }
 
     suspend fun removeAward(msg: Message) {
         withContext(IO) {
-            messageDao.deleteAward(msg)
+            messageDao.deleteMessage(msg)
         }
     }
 
-    fun getMessagesByPersonId(msgId: String) =
-            messageDao.getMessagesForPerson(msgId)
+    fun getMessagesByPersonId(msgId: Int) =
+            messageDao.getMessagesForMotherId(msgId)
 
-    fun getMessages() = messageDao.getMessages()
+    fun getMessageByPostId(postId: Int) = messageDao.getMessageByPostId(postId) //getMessages()
 
-    fun getMessagesByPerson(personId: String) = messageDao.getMessagesForPerson(personId)
+
+    fun getMessagesByPerson(motherId: Int) = messageDao.getMessagesForMotherId(motherId)
 
     companion object {
 

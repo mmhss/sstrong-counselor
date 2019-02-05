@@ -14,36 +14,26 @@ class PostListViewModel internal constructor(
     private val postRepository: PostRepository
 ) : ViewModel() {
 
-    private val growZoneNumber = MutableLiveData<Int>()
+    //private val growZoneNumber = MutableLiveData<Int>()
 
     private val postList = MediatorLiveData<List<Post>>()
 
     init {
-        growZoneNumber.value = NO_GROW_ZONE
-
-        val livePostList = Transformations.switchMap(growZoneNumber) {
-            if (it == NO_GROW_ZONE) {
-                postRepository.getPosts()
-            } else {
-                postRepository.getPosts() //postRepository.getPostsWithGrowZoneNumber(it)
-            }
-        }
+        //EACH TIME YOU LOAD VIEWMODEL CHECK FOR NEW POSTS
+        //ALSO A SCHEDULED BACKGROUND SERVICE THAT CHECKS DAILY
+        postRepository.refreshPostList()
+        val livePostList = postRepository.getPosts()
         postList.addSource(livePostList, postList::setValue)
     }
 
     fun getPosts() = postList
 
-    fun setGrowZoneNumber(num: Int) {
-        growZoneNumber.value = num
+    fun updatePeople() {
+        postRepository.refreshPostList()
     }
 
-    fun clearGrowZoneNumber() {
-        growZoneNumber.value = NO_GROW_ZONE
-    }
-
-    fun isFiltered() = growZoneNumber.value != NO_GROW_ZONE
 
     companion object {
-        private const val NO_GROW_ZONE = -1
+        //private const val NO_GROW_ZONE = -1
     }
 }

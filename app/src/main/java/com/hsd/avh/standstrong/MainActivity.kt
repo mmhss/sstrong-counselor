@@ -14,13 +14,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.hsd.avh.standstrong.databinding.ActivityHomeBinding
 import androidx.navigation.ui.NavigationUI
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.hsd.avh.standstrong.fragments.PostListFragment
-import com.hsd.avh.standstrong.workers.SeedDatabaseWorker
 
 
 //import com.hsd.avh.standstrong

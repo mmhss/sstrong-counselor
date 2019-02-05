@@ -14,7 +14,7 @@ interface AwardDao {
     @Query("SELECT * FROM awards WHERE id = :awardId")
     fun getAwardById(awardId: String): LiveData<Award>
 
-    @Query("SELECT * FROM awards WHERE person_id = :personId")
+    @Query("SELECT * FROM awards WHERE mother_id = :personId")
     fun getAwardsForPerson(personId: String): LiveData<Award>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)

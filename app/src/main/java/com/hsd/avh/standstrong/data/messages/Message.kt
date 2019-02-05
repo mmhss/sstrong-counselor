@@ -14,22 +14,19 @@ enum class PostTypeEnum{
  * [Message] contains all communication between [Person]s including client, counsellor and supervisors
  *
  */
+/*foreignKeys = [ForeignKey(entity = Person::class, parentColumns = ["id"], childColumns = ["person_id"],
+onDelete = ForeignKey.CASCADE)],*/
+
 @Entity(
-    tableName = "messages",
-    foreignKeys = [ForeignKey(entity = Person::class, parentColumns = ["id"], childColumns = ["person_id"],
-            onDelete = ForeignKey.CASCADE)],
-    indices = [Index("person_id")]
-)
+    tableName = "messages")
 data class Message(
-        @PrimaryKey(autoGenerate = false) @ColumnInfo(name = "id") var id: String = UUID.randomUUID().toString(),
-        @ColumnInfo(name = "person_id") val personId: String,
-        @ColumnInfo(name = "associated_id") val associatedId: String,
+        @ColumnInfo(name = "mother_id") val motherId: Int,
         @ColumnInfo(name = "msg") val msg: String,
-        @ColumnInfo(name = "type") val msgType: Int,
+        @ColumnInfo(name = "direction") val direction: String,
+        @ColumnInfo(name = "thread") val msgThread: Int,
         @ColumnInfo(name = "submitted_date") val msgDate: Calendar = Calendar.getInstance(),
-        @ColumnInfo(name = "sent") val sent: Boolean,
-        @ColumnInfo(name = "has_media") val hasMedia: Boolean,
-        @ColumnInfo(name = "medial_url") val mediaUrl: String
+       // @ColumnInfo(name = "sent") val sent: Boolean,
+        @PrimaryKey(autoGenerate = false) @ColumnInfo(name = "id") var id: String = UUID.randomUUID().toString()
 ) {
 
     override fun toString() = id

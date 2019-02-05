@@ -9,11 +9,18 @@ import com.hsd.avh.standstrong.data.posts.Post
  */
 @Dao
 interface PersonDao {
-    @Query("SELECT * FROM people")
+    @Query("SELECT * FROM people ORDER BY ss_id")
     fun getAllPeople(): LiveData<List<Person>>
 
-    @Query("SELECT * FROM people WHERE id = :personId")
-    fun getPersonById(personId: String): LiveData<Person>
+    @Query("SELECT * FROM people WHERE mother_id = :motherId")
+    fun getPersonByMotherId(motherId: Int): LiveData<Person>
+
+    @Query("SELECT * FROM people WHERE ss_id = :ssId")
+    fun getPersonByMotherSsId(ssId: String): LiveData<Person>
+
+    @Query("SELECT ss_id FROM people WHERE id = :motherId")
+    fun getMotherSsId(motherId: Int): String
+
 
     @Query("SELECT count(*) FROM people")
     fun getPersonCount(): LiveData<Int>

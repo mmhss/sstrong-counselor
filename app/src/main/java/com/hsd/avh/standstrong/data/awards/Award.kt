@@ -17,18 +17,15 @@ enum class AwardTypeEnum{
  */
 @Entity(
     tableName = "awards",
-    foreignKeys = [ForeignKey(entity = Person::class, parentColumns = ["first_name"], childColumns = ["person_id"],
-            onDelete = ForeignKey.CASCADE)],
-    indices = arrayOf(Index(value = ["person_id","filename"],
+    indices = arrayOf(Index(value = ["mother_id","filename"],
             unique = true))
 )
 
 
 data class Award(
-    @ColumnInfo(name = "person_id") val personId: String,
+    @ColumnInfo(name = "mother_id") val motherId: Int,
     @ColumnInfo(name = "date") val awardDate: Date,
     @ColumnInfo(name = "filename")val fileName: String,
-    @ColumnInfo(name = "title")val title: String,
     @PrimaryKey(autoGenerate = false) @ColumnInfo(name = "id") var awardId: String = UUID.randomUUID().toString()
 ) {
 

@@ -34,13 +34,12 @@ class PostDetailFragment : Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
+        //Post Id is
         val postId = PostDetailFragmentArgs.fromBundle(arguments).postId
-
-        //val binding = FragmentPeopleDetailsBinding.inflate(inflater, container, false)
         val factory = InjectorUtils.providePostDetailViewModelFactory(requireActivity(), postId)
-
         vm = ViewModelProviders.of(this, factory)
                 .get(PostDetailViewModel::class.java)
+
 
         val postDetailViewModel = ViewModelProviders.of(this, factory)
                 .get(PostDetailViewModel::class.java)
@@ -50,29 +49,11 @@ class PostDetailFragment : Fragment() {
                 inflater, R.layout.fragment_post_details, container, false).apply {
             vm = postDetailViewModel
             setLifecycleOwner(this@PostDetailFragment)
-
         }
 
-
-        /*val binding = DataBindingUtil.inflate<FragmentPeopleDetailsBinding>(
-                inflater, R.layout.fragment_people_details, container, false).apply {
-            vm = personDetailViewModel
-            setLifecycleOwner(this@PeopleDetailFragment)
-
-        }
-*/
         vm.post.observe(this, Observer { post->
             Snackbar.make(binding.root, "Post", Snackbar.LENGTH_LONG).show()
         })
-    /*    personDetailViewModel.person.observe(this, Observer { person->
-            shareText = if (plant == null) {
-                ""
-            } else {
-                getString(R.string.share_text_plant, plant.name)
-            }
-        })
-*/
-
         return binding.root
     }
 

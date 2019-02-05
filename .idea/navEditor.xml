@@ -8,13 +8,25 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
+                  <entry key="message_fragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="446" />
+                            <option name="y" value="254" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="people_detail_fragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="577" />
-                            <option name="y" value="-160" />
+                            <option name="x" value="188" />
+                            <option name="y" value="319" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -25,8 +37,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="583" />
-                            <option name="y" value="145" />
+                            <option name="x" value="440" />
+                            <option name="y" value="-36" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -37,8 +49,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="297" />
-                            <option name="y" value="468" />
+                            <option name="x" value="-13" />
+                            <option name="y" value="12" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -49,8 +61,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="317" />
-                            <option name="y" value="-158" />
+                            <option name="x" value="14" />
+                            <option name="y" value="329" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -70,13 +82,18 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="302" />
-                            <option name="y" value="152" />
+                            <option name="x" value="168" />
+                            <option name="y" value="12" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_post_list_to_person_detail">
+                            <entry key="action_post_list_to_messages">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_post_list_to_post_detail">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -84,26 +101,6 @@
                           </map>
                         </option>
                       </LayoutPositions>
-                    </value>
-                  </entry>
-                </map>
-              </option>
-            </LayoutPositions>
-          </value>
-        </entry>
-        <entry key="sstrong_person_nav.xml">
-          <value>
-            <LayoutPositions>
-              <option name="myPositions">
-                <map>
-                  <entry key="tab_people_awards">
-                    <value>
-                      <LayoutPositions />
-                    </value>
-                  </entry>
-                  <entry key="tab_people_posts">
-                    <value>
-                      <LayoutPositions />
                     </value>
                   </entry>
                 </map>

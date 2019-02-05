@@ -81,6 +81,8 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutinesVersion"
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
+    implementation 'com.github.varunest:sparkbutton:1.0.6'
+
     implementation "com.google.firebase:firebase-core:$rootProject.firebaseCoreVersion"
     implementation "com.crashlytics.sdk.android:crashlytics:$rootProject.crashalyticsVersion"
     // Testing dependencies

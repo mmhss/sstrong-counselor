@@ -24,7 +24,7 @@
                     android:clipToPadding="false"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:paddingBottom="25dp"
+                    android:paddingBottom="56dp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/list_item_people"/>
 
@@ -36,7 +36,6 @@
             android:layout_height="match_parent"
             app:isGone="@{!viewmodel.hasPeople}">
 
-            <!-- TODO: Update blank fragment layout -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.hsd.avh.standstrong.MainActivity
 import com.hsd.avh.standstrong.StandStrong
@@ -39,6 +40,16 @@ class PostListFragment : Fragment() {
 
         val adapter = PostAdapter()
         binding.postList.adapter = adapter
+        val swipeRefreshLayout =  binding.swiping
+        swipeRefreshLayout.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
+            viewModel.updatePeople()
+            //Just a hack with no error or success being returned.
+            swipeRefreshLayout.postDelayed({
+                swipeRefreshLayout.isRefreshing = false
+            }, 3000)
+
+        })
+
         subscribeUi(adapter)
 
         setHasOptionsMenu(true)
@@ -58,13 +69,4 @@ class PostListFragment : Fragment() {
         })
     }
 
-    /*private fun updateData() {
-        with(viewModel) {
-            if (isFiltered()) {
-                clearGrowZoneNumber()
-            } else {
-                setGrowZoneNumber(9)
-            }
-        }
-    }*/
 }

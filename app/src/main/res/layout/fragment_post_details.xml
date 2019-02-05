@@ -96,7 +96,7 @@
                     android:paddingTop="@dimen/activity_horizontal_margin2"
                     android:paddingEnd="@dimen/activity_horizontal_margin"
                     android:paddingBottom="@dimen/activity_horizontal_margin2"
-                    android:text="@{vm.post.postTxtHeader}"
+                    android:text="@{vm.post.postHeader}"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
 
                 <ImageView
@@ -135,7 +135,7 @@
                     android:paddingTop="@dimen/activity_horizontal_margin2"
                     android:paddingEnd="@dimen/activity_horizontal_margin"
                     android:paddingBottom="@dimen/activity_horizontal_margin2"
-                    android:text="@{vm.post.postTxt}"
+                    android:text="@{vm.post.postSubHeader}"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                     android:textColor="@color/colorPrimary" />
 
