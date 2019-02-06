@@ -1,5 +1,6 @@
 package com.hsd.avh.standstrong.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import com.hsd.avh.standstrong.databinding.ListItemAwardsBinding
 /**
  * Adapter for the [RecyclerView] in [AwardFragment].
  */
+
 class AwardAdapter : ListAdapter<Award, AwardAdapter.ViewHolder>(AwardDiffCallback()) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -30,6 +32,7 @@ class AwardAdapter : ListAdapter<Award, AwardAdapter.ViewHolder>(AwardDiffCallba
         return View.OnClickListener {
            // val direction = AwardListFragmentDirections.ActionAwardListFragmentToDetailFragment(awardId)
             //it.findNavController().navigate(direction)
+            Log.d("SSS",awardId)
         }
     }
 

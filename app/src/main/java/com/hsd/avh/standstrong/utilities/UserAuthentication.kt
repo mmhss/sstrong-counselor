@@ -1,15 +1,13 @@
 package com.hsd.avh.standstrong.utilities
 
-import android.view.View
-import android.widget.Toast
 
 
 
 class UserAuthentication(txt1:String,txt2:String,txt3:String,txt4:String) {
-    lateinit var t1: String
-    lateinit var t2: String
-    lateinit var t3: String
-    lateinit var t4: String
+    var t1: String
+    var t2: String
+    var t3: String
+    var t4: String
     lateinit var code: String
 
     init{

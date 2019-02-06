@@ -3,24 +3,17 @@ package com.hsd.avh.standstrong.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.hsd.avh.standstrong.MainActivity
-import com.hsd.avh.standstrong.StandStrong
 import com.hsd.avh.standstrong.adapters.PostAdapter
 import com.hsd.avh.standstrong.databinding.FragmentPostBinding
 import com.hsd.avh.standstrong.utilities.FirebaseTrackingUtil
 import com.hsd.avh.standstrong.utilities.InjectorUtils
 import com.hsd.avh.standstrong.viewmodels.PostListViewModel
-import com.hsd.avh.standstrong.utilities.FirebaseUtils
+
 
 class PostListFragment : Fragment() {
 
@@ -41,14 +34,14 @@ class PostListFragment : Fragment() {
         val adapter = PostAdapter()
         binding.postList.adapter = adapter
         val swipeRefreshLayout =  binding.swiping
-        swipeRefreshLayout.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
+        swipeRefreshLayout.setOnRefreshListener {
             viewModel.updatePeople()
             //Just a hack with no error or success being returned.
             swipeRefreshLayout.postDelayed({
                 swipeRefreshLayout.isRefreshing = false
             }, 3000)
 
-        })
+        }
 
         subscribeUi(adapter)
 

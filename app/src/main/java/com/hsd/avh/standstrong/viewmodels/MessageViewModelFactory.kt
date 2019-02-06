@@ -4,8 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.hsd.avh.standstrong.data.awards.MessageRepository
 
-import com.hsd.avh.standstrong.data.posts.PostRepository
-
 /**
  * Factory for creating a [MessageViewModel] with a constructor that takes a [MessageRepository].
  */

@@ -3,15 +3,9 @@ package com.hsd.avh.standstrong
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.hsd.avh.standstrong.databinding.ActivityHomeBinding
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.NavigationUI.onNavDestinationSelected

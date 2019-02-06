@@ -3,26 +3,15 @@ package com.hsd.avh.standstrong.viewmodels
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.navigation.findNavController
 import com.hsd.avh.standstrong.data.people.Person
 import com.hsd.avh.standstrong.data.people.PersonRepository
-import com.hsd.avh.standstrong.fragments.PeopleFragmentDirections
 
-/**
- * The ViewModel used in [PersonDetailFragment].
- */
 class PersonDetailViewModel(
         personRepository: PersonRepository,
-        private val personId: String
+        personId: String
 ) : ViewModel() {
 
-    val person: LiveData<Person>
-
-    init {
-
-        person = personRepository.getPersonById(personId)
-
-    }
+    val person: LiveData<Person> = personRepository.getPersonById(personId)
 
     fun clickListenerPosts() : View.OnClickListener {
         return View.OnClickListener {

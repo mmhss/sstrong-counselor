@@ -1,21 +1,14 @@
 package com.hsd.avh.standstrong.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.hsd.avh.standstrong.data.awards.MessageRepository
 import com.hsd.avh.standstrong.data.messages.Message
-import com.hsd.avh.standstrong.data.posts.Post
-import com.hsd.avh.standstrong.data.posts.PostRepository
 import androidx.databinding.ObservableField
-import androidx.room.ColumnInfo
 import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
-import com.hsd.avh.ema.emaScheduler.ScheduleNotificationWorker
 import com.hsd.avh.standstrong.StandStrong
 import com.hsd.avh.standstrong.data.AppDatabase
 import com.hsd.avh.standstrong.workers.MessagesWorker
@@ -26,9 +19,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 
-/**
- * The ViewModel for [MessageFragment].
- */
+
 class MessageViewModel internal constructor(
     private val messageRepository: MessageRepository,
     private val motherId: Int,
@@ -60,7 +51,7 @@ class MessageViewModel internal constructor(
                         Calendar.getInstance()
                 )
 
-                var id = database.messageDao().insertMessage(m)
+                val id = database.messageDao().insertMessage(m)
                 database.postDao().updateCommentCount(postId)
 
                 //Now upload using WorkManager (Also Checks for new messages)

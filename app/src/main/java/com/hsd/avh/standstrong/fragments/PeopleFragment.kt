@@ -3,30 +3,17 @@ package com.hsd.avh.standstrong.fragments
 
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.hsd.avh.standstrong.adapters.PeopleAdapter
-import com.hsd.avh.standstrong.adapters.PostAdapter
-import com.hsd.avh.standstrong.data.people.PersonRepository
-import com.hsd.avh.standstrong.databinding.FragmentAwardsBinding
 import com.hsd.avh.standstrong.databinding.FragmentPeopleBinding
-import com.hsd.avh.standstrong.databinding.FragmentPostBinding
 import com.hsd.avh.standstrong.utilities.FirebaseTrackingUtil
 import com.hsd.avh.standstrong.utilities.InjectorUtils
-import com.hsd.avh.standstrong.viewmodels.AwardViewModel
 import com.hsd.avh.standstrong.viewmodels.PeopleViewModel
-import com.hsd.avh.standstrong.viewmodels.PostListViewModel
 
 class PeopleFragment : Fragment() {
 
@@ -49,14 +36,14 @@ class PeopleFragment : Fragment() {
         binding.peopleList.adapter = adapter
 
         val swipeRefreshLayout =  binding.swiping
-        swipeRefreshLayout.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
+        swipeRefreshLayout.setOnRefreshListener {
             viewModel.updatePeople()
             //Just a hack with no error or success being returned.
             swipeRefreshLayout.postDelayed({
                 swipeRefreshLayout.isRefreshing = false
             }, 3000)
 
-        })
+        }
         subscribeUi(adapter)
 
         setHasOptionsMenu(true)

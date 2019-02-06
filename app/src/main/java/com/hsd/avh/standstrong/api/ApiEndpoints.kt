@@ -28,11 +28,10 @@ interface ApiEndpoints{
     @GET("/api/gpss")
     fun getProximityData(): Call<List<ApiProximity>>
 
-    @GET("/api/proximities/proximitychart")
+    @GET("/api/proximities/proximity-chart")
     fun getGPSData(): Call<List<ApiGPS>>
 
-    //TODO API POST MESSAGE
-    @POST("/api/mothers")
+    @POST("/api/posts")
     @FormUrlEncoded
     fun postMessages(@Body msg: Message): Call<Message>
 
@@ -41,8 +40,7 @@ interface ApiEndpoints{
     fun getActivityData(): Call<List<ApiActivity>>
 
 
-    //TODO API GET MESSAGES
-    @GET("/api/mothers")
+    @GET("/api/posts")
     fun retrieveMessages(): Call<List<Message>>
 
 

@@ -1,15 +1,11 @@
 package com.hsd.avh.standstrong.viewmodels
 
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.hsd.avh.standstrong.data.posts.Post
 import com.hsd.avh.standstrong.data.posts.PostRepository
 
-/**
- * The ViewModel for [PostListFragment].
- */
+
 class PostListViewModel internal constructor(
     private val postRepository: PostRepository
 ) : ViewModel() {

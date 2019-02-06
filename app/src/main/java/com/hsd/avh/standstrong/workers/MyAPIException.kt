@@ -17,9 +17,5 @@ class MyAPIException : Exception {
         this.code = code
     }
 
-    constructor(cause: Throwable, code: Int) : super(cause) {
-        this.code = code
-    }
-
 
 }

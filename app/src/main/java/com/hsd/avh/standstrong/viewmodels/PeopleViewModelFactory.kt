@@ -4,8 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.hsd.avh.standstrong.data.people.PersonRepository
 
-import com.hsd.avh.standstrong.data.posts.PostRepository
-
 /**
  * Factory for creating a [PeopleViewModel] with a constructor that takes a [PersonRepository].
  */

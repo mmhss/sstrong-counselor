@@ -40,13 +40,13 @@ class LoginActivity : AppCompatActivity() {
                 startActivity(mainIntent)
                 finish()
             } else {
-                bindings.verifyBtn.startAnimation(AnimationUtils.loadAnimation(this.applicationContext,R.anim.shake));
+                bindings.verifyBtn.startAnimation(AnimationUtils.loadAnimation(this.applicationContext,R.anim.shake))
                 user.clearCode()
                 bindings.otp1.setText("")
                 bindings.otp2.setText("")
                 bindings.otp3.setText("")
                 bindings.otp4.setText("")
-                bindings.otp1.requestFocus();
+                bindings.otp1.requestFocus()
             }
 
         }
@@ -65,9 +65,9 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setFirebaseUser(){
         //Sets the user ID property.
-        firebaseAnalytics.setUserId(user.userType()?.userGroupCode);
+        firebaseAnalytics.setUserId(user.userType()?.userGroupCode)
         //Sets a user property to a given value.
-        firebaseAnalytics.setUserProperty("user_type", user.userType()?.userGroupName);
+        firebaseAnalytics.setUserProperty("user_type", user.userType()?.userGroupName)
 
     }
     private fun shiftRequest(from: EditText, to: EditText) {
