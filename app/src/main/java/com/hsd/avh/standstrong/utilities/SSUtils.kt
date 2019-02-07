@@ -8,32 +8,24 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.crashlytics.android.Crashlytics
-import com.google.gson.annotations.Expose
-import com.google.gson.annotations.SerializedName
 import com.hsd.avh.standstrong.LoginActivity
 import com.hsd.avh.standstrong.R
 import com.hsd.avh.standstrong.StandStrong
 import com.hsd.avh.standstrong.api.ApiEndpoints
 import com.hsd.avh.standstrong.api.ApiService
 import com.hsd.avh.standstrong.data.AppDatabase
-import com.hsd.avh.standstrong.data.awards.ApiAward
 import com.hsd.avh.standstrong.data.awards.Award
 import com.hsd.avh.standstrong.data.messages.Message
-import com.hsd.avh.standstrong.data.people.ApiPerson
 import com.hsd.avh.standstrong.data.people.Person
-import com.hsd.avh.standstrong.data.posts.ApiActivity
-import com.hsd.avh.standstrong.data.posts.ApiGPS
-import com.hsd.avh.standstrong.data.posts.ApiProximity
-import com.hsd.avh.standstrong.data.posts.Post
+import com.hsd.avh.standstrong.data.posts.*
 import com.hsd.avh.standstrong.workers.MyAPIException
 import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.HttpException
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
-
-
 
 
 class SSUtils {
@@ -45,11 +37,22 @@ class SSUtils {
         const val MOVEMENT = "Movement"
         const val BONUS = "Bonus"
         const val NEW_MESSAGE = -1
+        const val DATA_GPS = "@drawable/data_gps"
+        const val DATA_ACTIVITY = "@drawable/data_activity"
+        const val DATA_ROUTINE = "@drawable/data_routine"
+        const val NEW_AWARD = "@drawable/new_award"
+        //Tables
+        const val PROXIMITY = "proximity"
+        const val ACTIVITY = "activity"
+        const val POSTS = "posts"
+        const val PEOPLE = "people"
+        const val GPS = "gps"
+        const val AWARDS = "awards"
 
         var sdfDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         val database = AppDatabase.getInstance(StandStrong.applicationContext())
         var endpoints: ApiEndpoints? = ApiService.service
-
+        lateinit var returnSsId : String
 
         @JvmStatic fun setNextEducationalPost(currentPost:String) {
             val sharedPref = PreferenceManager.getDefaultSharedPreferences(StandStrong.applicationContext())
@@ -61,11 +64,11 @@ class SSUtils {
 
         @JvmStatic fun getNextEducationalPost():String {
             val sharedPref = PreferenceManager.getDefaultSharedPreferences(StandStrong.applicationContext())
-            return sharedPref.getString("eduPost","a1");
+            return sharedPref!!.getString("eduPost","a1")
         }
 
         @JvmStatic fun getEducationalPostTitle(name: String): String {
-            val findString = "post_title_edu_$name"
+            val findString : String  = "post_title_edu_$name"
             return StandStrong.applicationContext().getString(StandStrong.applicationContext().resources.getIdentifier(findString, "string", StandStrong.applicationContext().packageName))
         }
 
@@ -82,60 +85,79 @@ class SSUtils {
         }
 
         @JvmStatic fun checkForNewPeople() {
-            endpoints?.getMother()?.enqueue(object : Callback<List<ApiPerson>> {
-                override fun onResponse(call: Call<List<ApiPerson>>, response: Response<List<ApiPerson>>) {
-                    if (response.isSuccessful()) {
-                        var isMoms : Boolean = false;
-                        for (mother in response.body().orEmpty()) {
-                            var imgUrl = "https://www.tinygraphs.com/squares/"+mother.identificationNumber.toString()+"?theme=heatwave&numcolors=4&size=50&fmt=png"
-                            var p: Person = Person(mother.identificationNumber.toString(),mother.firstName.toString(),mother.lastName.toString(),  mother.id!!,1,imgUrl)
-                            CoroutineScope(Dispatchers.IO).launch {
-                                database.personDao().insertPerson(p)
-                            }
-                            isMoms = true;
+            GlobalScope.launch(Dispatchers.Main) {
+                val request = endpoints!!.getMotherAsync(getLastRow(PEOPLE))
+                try {
+                    val response = request.await()
+                    for (mother in response.body().orEmpty()) {
+                        var imgUrl = "https://www.tinygraphs.com/squares/"+mother.identificationNumber.toString()+"?theme=heatwave&numcolors=4&size=50&fmt=png"
+                        var p: Person = Person(mother.identificationNumber.toString(),mother.firstName.toString(),mother.lastName.toString(),  mother.id!!,1,imgUrl)
+                        withContext(Dispatchers.IO) {
+                            database.personDao().insertPerson(p)
                         }
-                        if(isMoms)
-                            triggerNotification(999,StandStrong.applicationContext().resources.getString(com.hsd.avh.standstrong.R.string.notification_description_people))
-                    } else {
-                        val statusCode = response.code()
-                        // handle request errors depending on status code
-                        var e = MyAPIException(response.message(),response.code())
-                        Crashlytics.logException(e)
+                        updateLastRetrievedRow(PEOPLE, mother.id!!)
                     }
-                }
-                override fun onFailure(call: Call<List<ApiPerson>>, t: Throwable) {
-                    var e = MyAPIException("Person Call Failed",99)
+                    if(response.body().orEmpty().isNotEmpty())
+                        triggerNotification(999,StandStrong.applicationContext().resources.getString(com.hsd.avh.standstrong.R.string.notification_description_people))
+                } catch (e: HttpException) {
+                    Crashlytics.logException(e)
+                } catch (e: Throwable) {
+                    Crashlytics.logException(e)
+                } catch (e: Exception) {
                     Crashlytics.logException(e)
                 }
-            })
+            }
+        }
+
+        @JvmStatic private  fun countPersons():Int {
+            var count = 0;
+            runBlocking {
+                CoroutineScope(Dispatchers.IO).launch {
+                    count = database.personDao().countPeople()
+                }
+            }
+            return count;
+        }
+
+        @JvmStatic private  fun countAwards():Int {
+            var count = 0;
+            runBlocking {
+                CoroutineScope(Dispatchers.IO).launch {
+                    count = database.awardDao().countAwards()
+                }
+            }
+            return count;
         }
 
         @JvmStatic fun checkForNewPosts() {
             //Education Comes through a workManager
 
-            checkForNewProximity()
+            //checkForNewProximity()
             checkForNewGPS()
-            checkForNewMessages()
-            //checkForNewActivity()
+            //checkForNewMessages()
+            checkForNewActivity()
         }
 
-
-        @JvmStatic private fun createDataPost(motherIds : ArrayList<Int>, ct : Int,drawable:String, pstTitle : Int, pstTxt : Int) {
-            if(motherIds.isNotEmpty()){
-                triggerNotification(999,StandStrong.applicationContext().resources.getString(com.hsd.avh.standstrong.R.string.notification_description_post))
-                var uniqueMomIds : Set<Int> = HashSet<Int>(motherIds)
+        @JvmStatic private fun createDataPost(motherIds:ArrayList<Int>,ct : Int,drawable:String, pstTitle : Int, pstTxt : Int) {
+            if (motherIds.isNotEmpty()) {
+                triggerNotification(999, StandStrong.applicationContext().resources.getString(com.hsd.avh.standstrong.R.string.notification_description_post))
+                var ssId = ""
+                var uniqueMomIds: Set<Int> = HashSet<Int>(motherIds)
                 for (mom in uniqueMomIds) {
-                    CoroutineScope(Dispatchers.IO).launch {
+                    GlobalScope.launch(Dispatchers.Main) {
+                        val request = endpoints!!.getMotherByIdAsync(mom)
                         try {
-                            var date = Date()
-                            var cardTitle = StandStrong.applicationContext().getString(ct)
-                            var mURL = drawable
-                            var ssId = database.personDao().getMotherSsId(mom)
-                            var aURL = "https://www.tinygraphs.com/squares/"+ssId+"?theme=heatwave&numcolors=4&size=50&fmt=png"
-                            var postTitle = StandStrong.applicationContext().getString(pstTitle) + ssId
-                            var postTxt =StandStrong.applicationContext().getString(pstTxt)
-                            var p: Post = Post( ssId, mom,date,aURL,cardTitle,ssId,mURL,false,0,2,postTitle,postTxt)
-                            database.postDao().insertPost(p)
+                            val response = request.await()
+                            ssId = response.body()!!.identificationNumber!!
+                            var p: Post = Post( ssId, mom,Date(), "https://www.tinygraphs.com/squares/$ssId?theme=heatwave&numcolors=4&size=50&fmt=png",StandStrong.applicationContext().getString(ct),ssId,drawable,false,0,2,StandStrong.applicationContext().getString(pstTitle) + ssId,StandStrong.applicationContext().getString(pstTxt))
+                            //Makes sure to tell the UI when we are done so t can update live data
+                            withContext(Dispatchers.IO){
+                                database.postDao().insertPost(p)
+                            }
+                        } catch (e: HttpException) {
+                            Crashlytics.logException(e)
+                        } catch (e: Throwable) {
+                            Crashlytics.logException(e)
                         } catch (e: Exception) {
                             Crashlytics.logException(e)
                         }
@@ -144,149 +166,148 @@ class SSUtils {
             }
         }
 
-
         @JvmStatic fun checkForNewProximity() {
-            endpoints?.getProximityData()?.enqueue(object : Callback<List<ApiProximity>> {
-                override fun onResponse(call: Call<List<ApiProximity>>, response: Response<List<ApiProximity>>) {
-                    if (response.isSuccessful) {
-                        val motherIds = ArrayList<Int>()
-                        for (r in response.body().orEmpty()) {
-                            motherIds.add(r.motherId!!)
-                            CoroutineScope(Dispatchers.IO).launch {
-                                try {
-                                    database.proximityDao().insertProximity(r)
-                                } catch (e: Exception) {
-                                    Crashlytics.logException(e)
-                                }
-                            }
+            GlobalScope.launch(Dispatchers.Main) {
+                val motherIds = ArrayList<Int>()
+                val request = endpoints!!.getProximityDataAsync(getLastRow(PROXIMITY))
+                try {
+                    val response = request.await()
+                    for (r in response.body().orEmpty()) {
+                        //motherIds.add(r.mother.id)
+                        val proxy : Proximity = Proximity()
+                        withContext(Dispatchers.IO) {
+                            database.proximityDao().insertProximity(proxy)
                         }
-                        createDataPost(motherIds, R.string.card_title_proximity,"@drawable/data-routine",R.string.post_title_proximity,R.string.post_subtitle_proximity)
-                    } else {
-                        val statusCode = response.code()
-                        // handle request errors depending on status code
-                        var e = MyAPIException(response.message(),response.code())
-                        Crashlytics.logException(e)
+                        //updateLastRetrievedRow(PROXIMITY, r.id!!)
                     }
-                }
-                override fun onFailure(call: Call<List<ApiProximity>>, t: Throwable) {
-                    var e = MyAPIException("Post Proximity Call Failed",95)
+                    if (response.body().orEmpty().isNotEmpty()) {
+                        createDataPost(motherIds, R.string.card_title_proximity, DATA_ROUTINE, R.string.post_title_proximity, R.string.post_subtitle_proximity)
+                    }
+                } catch (e: HttpException) {
+                    Crashlytics.logException(e)
+                } catch (e: Throwable) {
+                    Crashlytics.logException(e)
+                } catch (e: Exception) {
                     Crashlytics.logException(e)
                 }
-            })
+            }
+
         }
 
         @JvmStatic fun checkForNewGPS() {
-            endpoints?.getGPSData()?.enqueue(object : Callback<List<ApiGPS>> {
-                    override fun onResponse(call: Call<List<ApiGPS>>, response: Response<List<ApiGPS>>) {
-                        if (response.isSuccessful) {
-                            val motherIds = ArrayList<Int>()
-                            for (r in response.body().orEmpty()) {
-                                motherIds.add(r.motherId!!)
-                                CoroutineScope(Dispatchers.IO).launch {
-                                    try {
-                                        database.gpsDao().insertGPS(r)
-                                    } catch (e: Exception) {
-                                        Crashlytics.logException(e)
-                                    }
-                                }
-                            }
-                            createDataPost(motherIds, R.string.card_title_gps,"@drawable/data-gps",R.string.post_title_gps,R.string.post_subtitle_gps)
-                        } else {
-                            val statusCode = response.code()
-
-                            var e = MyAPIException(response.message(),response.code())
-                            Crashlytics.logException(e)
+            GlobalScope.launch(Dispatchers.Main) {
+                val motherIds = ArrayList<Int>()
+                val request = endpoints!!.getGPSDataAsync(getLastRow(GPS))
+                try {
+                    val response = request.await()
+                    for (r in response.body().orEmpty()) {
+                        motherIds.add(r.mother!!.id!!)
+                        //"captureDate": "2019-02-01 13:10:19",
+                        val date =   SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(r.captureDate)
+                        var gps : Gps = Gps(r.latitude,r.longitude,r.altitude,r.accuracy, r.mother!!.id,date)
+                        withContext(Dispatchers.IO) {
+                            database.gpsDao().insertGPS(gps)
                         }
+                        updateLastRetrievedRow(GPS, r.id!!)
                     }
-                    override fun onFailure(call: Call<List<ApiGPS>>, t: Throwable) {
-                        var e = MyAPIException("Post GPS Call Failed",85)
-                        Crashlytics.logException(e)
+                    if (response.body().orEmpty().isNotEmpty()) {
+                        createDataPost(motherIds, R.string.card_title_gps,DATA_GPS,R.string.post_title_gps,R.string.post_subtitle_gps)
                     }
-                })
+                } catch (e: HttpException) {
+                    Crashlytics.logException(e)
+                } catch (e: Throwable) {
+                    Crashlytics.logException(e)
+                } catch (e: Exception) {
+                    Crashlytics.logException(e)
+                }
+            }
         }
 
         @JvmStatic fun checkForNewActivity() {
-            endpoints?.getActivityData()?.enqueue(object : Callback<List<ApiActivity>> {
-                override fun onResponse(call: Call<List<ApiActivity>>, response: Response<List<ApiActivity>>) {
-                    if (response.isSuccessful) {
-                        val motherIds = ArrayList<Int>()
-                        for (r in response.body().orEmpty()) {
-                            motherIds.add(r.motherId!!)
-                            CoroutineScope(Dispatchers.IO).launch {
-                                try {
-                                    database.activityDao().insertActivity(r)
-                                } catch (e: Exception) {
-                                    Crashlytics.logException(e)
-                                }
-                            }
+            GlobalScope.launch(Dispatchers.Main) {
+                val motherIds = ArrayList<Int>()
+                val request = endpoints!!.getActivityDataAsync(getLastRow(ACTIVITY))
+                try {
+                    val response = request.await()
+                    for (r in response.body().orEmpty()) {
+                        motherIds.add(r.mother!!.id!!)
+                        //"captureDate": "2019-02-01 13:10:19",
+                        val date =   SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(r.captureDate)
+                        var act : Activity= Activity(r.activityType,r.confidence,r.mother!!.id!!,date,r.id)
+                        withContext(Dispatchers.IO) {
+                            database.activityDao().insertActivity(act)
                         }
-                        createDataPost(motherIds, R.string.card_title_activity,"@drawable/data-activity",R.string.post_title_activity,R.string.post_subtitle_activity)
-                    } else {
-                        val statusCode = response.code()
-                        // handle request errors depending on status code
-                        var e = MyAPIException(response.message(),response.code())
-                        Crashlytics.logException(e)
+                        updateLastRetrievedRow(ACTIVITY, r.id!!)
                     }
-                }
-                override fun onFailure(call: Call<List<ApiActivity>>, t: Throwable) {
-                    var e = MyAPIException("Post Activity Call Failed",90)
+                    if (response.body().orEmpty().isNotEmpty()) {
+                        createDataPost(motherIds, R.string.card_title_activity, DATA_ACTIVITY,R.string.post_title_activity,R.string.post_subtitle_activity)
+                    }
+                } catch (e: HttpException) {
+                    Crashlytics.logException(e)
+                } catch (e: Throwable) {
+                    Crashlytics.logException(e)
+                } catch (e: Exception) {
                     Crashlytics.logException(e)
                 }
-            })
+            }
+        }
+
+        @JvmStatic private fun getssId(momId:Int):String{
+            var ssId = ""
+            GlobalScope.launch(Dispatchers.Main) {
+                val request = endpoints!!.getMotherByIdAsync(momId)
+                try {
+                    val response = request.await()
+                    ssId = response.body()!!.identificationNumber!!
+                } catch (e: HttpException) {
+                    Log.d("SSS",e.code().toString())
+                } catch (e: Throwable) {
+                    Log.d("SSS",e.toString())
+                }
+            }
+            return ssId
+        }
+
+        @JvmStatic private fun updateLastRetrievedRow(table:String, rowId:Int) {
+            val sharedPref = PreferenceManager.getDefaultSharedPreferences(StandStrong.applicationContext())
+            val editor = sharedPref.edit()
+            editor.putInt(table,rowId)
+            editor.apply()
+        }
+
+        @JvmStatic private fun getLastRow(table:String):String{
+            val sharedPref = PreferenceManager.getDefaultSharedPreferences(StandStrong.applicationContext())
+            return "id>" + Integer.toString(sharedPref!!.getInt(table,0)) //start on first row
         }
 
         @JvmStatic fun checkForNewAwards() {
-            endpoints?.getAwards()?.enqueue(object : Callback<List<ApiAward>> {
-                override fun onResponse(call: Call<List<ApiAward>>, response: Response<List<ApiAward>>) {
-                    if (response.isSuccessful) {
-                        var isAwards : Boolean = false;
+            GlobalScope.launch(Dispatchers.Main) {
+                val request = endpoints!!.getAwardsAsync(getLastRow(AWARDS))
+                try {
+                    val response = request.await()
                         for (award in response.body().orEmpty()) {
-                            var date = Date()
-                            var awardStr = "default"
-                            var levelStr = "0"
-                            try{
-                                date = SimpleDateFormat("yyyy-MM-dd").parse(award.awardForDate)
-                                awardStr = switchAward(award.awardType!!)
-                                levelStr = Integer.toString(award.awardLevel!!)
-                            } catch (e:java.lang.Exception) {
-                                date = Date()
+                            var ssId = getssId(award.mother!!.id!!)
+                            var a: Award = Award(award.mother!!.id!!,
+                                    SimpleDateFormat("yyyy-MM-dd").parse(award.awardForDate),
+                                    ssId,
+                                    "@drawable/" + switchAward(award.awardType!!)+ "_l"+Integer.toString(award.awardLevel!!))
+                            withContext(Dispatchers.IO) {
+                                database.awardDao().insertAward(a)
+                                var p: Post = Post(ssId, a.motherId, Date(), "https://www.tinygraphs.com/squares/" + a.motherId + "?theme=heatwave&numcolors=4&size=50&fmt=png", StandStrong.applicationContext().getString(R.string.card_title_award), ssId, NEW_AWARD, false, 0, 2, StandStrong.applicationContext().getString(R.string.post_title_award), StandStrong.applicationContext().getString(R.string.post_subtitle_award))
+                                database.postDao().insertPost(p)
                             }
-                            val fileNameString = "@drawable/" + awardStr + "_l"+levelStr
-                            var a: Award = Award(award.mother!!.id!!,date,fileNameString)
-                            CoroutineScope(Dispatchers.IO).launch {
-                                try {
-                                    database.awardDao().insertAward(a)
-                                    //Also make a post that their is a new award.
-                                    var cardTitle = StandStrong.applicationContext().getString(R.string.card_title_award)
-                                    var mURL = "@drawable/new-award"
-                                    var aURL = "https://www.tinygraphs.com/squares/"+a.motherId+"?theme=heatwave&numcolors=4&size=50&fmt=png"
-                                    var postTitle = StandStrong.applicationContext().getString(R.string.post_title_award)
-                                    var postTxt =StandStrong.applicationContext().getString(R.string.post_subtitle_award)
-                                    var ssId = database.personDao().getMotherSsId(a.motherId)
-                                    var p: Post = Post( ssId,a.motherId,date,aURL,cardTitle,ssId,mURL,false,0,2,postTitle,postTxt)
-                                    database.postDao().insertPost(p)
-                                } catch (e: Exception) {
-                                    Crashlytics.logException(e)
-                                }
-                            }
-                            isAwards = true;
+                            updateLastRetrievedRow(AWARDS, award.id!!)
                         }
-                        if(isAwards)
-                            triggerNotification(999,StandStrong.applicationContext().resources.getString(com.hsd.avh.standstrong.R.string.notification_description_award))
-                    } else {
-                        val statusCode = response.code()
-                        // handle request errors depending on status code
-                        var e = MyAPIException(response.message(),response.code())
-                        Crashlytics.logException(e)
-                    }
-                }
-
-                override fun onFailure(call: Call<List<ApiAward>>, t: Throwable) {
-                    // handle request errors depending on status code
-                    var e = MyAPIException("Award Call Failed",99)
+                    if(response.body().orEmpty().isNotEmpty())
+                        triggerNotification(999,StandStrong.applicationContext().resources.getString(com.hsd.avh.standstrong.R.string.notification_description_award))
+                } catch (e: HttpException) {
+                    Crashlytics.logException(e)
+                } catch (e: Throwable) {
+                    Crashlytics.logException(e)
+                } catch (e: Exception) {
                     Crashlytics.logException(e)
                 }
-            })
+            }
         }
 
         @JvmStatic private fun switchAward(s : String) : String {
@@ -305,18 +326,17 @@ class SSUtils {
             var m : Message? = null
             var endpoints: ApiEndpoints? = ApiService.service
             runBlocking {
-                m = async {
+                m = withContext(Dispatchers.Default) {
                     CoroutineScope(Dispatchers.IO).async {
                         database.messageDao().getMessageById(id)
                     }.await()
-                }.await()
+                }
                 if (m != null) {
                     endpoints?.postMessages(m!!)?.enqueue(object : Callback<Message> {
                         override fun onResponse(call: Call<Message>, response: Response<Message>) {
                             if (response.isSuccessful) {
                                 Log.d("SSTRNG","Success")
                             } else {
-                                val statusCode = response.code()
                                 var e = MyAPIException(response.message(),response.code())
                                 Crashlytics.logException(e)
                             }

@@ -8,10 +8,8 @@ import com.hsd.avh.standstrong.StandStrong
 import com.hsd.avh.standstrong.data.AppDatabase
 import com.hsd.avh.standstrong.data.posts.Post
 import com.hsd.avh.standstrong.utilities.SSUtils
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import com.hsd.avh.standstrong.R
+import kotlinx.coroutines.*
 
 
 class ScheduleNotificationWorker(context : Context, params : WorkerParameters)
@@ -48,9 +46,13 @@ class ScheduleNotificationWorker(context : Context, params : WorkerParameters)
         val postTitle = SSUtils.getEducationalPostTitle(SSUtils.getNextEducationalPost())
         val postTxt =SSUtils.getEducationalPostText(SSUtils.getNextEducationalPost())
         val p: Post = Post( "All",99999,Date(),avatarUrl,cardTitle,"",mediaUrl,false,0,1,postTitle,postTxt)
-        CoroutineScope(Dispatchers.IO).launch {
-            database.postDao().insertPost(p)
+
+        GlobalScope.launch(Dispatchers.Main) {
+            withContext(Dispatchers.IO){
+                database.postDao().insertPost(p)
+            }
         }
+
 
     }
 

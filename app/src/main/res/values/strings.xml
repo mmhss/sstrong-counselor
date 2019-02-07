@@ -38,7 +38,7 @@
     <!-- Data Posts -->
     <!-- Education -->
     <string name="card_title_education">Continued Learning</string>
-    <string name="post_title_edu_a1">Title 1</string>
+    <string name="post_title_edu_a1">अवसादको कारण</string>
     <string name="post_title_edu_a2">Title 2</string>
     <string name="post_title_edu_a3">Title 3</string>
     <string name="post_subtitle_edu_a1">Sub Title 1. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>

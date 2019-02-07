@@ -11,17 +11,17 @@ import com.hsd.avh.standstrong.data.people.Person
 @Dao
 interface ActivityDao {
     @Query("SELECT * FROM activity ")
-    fun getActivity(): LiveData<List<ApiActivity>>
+    fun getActivity(): LiveData<List<Activity>>
 
     @Insert
-    fun insertActivity(activity: ApiActivity)
+    fun insertActivity(activity: Activity)
 
     @Delete
-    fun deleteActivity(activity: ApiActivity)
+    fun deleteActivity(activity: Activity)
 
     @Query("DELETE FROM activity")
     fun deleteAll()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(activity: List<ApiActivity>)
+    fun insertAll(activity: List<Activity>)
 }

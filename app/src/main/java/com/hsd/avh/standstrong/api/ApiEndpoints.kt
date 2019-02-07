@@ -5,40 +5,37 @@ import com.hsd.avh.standstrong.data.awards.ApiAward
 import com.hsd.avh.standstrong.data.messages.Message
 import com.hsd.avh.standstrong.data.people.ApiPerson
 import com.hsd.avh.standstrong.data.people.Person
-import com.hsd.avh.standstrong.data.posts.ApiActivity
-import com.hsd.avh.standstrong.data.posts.ApiGPS
-import com.hsd.avh.standstrong.data.posts.ApiProximity
+import com.hsd.avh.standstrong.data.posts.*
+import kotlinx.coroutines.Deferred
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.POST
-import com.hsd.avh.standstrong.data.posts.Post
-import retrofit2.http.Body
-import retrofit2.http.FormUrlEncoded
-
-
+import retrofit2.Response
+import retrofit2.http.*
 
 
 interface ApiEndpoints{
-    @GET("/api/mothers")
-    fun getMother(): Call<List<ApiPerson>>
+    @GET("/api/mothers?")
+    fun getMotherAsync(@Query("search") searchId:String ): Deferred<Response<List<ApiPerson>>>
 
-    @GET("/api/awards")
-    fun getAwards(): Call<List<ApiAward>>
+    @GET("/api/mothers/{id}")
+    fun getMotherByIdAsync(@Path("id") id:Int): Deferred<Response<ApiPerson>>
 
-    @GET("/api/gpss")
-    fun getProximityData(): Call<List<ApiProximity>>
 
-    @GET("/api/proximities/proximity-chart")
-    fun getGPSData(): Call<List<ApiGPS>>
+    @GET("/api/awards?")
+    fun getAwardsAsync(@Query("search") searchId:String ): Deferred<Response<List<ApiAward>>>  // e.g id>2
+
+
+    @GET("/api/gpss?")
+    fun getGPSDataAsync(@Query("search") searchId:String ): Deferred<Response<List<ApiGPS>>>
+
+    @GET("/api/mothers/proximity-charts?")
+    fun getProximityDataAsync(@Query("search") searchId:String ): Deferred<Response<List<ApiProximity>>>
+
+    @GET("/api/activities?")
+    fun getActivityDataAsync(@Query("search") searchId:String ): Deferred<Response<List<ApiActivity>>>
 
     @POST("/api/posts")
     @FormUrlEncoded
     fun postMessages(@Body msg: Message): Call<Message>
-
-
-    @GET("/api/activities")
-    fun getActivityData(): Call<List<ApiActivity>>
-
 
     @GET("/api/posts")
     fun retrieveMessages(): Call<List<Message>>

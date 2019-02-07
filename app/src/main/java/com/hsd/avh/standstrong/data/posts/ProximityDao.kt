@@ -12,18 +12,18 @@ import java.util.*
 @Dao
 interface ProximityDao {
     @Query("SELECT * FROM proximity ORDER BY chart_date")
-    fun getProximity(): LiveData<List<ApiProximity>>
+    fun getProximity(): LiveData<List<Proximity>>
 
     @Insert
-    fun insertProximity(proxy: ApiProximity): Long
+    fun insertProximity(proxy: Proximity): Long
 
     @Delete
-    fun deleteProximity(proxy: ApiProximity)
+    fun deleteProximity(proxy: Proximity)
 
     @Query("DELETE FROM proximity")
     fun deleteAll()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(proximity: List<ApiProximity>)
+    fun insertAll(proximity: List<Proximity>)
 
 }

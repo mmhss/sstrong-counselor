@@ -22,7 +22,7 @@ import com.hsd.avh.standstrong.workers.SeedDatabaseWorker
 /**
  * The Room database for this app
  */
-@Database(entities = [Person::class, Post::class, Award::class, Message::class,ApiActivity::class,ApiProximity::class,ApiGPS::class], version = 1, exportSchema = false)
+@Database(entities = [Person::class, Post::class, Award::class, Message::class,Activity::class,Proximity::class,Gps::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun personDao(): PersonDao

@@ -11,17 +11,17 @@ import com.hsd.avh.standstrong.data.people.Person
 @Dao
 interface GPSDao {
     @Query("SELECT * FROM gps ORDER BY record_date")
-    fun getGPS(): LiveData<List<ApiGPS>>
+    fun getGPS(): LiveData<List<Gps>>
 
     @Insert
-    fun insertGPS(gps: ApiGPS)
+    fun insertGPS(gps: Gps)
 
     @Delete
-    fun deleteGPS(gps: ApiGPS)
+    fun deleteGPS(gps: Gps)
 
     @Query("DELETE FROM gps")
     fun deleteAll()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(gps: List<ApiGPS>)
+    fun insertAll(gps: List<Gps>)
 }

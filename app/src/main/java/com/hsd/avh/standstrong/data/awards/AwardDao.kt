@@ -2,6 +2,7 @@ package com.hsd.avh.standstrong.data.awards
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import kotlinx.coroutines.Deferred
 
 /**
  * The Data Access Object for the [Award] class.
@@ -10,6 +11,9 @@ import androidx.room.*
 interface AwardDao {
     @Query("SELECT * FROM awards")
     fun getAwards(): LiveData<List<Award>>
+
+    @Query("SELECT count(id) FROM awards")
+    fun countAwards(): Int
 
     @Query("SELECT * FROM awards WHERE id = :awardId")
     fun getAwardById(awardId: String): LiveData<Award>

@@ -28,6 +28,7 @@ class StandStrong : Application() {
             const val MESSAGE_DIRECTION_RECEIVE = "receive"
             const val MESSAGE_ROW_ID= "DBMessageId"
             const val TAG = "SSTNG"
+
             private var instance: StandStrong? = null
 
             fun firebaseInstance():FirebaseAnalytics{
