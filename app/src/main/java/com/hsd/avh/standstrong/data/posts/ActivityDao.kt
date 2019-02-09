@@ -13,7 +13,7 @@ interface ActivityDao {
     @Query("SELECT * FROM activity ")
     fun getActivity(): LiveData<List<Activity>>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertActivity(activity: Activity)
 
     @Delete

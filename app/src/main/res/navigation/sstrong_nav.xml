@@ -53,6 +53,20 @@
         <argument
             android:name="personId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_post_list_to_post_detail"
+            app:destination="@id/post_detail_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_post_list_to_messages"
+            app:destination="@id/message_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment

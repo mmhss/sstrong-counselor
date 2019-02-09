@@ -21,7 +21,8 @@ object InjectorUtils {
         return AwardRepository.getInstance(AppDatabase.getInstance(context).awardDao())
     }
     private fun getPeopleRepository(context: Context): PersonRepository {
-        return PersonRepository.getInstance(AppDatabase.getInstance(context).personDao())
+        return PersonRepository.getInstance(AppDatabase.getInstance(context).personDao(),AppDatabase.getInstance(context).postDao()
+                ,AppDatabase.getInstance(context).awardDao(),AppDatabase.getInstance(context).messageDao())
     }
 
     private fun getMessageRepository(context: Context): MessageRepository {

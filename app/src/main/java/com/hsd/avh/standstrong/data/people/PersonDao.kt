@@ -12,9 +12,9 @@ interface PersonDao {
     @Query("SELECT * FROM people ORDER BY ss_id")
     fun getAllPeople(): LiveData<List<Person>>
 
-    @Query("SELECT count(id) FROM people")
+    /*@Query("SELECT count(id) FROM people")
     fun countPeople(): Int
-
+*/
     @Query("SELECT * FROM people WHERE mother_id = :motherId")
     fun getPersonByMotherId(motherId: Int): LiveData<Person>
 

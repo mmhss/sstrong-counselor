@@ -3,26 +3,25 @@
     <string name="home">Home</string>
     <string name="people">People</string>
     <string name="awards">Awards</string>
+    <string name="posts">Posts</string>
+    <string name="messages">Messages</string>
 
     <string name="no_posts">No posts yet available...</string>
     <string name="no_posts_long">New posts will show up here as data begins to be collected from your clients.</string>
-
     <string name="no_people">No people</string>
     <string name="no_people_long">No people are yet connected to your account. People will show up as they are connected to you.</string>
-
     <string name="no_awards">No Awards</string>
     <string name="no_awards_long">None of your participants have unlocked awards yet. Keep checking back and be the first to congratulate them.</string>
 
     <string name="login_code">LOGIN CODE</string>
     <string name="login_message">Please enter your 4 digit password to begin.</string>
 
-
     <string name="notification_title">StandStrong</string>
     <string name="notification_description_people">New clients added.</string>
     <string name="notification_description_award">New awards issued.</string>
     <string name="notification_description_post">New data posts.</string>
+    <string name="notification_description_message">New messages.</string>
     <string name="notification_ticker">{New data from StandStrong clients.}</string>
-
 
     <!-- String plurals and their related prefix / suffix strings -->
     <string name="post_prefix">Posts:</string>
@@ -31,9 +30,6 @@
         <item quantity="other" >%d posts</item>
     </plurals>
 
-
-    <!-- Message-->
-    <!--<string name="write_a_message">Write a message</string>-->
 
     <!-- Data Posts -->
     <!-- Education -->

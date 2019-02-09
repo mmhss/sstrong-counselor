@@ -85,6 +85,8 @@ dependencies {
     implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
     implementation "com.google.firebase:firebase-core:$rootProject.firebaseCoreVersion"
     implementation "com.crashlytics.sdk.android:crashlytics:$rootProject.crashalyticsVersion"
+    implementation 'com.github.imaNNeoFighT:ArcChartView:1.0.3.1'
+    implementation 'com.google.maps.android:android-maps-utils:0.5+'
     // Testing dependencies
     androidTestImplementation "androidx.arch.core:core-testing:$rootProject.coreTestingVersion"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$rootProject.espressoVersion"

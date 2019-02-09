@@ -46,9 +46,9 @@ class MessageViewModel internal constructor(
             txtMessage.set("")
             CoroutineScope(Dispatchers.IO).launch {
                 val m = Message(motherId,
-                        txtMsg, StandStrong.MESSAGE_DIRECTION_RECEIVE,
+                        txtMsg, StandStrong.MESSAGE_DIRECTION_OUT,
                         postId,
-                        Calendar.getInstance()
+                        Date()
                 )
 
                 val id = database.messageDao().insertMessage(m)

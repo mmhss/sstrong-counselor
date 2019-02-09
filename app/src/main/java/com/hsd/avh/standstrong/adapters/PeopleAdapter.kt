@@ -24,7 +24,7 @@ class PeopleAdapter : ListAdapter<Person, PeopleAdapter.ViewHolder>(PeopleDiffCa
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val person = getItem(position)
         holder.apply {
-            bind(createOnClickListener(person.personId), person)
+            bind(createOnClickListener(person.ssId), person)
             itemView.tag = person
         }
     }

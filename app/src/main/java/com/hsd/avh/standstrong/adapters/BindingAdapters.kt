@@ -9,6 +9,7 @@ import com.hsd.avh.standstrong.StandStrong
 import com.hsd.avh.standstrong.utilities.InjectorUtils
 import android.widget.TextView
 import androidx.annotation.NonNull
+import com.hsd.avh.standstrong.R
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -34,18 +35,21 @@ fun bindImageFromUrl(view: ImageView, imageUrl: String?) {
 
 @BindingAdapter("srcFromDrawable")
 fun setImageDrawable(view: ImageView, imageStr: String?) {
-    if (imageStr == null) {
+    if (imageStr.isNullOrEmpty()) {
         view.setImageURI(null)
     } else {
         //Note (1): no path (and no extension, in case of images).
         //Note (2): use "drawable" for drawables, "string" for strings, .
-        val resId = InjectorUtils.getResourceID(imageStr,"drawable", StandStrong.applicationContext())
-        view.setImageResource(resId)
+        val resId = InjectorUtils.getResourceID(imageStr, "drawable", StandStrong.applicationContext())
+        //view.setImageResource(resId)
+        Glide.with(view.context)
+                .load(resId)
+                .into(view)
     }
 }
 
 @BindingAdapter("readableDate")
 fun bindServerDate(textView: TextView, date: Date) {
-    var sdfDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+    var sdfDate = SimpleDateFormat("yyyy-MM-dd HH:mm")
     textView.text = sdfDate.format(date)
 }

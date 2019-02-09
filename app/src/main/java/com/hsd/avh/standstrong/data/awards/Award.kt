@@ -25,7 +25,7 @@ enum class AwardTypeEnum{
 data class Award(
     @ColumnInfo(name = "mother_id") val motherId: Int,
     @ColumnInfo(name = "date") val awardDate: Date,
-    @ColumnInfo(name = "displayString") val displayString: String,
+    @ColumnInfo(name = "display_string") val displayString: String,
     @ColumnInfo(name = "filename")val fileName: String,
     @PrimaryKey(autoGenerate = false) @ColumnInfo(name = "id") var awardId: String = UUID.randomUUID().toString()
 ) {

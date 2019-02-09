@@ -36,13 +36,11 @@ class PostAdapter : ListAdapter<Post, PostAdapter.ViewHolder>(PostDiffCallback()
 
     private fun createOnClickListener(postId: Int): View.OnClickListener {
         return View.OnClickListener {
-
             val bundle = Bundle()
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, Integer.toString(postId))
             bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Post Viewed")
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "post")
             StandStrong.firebaseInstance().logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle)
-
             val direction = PostListFragmentDirections.actionPostListToPostDetail(postId)
             it.findNavController().navigate(direction)
         }
@@ -50,7 +48,6 @@ class PostAdapter : ListAdapter<Post, PostAdapter.ViewHolder>(PostDiffCallback()
 
     private fun createCommentOnClickListener(post: Post): View.OnClickListener {
         return View.OnClickListener {
-
             val bundle = Bundle()
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, Integer.toString(post.postId))
             bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Comments Viewed")

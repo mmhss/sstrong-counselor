@@ -2,16 +2,48 @@ package com.hsd.avh.standstrong.viewmodels
 
 import android.view.View
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hsd.avh.standstrong.data.people.Person
 import com.hsd.avh.standstrong.data.people.PersonRepository
+import com.hsd.avh.standstrong.data.posts.Post
+import com.hsd.avh.standstrong.data.posts.PostRepository
 
 class PersonDetailViewModel(
         personRepository: PersonRepository,
         personId: String
 ) : ViewModel() {
 
+
+    private val postList = MediatorLiveData<List<Post>>()
+    private var awardCount = MediatorLiveData<Int>()
+    private var messageCount = MediatorLiveData<Int>()
+    private var postCount = MediatorLiveData<Int>()
     val person: LiveData<Person> = personRepository.getPersonById(personId)
+
+
+    init {
+        val livePostList = personRepository.getPostListById(personId)
+        val liveAwardCount = personRepository.getAwardCount(personId)
+        val liveMessageCount = personRepository.getMessageCount(personId)
+        val livePostCount = personRepository.getPostCount(personId)
+
+        postList.addSource(livePostList, postList::setValue)
+
+        awardCount.addSource(liveAwardCount, awardCount::setValue)
+        messageCount.addSource(liveMessageCount, messageCount::setValue)
+        postCount.addSource(livePostCount, postCount::setValue)
+
+    }
+
+    fun getPosts() = postList
+
+    fun getAwardCount() = awardCount
+    fun getMessageCount() = messageCount
+    fun getPostCount() = postCount
+
+
 
     fun clickListenerPosts() : View.OnClickListener {
         return View.OnClickListener {

@@ -21,7 +21,10 @@ interface PostDao {
 */
 
     @Query("SELECT * FROM posts WHERE person_id = :personId")
-    fun getPostsForPerson(personId: String): LiveData<Post>
+    fun getPostsForPerson(personId: String): LiveData<List<Post>>
+
+    @Query("SELECT count(*) FROM posts WHERE person_id = :personId")
+    fun getPostCountForPerson(personId: String): LiveData<Int>
 
 
     @Query("UPDATE posts SET liked = :heart WHERE id = :postId")
@@ -31,7 +34,7 @@ interface PostDao {
     fun updateCommentCount(postId: Int): Int
 
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertPost(post: Post): Long
 
     @Delete

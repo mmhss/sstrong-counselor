@@ -3,6 +3,7 @@ package com.hsd.avh.standstrong.viewmodels
 import androidx.lifecycle.*
 import com.hsd.avh.standstrong.data.people.Person
 import com.hsd.avh.standstrong.data.people.PersonRepository
+import kotlinx.coroutines.runBlocking
 
 
 class PeopleViewModel internal constructor(
@@ -13,7 +14,7 @@ class PeopleViewModel internal constructor(
     val hasPeople: LiveData<Boolean>
 
     init {
-        peopleRepository.refreshPersonList()
+        //peopleRepository.refreshPersonList()
         peopleList.addSource(peopleRepository.getAllPeople(),peopleList::setValue)
         hasPeople = Transformations.map(peopleList) {
             it != null

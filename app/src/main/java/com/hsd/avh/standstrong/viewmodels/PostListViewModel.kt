@@ -13,15 +13,13 @@ class PostListViewModel internal constructor(
     //private val growZoneNumber = MutableLiveData<Int>()
 
     private val postList = MediatorLiveData<List<Post>>()
-
     init {
         //EACH TIME YOU LOAD VIEWMODEL CHECK FOR NEW POSTS
         //ALSO A SCHEDULED BACKGROUND SERVICE THAT CHECKS DAILY
-        postRepository.refreshPostList()
+        //postRepository.refreshPostList()
         val livePostList = postRepository.getPosts()
         postList.addSource(livePostList, postList::setValue)
     }
-
     fun getPosts() = postList
 
     fun updatePeople() {

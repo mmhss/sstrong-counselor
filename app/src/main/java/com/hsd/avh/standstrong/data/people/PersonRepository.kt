@@ -13,14 +13,25 @@ import com.hsd.avh.standstrong.api.ApiService
 import com.hsd.avh.standstrong.api.ApiEndpoints
 import androidx.annotation.NonNull
 import android.R.attr.name
+import androidx.lifecycle.LiveData
 import com.crashlytics.android.Crashlytics
+import com.hsd.avh.standstrong.data.awards.AwardDao
+import com.hsd.avh.standstrong.data.awards.MessageDao
+import com.hsd.avh.standstrong.data.posts.PostDao
 import com.hsd.avh.standstrong.utilities.SSUtils
 import com.hsd.avh.standstrong.workers.MyAPIException
 
 
 class PersonRepository private constructor(
-    private val personDao: PersonDao
+        private val personDao: PersonDao,
+        private val postDao: PostDao,
+        private val awardDao: AwardDao,
+        private val messageDao: MessageDao
 ) {
+
+
+    fun getPostListById(postId: String) = postDao.getPostsForPerson(postId)
+
 
     fun refreshPersonList() {
         SSUtils.checkForNewPeople()
@@ -44,8 +55,23 @@ class PersonRepository private constructor(
     fun getAllPeople() = personDao.getAllPeople()
 
 
-    fun getPeopleCount() =
-            personDao.getPersonCount()
+    fun getPeopleCount() : LiveData<Int> {
+            return personDao.getPersonCount()
+    }
+
+    fun getAwardCount(personId:String) : LiveData<Int> {
+        return awardDao.getAwardCountForPerson(personId)
+    }
+
+    fun getPostCount(personId:String) : LiveData<Int> {
+        return postDao.getPostCountForPerson(personId)
+    }
+
+    fun getMessageCount(personId:String) : LiveData<Int> {
+        return messageDao.getMessageCountForPerson(personId)
+    }
+
+
 
 
     companion object {
@@ -54,10 +80,10 @@ class PersonRepository private constructor(
         // For Singleton instantiation
         @Volatile private var instance: PersonRepository? = null
 
-        fun getInstance(personDao: PersonDao) =
+        fun getInstance(personDao: PersonDao,postDao:PostDao,awardDao:AwardDao,messageDao: MessageDao) =
                 instance ?: synchronized(this) {
                     instance
-                            ?: PersonRepository(personDao).also { instance = it }
+                            ?: PersonRepository(personDao,postDao,awardDao,messageDao).also { instance = it }
                 }
 
 

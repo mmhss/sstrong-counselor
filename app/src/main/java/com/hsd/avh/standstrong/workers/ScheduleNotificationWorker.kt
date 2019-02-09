@@ -56,7 +56,6 @@ class ScheduleNotificationWorker(context : Context, params : WorkerParameters)
 
     }
 
-
     private fun getPeople() {
         SSUtils.checkForNewPeople()
     }

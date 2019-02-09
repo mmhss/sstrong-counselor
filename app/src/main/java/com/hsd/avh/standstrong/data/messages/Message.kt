@@ -24,7 +24,7 @@ data class Message(
         @ColumnInfo(name = "msg") val msg: String,
         @ColumnInfo(name = "direction") val direction: String,
         @ColumnInfo(name = "thread") val msgThread: Int,
-        @ColumnInfo(name = "submitted_date") val msgDate: Calendar = Calendar.getInstance(),
+        @ColumnInfo(name = "submitted_date") val msgDate: Date,
        // @ColumnInfo(name = "sent") val sent: Boolean,
         @PrimaryKey(autoGenerate = false) @ColumnInfo(name = "id") var id: String = UUID.randomUUID().toString()
 ) {

@@ -13,7 +13,7 @@ interface GPSDao {
     @Query("SELECT * FROM gps ORDER BY record_date")
     fun getGPS(): LiveData<List<Gps>>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertGPS(gps: Gps)
 
     @Delete

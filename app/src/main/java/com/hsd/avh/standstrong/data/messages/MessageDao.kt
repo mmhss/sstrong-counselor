@@ -23,6 +23,12 @@ interface MessageDao {
     @Query("SELECT * FROM messages WHERE mother_id = :motherId")
     fun getMessagesForMotherId(motherId: Int): LiveData<Message>
 
+    @Query("SELECT count(*) FROM posts WHERE person_id = :personId")
+    fun getMessageCountForPerson(personId: String): LiveData<Int>
+
+    @Query("UPDATE messages SET thread = :threadId WHERE id = :messageId")
+    fun updateThreadId(threadId: Int, messageId:Long): Int
+
 
     @Insert
     fun insertMessage(message: Message): Long

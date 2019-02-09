@@ -31,6 +31,12 @@ class AwardRepository private constructor(
 
     fun getAwardByPerson(personId: String) = awardDao.getAwardsForPerson(personId)
 
+    suspend fun getAwardCount() {
+        withContext(IO) {
+            awardDao.countAwards()
+        }
+    }
+
     companion object {
 
         // For Singleton instantiation

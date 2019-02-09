@@ -40,6 +40,7 @@ class SSUtils {
         const val DATA_GPS = "@drawable/data_gps"
         const val DATA_ACTIVITY = "@drawable/data_activity"
         const val DATA_ROUTINE = "@drawable/data_routine"
+        const val NEW_MESSAGE_DRAWABLE = "@drawable/new_message"
         const val NEW_AWARD = "@drawable/new_award"
         //Tables
         const val PROXIMITY = "proximity"
@@ -48,6 +49,7 @@ class SSUtils {
         const val PEOPLE = "people"
         const val GPS = "gps"
         const val AWARDS = "awards"
+        const val MESSAGES = "messages"
 
         var sdfDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         val database = AppDatabase.getInstance(StandStrong.applicationContext())
@@ -93,7 +95,11 @@ class SSUtils {
                         var imgUrl = "https://www.tinygraphs.com/squares/"+mother.identificationNumber.toString()+"?theme=heatwave&numcolors=4&size=50&fmt=png"
                         var p: Person = Person(mother.identificationNumber.toString(),mother.firstName.toString(),mother.lastName.toString(),  mother.id!!,1,imgUrl)
                         withContext(Dispatchers.IO) {
-                            database.personDao().insertPerson(p)
+                            try {
+                                database.personDao().insertPerson(p)
+                            } catch(e:Exception) {
+                                Log.d("SSS","Error")
+                            }
                         }
                         updateLastRetrievedRow(PEOPLE, mother.id!!)
                     }
@@ -109,7 +115,7 @@ class SSUtils {
             }
         }
 
-        @JvmStatic private  fun countPersons():Int {
+       /* @JvmStatic private  fun countPersons():Int {
             var count = 0;
             runBlocking {
                 CoroutineScope(Dispatchers.IO).launch {
@@ -118,7 +124,7 @@ class SSUtils {
             }
             return count;
         }
-
+*/
         @JvmStatic private  fun countAwards():Int {
             var count = 0;
             runBlocking {
@@ -132,9 +138,10 @@ class SSUtils {
         @JvmStatic fun checkForNewPosts() {
             //Education Comes through a workManager
 
-            //checkForNewProximity()
+            checkForNewProximity()
             checkForNewGPS()
-            //checkForNewMessages()
+            checkForNewMessages()
+            //A message worker upload and downloads messages
             checkForNewActivity()
         }
 
@@ -149,7 +156,7 @@ class SSUtils {
                         try {
                             val response = request.await()
                             ssId = response.body()!!.identificationNumber!!
-                            var p: Post = Post( ssId, mom,Date(), "https://www.tinygraphs.com/squares/$ssId?theme=heatwave&numcolors=4&size=50&fmt=png",StandStrong.applicationContext().getString(ct),ssId,drawable,false,0,2,StandStrong.applicationContext().getString(pstTitle) + ssId,StandStrong.applicationContext().getString(pstTxt))
+                            var p: Post = Post( ssId, mom,Date(), "https://www.tinygraphs.com/squares/$ssId?theme=heatwave&numcolors=4&size=50&fmt=png",StandStrong.applicationContext().getString(ct),ssId,drawable,false,0,2,StandStrong.applicationContext().getString(pstTitle) +" "+ ssId,StandStrong.applicationContext().getString(pstTxt))
                             //Makes sure to tell the UI when we are done so t can update live data
                             withContext(Dispatchers.IO){
                                 database.postDao().insertPost(p)
@@ -169,16 +176,20 @@ class SSUtils {
         @JvmStatic fun checkForNewProximity() {
             GlobalScope.launch(Dispatchers.Main) {
                 val motherIds = ArrayList<Int>()
-                val request = endpoints!!.getProximityDataAsync(getLastRow(PROXIMITY))
+                val request = endpoints!!.getProximityDataAsync(getLastProxyRow(PROXIMITY))
                 try {
                     val response = request.await()
                     for (r in response.body().orEmpty()) {
-                        //motherIds.add(r.mother.id)
-                        val proxy : Proximity = Proximity()
+                        motherIds.add(r.motherId!!)
+                        /*"chartDay": "2018-11-08",
+                          "chartHour": "18",*/
+                        val dt = r.chartDay +  " " + r.chartHour + ":00"
+                        val date =   SimpleDateFormat("yyyy-MM-dd HH:mm").parse(dt)
+                        val proxy : Proximity = Proximity(r.chartEvent,r.chartValue,r.motherId,date,r.proximityId)
                         withContext(Dispatchers.IO) {
                             database.proximityDao().insertProximity(proxy)
                         }
-                        //updateLastRetrievedRow(PROXIMITY, r.id!!)
+                        updateLastRetrievedRow(PROXIMITY, r.proximityId!!)
                     }
                     if (response.body().orEmpty().isNotEmpty()) {
                         createDataPost(motherIds, R.string.card_title_proximity, DATA_ROUTINE, R.string.post_title_proximity, R.string.post_subtitle_proximity)
@@ -252,19 +263,22 @@ class SSUtils {
             }
         }
 
-        @JvmStatic private fun getssId(momId:Int):String{
+        @JvmStatic private fun getSsId(momId:Int):String{
             var ssId = ""
-            GlobalScope.launch(Dispatchers.Main) {
-                val request = endpoints!!.getMotherByIdAsync(momId)
-                try {
-                    val response = request.await()
-                    ssId = response.body()!!.identificationNumber!!
-                } catch (e: HttpException) {
-                    Log.d("SSS",e.code().toString())
-                } catch (e: Throwable) {
-                    Log.d("SSS",e.toString())
+            //GlobalScope.launch(Dispatchers.Main) {
+
+                runBlocking {
+                    try {
+                        val request = endpoints!!.getMotherByIdAsync(momId)
+                        val response = request.await()
+                        ssId = response.body()!!.identificationNumber!!
+                    } catch (e: HttpException) {
+                        Log.d("SSS",e.code().toString())
+                    } catch (e: Throwable) {
+                        Log.d("SSS",e.toString())
+                    }
                 }
-            }
+            //}
             return ssId
         }
 
@@ -280,21 +294,39 @@ class SSUtils {
             return "id>" + Integer.toString(sharedPref!!.getInt(table,0)) //start on first row
         }
 
+        @JvmStatic private fun getLastProxyRow(table:String):Int{
+            val sharedPref = PreferenceManager.getDefaultSharedPreferences(StandStrong.applicationContext())
+            return sharedPref!!.getInt(table,0) //start on first row
+        }
+
+
         @JvmStatic fun checkForNewAwards() {
             GlobalScope.launch(Dispatchers.Main) {
                 val request = endpoints!!.getAwardsAsync(getLastRow(AWARDS))
                 try {
                     val response = request.await()
                         for (award in response.body().orEmpty()) {
-                            var ssId = getssId(award.mother!!.id!!)
+                            var ssId = ""
+                            ssId = getSsId(award.mother!!.id!!)
+
                             var a: Award = Award(award.mother!!.id!!,
                                     SimpleDateFormat("yyyy-MM-dd").parse(award.awardForDate),
                                     ssId,
                                     "@drawable/" + switchAward(award.awardType!!)+ "_l"+Integer.toString(award.awardLevel!!))
                             withContext(Dispatchers.IO) {
-                                database.awardDao().insertAward(a)
-                                var p: Post = Post(ssId, a.motherId, Date(), "https://www.tinygraphs.com/squares/" + a.motherId + "?theme=heatwave&numcolors=4&size=50&fmt=png", StandStrong.applicationContext().getString(R.string.card_title_award), ssId, NEW_AWARD, false, 0, 2, StandStrong.applicationContext().getString(R.string.post_title_award), StandStrong.applicationContext().getString(R.string.post_subtitle_award))
-                                database.postDao().insertPost(p)
+
+                                try {
+                                    database.awardDao().insertAward(a)
+                                } catch(e:Exception) {
+                                    Log.d("SSS","Error")
+                                }
+                                var p: Post = Post(ssId, a.motherId, Date(), "https://www.tinygraphs.com/squares/" + a.motherId + "?theme=heatwave&numcolors=4&size=50&fmt=png", StandStrong.applicationContext().getString(R.string.card_title_award), ssId, NEW_AWARD, false, 0, 2, ssId + " " +StandStrong.applicationContext().getString(R.string.post_title_award), StandStrong.applicationContext().getString(R.string.post_subtitle_award))
+
+                                try {
+                                    database.postDao().insertPost(p)
+                                } catch(e:Exception) {
+                                    Log.d("SSS","Error")
+                                }
                             }
                             updateLastRetrievedRow(AWARDS, award.id!!)
                         }
@@ -352,44 +384,59 @@ class SSUtils {
         }
 
         @JvmStatic fun checkForNewMessages(){
-            var endpoints: ApiEndpoints? = ApiService.service
-            endpoints?.retrieveMessages()?.enqueue(object : Callback<List<Message>> {
-                override fun onResponse(call: Call<List<Message>>, response: Response<List<Message>>) {
-                    if (response.isSuccessful) {
-                        for (msg in response.body().orEmpty()) {
-                            CoroutineScope(Dispatchers.IO).launch {
-                                var msgT = -1
-                                if(msg.msgThread == NEW_MESSAGE) {
-                                    //New so must make a post for this message thread
-                                    var date = SimpleDateFormat("dd/MM/yyyy-MM-dd").parse("01/01/2019")
+            GlobalScope.launch(Dispatchers.Main) {
+                val request = endpoints!!.getMessagesAsync(getLastRow(MESSAGES))
+                try {
+                    val response = request.await()
+                    val motherIds = ArrayList<Int>()
+                    var insertRowIdRow : Long = 0;
+                    for (r in response.body().orEmpty()) {
+                        if (r.direction == StandStrong.MESSAGE_DIRECTION_IN) {
+                            var ssId = ""
+                            ssId = getSsId(r.mother!!.id!!)
+                            withContext(Dispatchers.IO) {
+                                //New thread not a response
+                                insertRowIdRow = r.threadId!!.toLong()
+                                if(r.threadId == -1) {
+                                    motherIds.add(r.mother!!.id!!)
+                                    //"postedDate": "2019-02-06 00:00:00",
+                                    val dateMsg =   SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(r.postedDate)
                                     var cardTitle = StandStrong.applicationContext().getString(R.string.card_title_msg)
-                                    var mURL = "@drawable/new-message"
-                                    var aURL = "https://www.tinygraphs.com/squares/"+msg.motherId+"?theme=heatwave&numcolors=4&size=50&fmt=png"
+                                    var mURL = NEW_MESSAGE_DRAWABLE
+                                    var aURL = "https://www.tinygraphs.com/squares/"+r.mother!!.id!!+"?theme=heatwave&numcolors=4&size=50&fmt=png"
                                     var postTitle = StandStrong.applicationContext().getString(R.string.post_title_msg)
                                     var postTxt =StandStrong.applicationContext().getString(R.string.post_subtitle_msg)
-                                    var ssId = database.personDao().getMotherSsId(msg.motherId)
-                                    var p: Post = Post( ssId,msg.motherId,date,aURL,cardTitle,ssId,mURL,false,0,2,postTitle,postTxt)
-                                    msgT = database.postDao().insertPost(p).toInt()
+                                    var p: Post = Post( ssId, r.mother!!.id!!,dateMsg,aURL,cardTitle,ssId,mURL,false,0,2,postTitle,postTxt)
+                                    try {
+                                        runBlocking {
+                                            insertRowIdRow = database.postDao().insertPost(p)
+                                        }
+                                    } catch(e:Exception) {
+                                        Log.d("SSS","Error")
+                                    }
+
+                                    val m = Message(r.mother!!.id!!,r.message!!,StandStrong.MESSAGE_DIRECTION_IN,insertRowIdRow.toInt() ,dateMsg)
+                                    try {
+                                        database.messageDao().insertMessage(m)
+                                    } catch(e:Exception) {
+                                        Log.d("SSS","Error")
+                                    }
                                 }
-                                val m = Message(99123,
-                                        "My Mesage",StandStrong.MESSAGE_DIRECTION_SEND,
-                                        msgT ,
-                                        Calendar.getInstance()
-                                )
-                                database.messageDao().insertMessage(m)
                             }
+                            updateLastRetrievedRow(MESSAGES, r.id!!)
                         }
-                    } else {
-                        val statusCode = response.code()
-                        var e = MyAPIException(response.message(),response.code())
-                        Crashlytics.logException(e)
+                        var uniqueMomIds: Set<Int> = HashSet<Int>(motherIds)
+                        if(uniqueMomIds.orEmpty().isNotEmpty())
+                            triggerNotification(999,StandStrong.applicationContext().resources.getString(com.hsd.avh.standstrong.R.string.notification_description_message))
                     }
-                }
-                override fun onFailure(call: Call<List<Message>>, t: Throwable) {
-                    var e = MyAPIException("Upload New Messages Failed",98)
+                } catch (e: HttpException) {
+                    Crashlytics.logException(e)
+                } catch (e: Throwable) {
+                    Crashlytics.logException(e)
+                } catch (e: Exception) {
                     Crashlytics.logException(e)
                 }
-            })
+            }
         }
 
 

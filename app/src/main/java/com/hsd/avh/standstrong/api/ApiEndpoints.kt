@@ -2,6 +2,7 @@ package com.hsd.avh.standstrong.api
 
 
 import com.hsd.avh.standstrong.data.awards.ApiAward
+import com.hsd.avh.standstrong.data.messages.ApiMessage
 import com.hsd.avh.standstrong.data.messages.Message
 import com.hsd.avh.standstrong.data.people.ApiPerson
 import com.hsd.avh.standstrong.data.people.Person
@@ -27,8 +28,8 @@ interface ApiEndpoints{
     @GET("/api/gpss?")
     fun getGPSDataAsync(@Query("search") searchId:String ): Deferred<Response<List<ApiGPS>>>
 
-    @GET("/api/mothers/proximity-charts?")
-    fun getProximityDataAsync(@Query("search") searchId:String ): Deferred<Response<List<ApiProximity>>>
+    @GET("/api/proximities/proximity-charts/{proximitySyncId}")
+    fun getProximityDataAsync(@Path("proximitySyncId") searchId:Int): Deferred<Response<List<ApiProximity>>>
 
     @GET("/api/activities?")
     fun getActivityDataAsync(@Query("search") searchId:String ): Deferred<Response<List<ApiActivity>>>
@@ -37,8 +38,8 @@ interface ApiEndpoints{
     @FormUrlEncoded
     fun postMessages(@Body msg: Message): Call<Message>
 
-    @GET("/api/posts")
-    fun retrieveMessages(): Call<List<Message>>
+    @GET("/api/posts?")
+    fun getMessagesAsync(@Query("search") searchId:String ): Deferred<Response<List<ApiMessage>>>
 
 
 }

@@ -1,29 +1,28 @@
 package com.hsd.avh.standstrong.data.posts
 
-import androidx.room.*
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import com.hsd.avh.standstrong.data.awards.ApiAward.Mother
-import java.text.SimpleDateFormat
-import java.util.*
-
 
 class ApiProximity {
-    @SerializedName("chartEvent")
+
+    @SerializedName("motherId")
     @Expose
-    var chartEvent: String? = null
-    @SerializedName("chartValue")
-    @Expose
-    var chartValue: String? = null
+    var motherId: Int? = null
     @SerializedName("chartDay")
     @Expose
     var chartDay: String? = null
     @SerializedName("chartHour")
     @Expose
     var chartHour: String? = null
-    @SerializedName("mother")
+    @SerializedName("chartEvent")
     @Expose
-    var mother: Mother? = null
+    var chartEvent: String? = null
+    @SerializedName("chartValue")
+    @Expose
+    var chartValue: String? = null
+    @SerializedName("proximityId")
+    @Expose
+    var proximityId: Int? = null
 
     /**
      * No args constructor for use in serialization
@@ -31,45 +30,22 @@ class ApiProximity {
      */
     constructor() {}
 
-
     /**
      *
      * @param chartHour
-     * @param mother
      * @param chartValue
      * @param chartEvent
+     * @param proximityId
+     * @param motherId
      * @param chartDay
      */
-    constructor(chartEvent: String, chartValue: String, chartDay: String, chartHour: String, mother: Mother) : super() {
-        this.chartEvent = chartEvent
-        this.chartValue = chartValue
+    constructor(motherId: Int?, chartDay: String, chartHour: String, chartEvent: String, chartValue: String, proximityId: Int?) : super() {
+        this.motherId = motherId
         this.chartDay = chartDay
         this.chartHour = chartHour
-        this.mother = mother
-
-    }
-
-    inner class Mother {
-
-        @SerializedName("id")
-        @Expose
-        @Ignore
-        var id: Int? = null
-
-        /**
-         * No args constructor for use in serialization
-         *
-         */
-        constructor() {}
-
-        /**
-         *
-         * @param id
-         */
-        constructor(id: Int?) : super() {
-            this.id = id
-        }
-
+        this.chartEvent = chartEvent
+        this.chartValue = chartValue
+        this.proximityId = proximityId
     }
 
 }

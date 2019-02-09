@@ -103,7 +103,7 @@
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
                     android:background="@color/lightgrey"
-                    android:scaleType="centerCrop"
+                    android:scaleType="fitCenter"
                     app:srcFromDrawable="@{post.mediaUrl}" />
 
                 <LinearLayout

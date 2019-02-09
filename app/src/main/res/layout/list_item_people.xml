@@ -81,7 +81,7 @@
                     android:layout_marginTop="2dp"
                     android:maxLines="2"
                     android:id="@+id/content_desc"
-                    android:text="@{peopleFragment.lastName}"
+                    android:text="@{peopleFragment.ssId}"
                     android:textColor="@color/fontColor"
                     android:textSize="14sp" />
 

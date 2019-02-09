@@ -24,8 +24,9 @@ class StandStrong : Application() {
 
         companion object {
             const val NOTIFICATION_CHANNEL = "stand strong"
-            const val MESSAGE_DIRECTION_SEND = "send"
-            const val MESSAGE_DIRECTION_RECEIVE = "receive"
+            const val MESSAGE_DIRECTION_IN = "ToCounseler"
+            const val MESSAGE_DIRECTION_OUT = "ToMother"
+            const val MESSAGE_DIRECTION_OUT_ALL = "ToMothers"
             const val MESSAGE_ROW_ID= "DBMessageId"
             const val TAG = "SSTNG"
 
