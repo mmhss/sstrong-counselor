@@ -13,6 +13,9 @@ interface GPSDao {
     @Query("SELECT * FROM gps ORDER BY record_date")
     fun getGPS(): LiveData<List<Gps>>
 
+    @Query("SELECT latitude,longitude FROM gps where mother_id = :motherId and accuracy < :accuracy and record_date BETWEEN :dayst AND :dayet ORDER BY record_date")
+    fun getGpsByDate(motherId:Int,accuracy:Int,dayst:Long,dayet:Long): LiveData<List<Gps>>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertGPS(gps: Gps)
 

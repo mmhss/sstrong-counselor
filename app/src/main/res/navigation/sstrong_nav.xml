@@ -17,8 +17,36 @@
         android:label="Sample"
         tools:layout="@layout/fragment_post" >
         <action
+            android:id="@+id/action_post_list_to_awards"
+            app:destination="@id/tab_awards"
+            app:enterAnim="@anim/slide_out_left"
+            app:exitAnim="@anim/slide_in_right"
+            app:popEnterAnim="@anim/slide_out_right"
+            app:popExitAnim="@anim/slide_in_left" />
+        <action
             android:id="@+id/action_post_list_to_post_detail"
             app:destination="@id/post_detail_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_post_list_to_data_activity"
+            app:destination="@id/post_data_activity_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_post_list_to_data_proximity"
+            app:destination="@id/post_data_proximity_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_post_list_to_data_gps"
+            app:destination="@id/post_data_gps_fragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -77,6 +105,45 @@
         <argument
             android:name="postId"
             app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/post_data_activity_fragment"
+        android:name="com.hsd.avh.standstrong.fragments.DataPostActivityFragment"
+        android:label="Data Activity"
+        tools:layout="@layout/fragment_data_activity">
+        <argument
+            android:name="motherId"
+            app:argType="integer" />
+        <argument
+            android:name="postDate"
+            app:argType="long" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/post_data_gps_fragment"
+        android:name="com.hsd.avh.standstrong.fragments.DataPostGpsFragment"
+        android:label="Data GPS"
+        tools:layout="@layout/fragment_data_gps">
+        <argument
+            android:name="motherId"
+            app:argType="integer" />
+        <argument
+            android:name="postDate"
+            app:argType="long" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/post_data_proximity_fragment"
+        android:name="com.hsd.avh.standstrong.fragments.DataPostProximityFragment"
+        android:label="Data Proximity"
+        tools:layout="@layout/fragment_data_proximity">
+        <argument
+            android:name="motherId"
+            app:argType="integer" />
+        <argument
+            android:name="postDate"
+            app:argType="long" />
     </fragment>
 
     <fragment

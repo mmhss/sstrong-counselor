@@ -4,9 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.hsd.avh.standstrong.data.posts.PostRepository
 
-/**
- * Factory for creating a [PostDetailViewModel] with a constructor that takes a [PostRepository].
- */
 class PostDetailViewModelFactory(
     private val repository: PostRepository,
     private val postId: Int

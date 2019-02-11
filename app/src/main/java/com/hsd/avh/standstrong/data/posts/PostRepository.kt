@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 
 /**
  * Repository module for handling data operations.
@@ -26,6 +27,16 @@ class PostRepository private constructor(
     fun getPosts() = postDao.getPosts()
 
     fun getPost(postId: Int) = postDao.getPost(postId)
+
+    //Activity
+    fun getActivityByDate(motherId:Int,confidence:Int,stDate:Long,endDate: Long) = activityDao.getActivityByDate(motherId,confidence,stDate,endDate)
+    fun getAllActivity() = activityDao.getActivity()
+
+    //Proximity
+    fun getProximityByDate(motherId:Int,stDate:Long,endDate: Long) = proximityDao.getProximityByDate(motherId,stDate,endDate)
+    //Gps
+    fun getGpsByDate(motherId:Int,confidence:Int,stDate:Long,endDate: Long) = gpsDao.getGpsByDate(motherId,confidence,stDate,endDate)
+
 
     fun refreshPostList() {
        SSUtils.checkForNewPosts()

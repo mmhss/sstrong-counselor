@@ -8,8 +8,11 @@
             name="msg"
             type="com.hsd.avh.standstrong.data.messages.Message"/>
     </data>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@{msg.msg}"/>
+        android:padding="8dp"
+        android:text="@{msg.msg}"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 </layout>

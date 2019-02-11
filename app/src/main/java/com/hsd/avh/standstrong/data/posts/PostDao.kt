@@ -10,7 +10,7 @@ import com.hsd.avh.standstrong.data.people.Person
  */
 @Dao
 interface PostDao {
-    @Query("SELECT * FROM posts ORDER BY date")
+    @Query("SELECT * FROM posts ORDER BY date desc")
     fun getPosts(): LiveData<List<Post>>
 
     @Query("SELECT * FROM posts WHERE id = :postId")

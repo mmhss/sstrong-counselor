@@ -28,6 +28,26 @@ class StandStrong : Application() {
             const val MESSAGE_DIRECTION_OUT = "ToMother"
             const val MESSAGE_DIRECTION_OUT_ALL = "ToMothers"
             const val MESSAGE_ROW_ID= "DBMessageId"
+
+            const val POST_CARD_MESSAGE = 1
+            const val POST_CARD_PROXIMITY = 2
+            const val POST_CARD_GPS = 3
+            const val POST_CARD_ACTIVITY = 4
+            const val POST_CARD_AWARD = 5
+            const val POST_CARD_CONTENT = 6
+
+            const val ACTIVITY_CONFIDENCE= 50
+            const val GPS_ACCURACY = 200
+
+            const val ACTIVITY_RUNNING = "Running"
+            const val ACTIVITY_TILTING = "Tilting"
+            const val ACTIVITY_STILL = "Still"
+            const val ACTIVITY_FOOT = "On Foot"
+            const val ACTIVITY_UNKNOWN = "Unknown"
+            const val ACTIVITY_VEHICLE = "In Vehicle"
+            const val ACTIVITY_BICYCLE = "On Bicycle"
+
+
             const val TAG = "SSTNG"
 
             private var instance: StandStrong? = null

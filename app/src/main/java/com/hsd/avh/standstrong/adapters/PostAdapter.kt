@@ -15,6 +15,7 @@ import com.hsd.avh.standstrong.databinding.ListItemPostsBinding
 import com.hsd.avh.standstrong.fragments.PostListFragmentDirections
 import com.hsd.avh.standstrong.utilities.SSUtils
 import com.varunest.sparkbutton.SparkEventListener
+import java.text.SimpleDateFormat
 
 /**
  * Adapter for the [RecyclerView] in [PostListFragment].
@@ -24,7 +25,7 @@ class PostAdapter : ListAdapter<Post, PostAdapter.ViewHolder>(PostDiffCallback()
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val post = getItem(position)
         holder.apply {
-            bind(createOnClickListener(post.postId), post,createCommentOnClickListener(post))
+            bind(createOnClickListener(post), post,createCommentOnClickListener(post))
             itemView.tag = post
         }
     }
@@ -34,15 +35,33 @@ class PostAdapter : ListAdapter<Post, PostAdapter.ViewHolder>(PostDiffCallback()
                 LayoutInflater.from(parent.context), parent, false))
     }
 
-    private fun createOnClickListener(postId: Int): View.OnClickListener {
+    private fun createOnClickListener(post: Post): View.OnClickListener {
         return View.OnClickListener {
             val bundle = Bundle()
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, Integer.toString(postId))
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, Integer.toString(post.postId))
             bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Post Viewed")
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "post")
             StandStrong.firebaseInstance().logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle)
-            val direction = PostListFragmentDirections.actionPostListToPostDetail(postId)
-            it.findNavController().navigate(direction)
+            //val dateFormat = SimpleDateFormat("yyyy-mm-dd hh:mm:ss")
+            //val strDate = dateFormat.format(
+
+            when (post.type) {
+                StandStrong.POST_CARD_CONTENT ->
+                    it.findNavController().navigate(PostListFragmentDirections.actionPostListToPostDetail(post.postId))
+                StandStrong.POST_CARD_MESSAGE->
+                    it.findNavController().navigate(PostListFragmentDirections.actionPostListToMessages( post.motherId,post.postId))
+                StandStrong.POST_CARD_AWARD->
+                    it.findNavController().navigate(PostListFragmentDirections.actionPostListToAwards())
+                StandStrong.POST_CARD_ACTIVITY ->
+                    it.findNavController().navigate(PostListFragmentDirections.actionPostListToDataActivity(post.motherId,post.postDate.time))
+                StandStrong.POST_CARD_GPS ->
+                    it.findNavController().navigate(PostListFragmentDirections.actionPostListToDataGps(post.motherId,post.postDate.time))
+                StandStrong.POST_CARD_PROXIMITY ->
+                    it.findNavController().navigate(PostListFragmentDirections.actionPostListToDataProximity(post.motherId,post.postDate.time))
+                else -> "na"
+            }
+            //val direction = PostListFragmentDirections.actionPostListToPostDetail(post.postId)
+            //it.findNavController().navigate(direction)
         }
     }
 

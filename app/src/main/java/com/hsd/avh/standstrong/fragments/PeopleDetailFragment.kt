@@ -53,10 +53,10 @@ class PeopleDetailFragment : Fragment() {
         vm.getPostCount().observe(viewLifecycleOwner, Observer { pc: Int ->
             binding.postCountTextView.text = Integer.toString(pc)  + " " + StandStrong.applicationContext().getString(R.string.posts)
         })
-        vm.getAwardCount().observe(viewLifecycleOwner, Observer { ac: Int ->
+        /*vm.getAwardCount().observe(viewLifecycleOwner, Observer { ac: Int ->
             binding.awardCountTextView.text = Integer.toString(ac)  + " " + StandStrong.applicationContext().getString(R.string.awards)
         })
-
+*/
         setHasOptionsMenu(true)
         return binding.root
     }

@@ -45,7 +45,7 @@ class ScheduleNotificationWorker(context : Context, params : WorkerParameters)
         val avatarUrl = "https://www.tinygraphs.com/squares/Education?theme=heatwave&numcolors=4&size=50&fmt=png"
         val postTitle = SSUtils.getEducationalPostTitle(SSUtils.getNextEducationalPost())
         val postTxt =SSUtils.getEducationalPostText(SSUtils.getNextEducationalPost())
-        val p: Post = Post( "All",99999,Date(),avatarUrl,cardTitle,"",mediaUrl,false,0,1,postTitle,postTxt)
+        val p: Post = Post( "All",99999,Date(),avatarUrl,cardTitle,"",mediaUrl,false,0,StandStrong.POST_CARD_CONTENT,postTitle,postTxt)
 
         GlobalScope.launch(Dispatchers.Main) {
             withContext(Dispatchers.IO){

@@ -8,6 +8,9 @@ package com.hsd.avh.standstrong.utilities
         enum class Screens {
             Post,
             PostDetails,
+            ActivityData,
+            GpsData,
+            ProximityData,
             Awards,
             AwardDetails,
             Clients,

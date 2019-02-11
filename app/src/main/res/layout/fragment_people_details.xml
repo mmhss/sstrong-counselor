@@ -207,8 +207,10 @@
                                     android:fontFamily="sans-serif"
                                     android:padding="5dp"
                                     android:textColor="@android:color/black"
-                                    android:textSize="14sp" />
-                                <!--android:text="@{vm.awardCount}"-->
+                                    android:textSize="14sp"
+                                    />
+
+                                android:text="@{Integer.toString(vm.awardCount)}"
 
                             </LinearLayout>
 

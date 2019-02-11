@@ -29,6 +29,19 @@ object InjectorUtils {
         return MessageRepository.getInstance(AppDatabase.getInstance(context).messageDao())
     }
 
+    private fun getPostDataRepository(context: Context): PostRepository {
+        return PostRepository.getInstance(AppDatabase.getInstance(context).postDao(),AppDatabase.getInstance(context).gpsDao(),AppDatabase.getInstance(context).activityDao(),AppDatabase.getInstance(context).proximityDao())
+    }
+
+    fun providePostDataViewModelFactory(
+            context: Context,
+            motherId: Int,
+            postDate: Long
+    ): DataPostViewModelFactory {
+        val repository = getPostDataRepository(context)
+        return DataPostViewModelFactory(repository,motherId,postDate)
+    }
+
 
     fun providePostListViewModelFactory(
         context: Context

@@ -145,18 +145,22 @@ class SSUtils {
             checkForNewActivity()
         }
 
-        @JvmStatic private fun createDataPost(motherIds:ArrayList<Int>,ct : Int,drawable:String, pstTitle : Int, pstTxt : Int) {
+        @JvmStatic private fun createDataPost(motherIds:ArrayList<String>,ct : Int,drawable:String, pstTitle : Int, pstTxt : Int, type:Int) {
             if (motherIds.isNotEmpty()) {
                 triggerNotification(999, StandStrong.applicationContext().resources.getString(com.hsd.avh.standstrong.R.string.notification_description_post))
                 var ssId = ""
-                var uniqueMomIds: Set<Int> = HashSet<Int>(motherIds)
+                var uniqueMomIds: Set<String> = HashSet<String>(motherIds)
                 for (mom in uniqueMomIds) {
+                    //Split ID and Day
+                    val thisMomsId = Integer.parseInt(mom.split("**")[0])
+                    val thisMomsDate = SimpleDateFormat("yyyy-MM-dd").parse(mom.split("**")[1])
+
                     GlobalScope.launch(Dispatchers.Main) {
-                        val request = endpoints!!.getMotherByIdAsync(mom)
+                        val request = endpoints!!.getMotherByIdAsync(thisMomsId)
                         try {
                             val response = request.await()
                             ssId = response.body()!!.identificationNumber!!
-                            var p: Post = Post( ssId, mom,Date(), "https://www.tinygraphs.com/squares/$ssId?theme=heatwave&numcolors=4&size=50&fmt=png",StandStrong.applicationContext().getString(ct),ssId,drawable,false,0,2,StandStrong.applicationContext().getString(pstTitle) +" "+ ssId,StandStrong.applicationContext().getString(pstTxt))
+                            var p: Post = Post( ssId, thisMomsId,thisMomsDate, "https://www.tinygraphs.com/squares/$ssId?theme=heatwave&numcolors=4&size=50&fmt=png",StandStrong.applicationContext().getString(ct),ssId,drawable,false,0,type,StandStrong.applicationContext().getString(pstTitle) +" "+ ssId,StandStrong.applicationContext().getString(pstTxt))
                             //Makes sure to tell the UI when we are done so t can update live data
                             withContext(Dispatchers.IO){
                                 database.postDao().insertPost(p)
@@ -175,24 +179,27 @@ class SSUtils {
 
         @JvmStatic fun checkForNewProximity() {
             GlobalScope.launch(Dispatchers.Main) {
-                val motherIds = ArrayList<Int>()
+                val motherIds = ArrayList<String>()
                 val request = endpoints!!.getProximityDataAsync(getLastProxyRow(PROXIMITY))
                 try {
                     val response = request.await()
+
                     for (r in response.body().orEmpty()) {
-                        motherIds.add(r.motherId!!)
-                        /*"chartDay": "2018-11-08",
-                          "chartHour": "18",*/
-                        val dt = r.chartDay +  " " + r.chartHour + ":00"
-                        val date =   SimpleDateFormat("yyyy-MM-dd HH:mm").parse(dt)
-                        val proxy : Proximity = Proximity(r.chartEvent,r.chartValue,r.motherId,date,r.proximityId)
-                        withContext(Dispatchers.IO) {
-                            database.proximityDao().insertProximity(proxy)
+                        if(r.chartEvent.toString() == "Visibility") {
+                            /*"chartDay": "2018-11-08",
+                            "chartHour": "18",*/
+                            val dt = r.chartDay +  " " + r.chartHour + ":00"
+                            motherIds.add(Integer.toString(r.motherId!!)+"**"+r.chartDay)
+                            val date =   SimpleDateFormat("yyyy-MM-dd HH:mm").parse(dt)
+                            val proxy : Proximity = Proximity(r.chartEvent,r.chartValue,r.motherId,date,r.proximityId)
+                            withContext(Dispatchers.IO) {
+                                database.proximityDao().insertProximity(proxy)
+                            }
                         }
                         updateLastRetrievedRow(PROXIMITY, r.proximityId!!)
                     }
                     if (response.body().orEmpty().isNotEmpty()) {
-                        createDataPost(motherIds, R.string.card_title_proximity, DATA_ROUTINE, R.string.post_title_proximity, R.string.post_subtitle_proximity)
+                        createDataPost(motherIds, R.string.card_title_proximity, DATA_ROUTINE, R.string.post_title_proximity, R.string.post_subtitle_proximity,StandStrong.POST_CARD_PROXIMITY)
                     }
                 } catch (e: HttpException) {
                     Crashlytics.logException(e)
@@ -207,12 +214,12 @@ class SSUtils {
 
         @JvmStatic fun checkForNewGPS() {
             GlobalScope.launch(Dispatchers.Main) {
-                val motherIds = ArrayList<Int>()
+                val motherIds = ArrayList<String>()
                 val request = endpoints!!.getGPSDataAsync(getLastRow(GPS))
                 try {
                     val response = request.await()
                     for (r in response.body().orEmpty()) {
-                        motherIds.add(r.mother!!.id!!)
+                        motherIds.add(Integer.toString(r.mother!!.id!!)+"**"+ r.captureDate!!.split(" ")[0])
                         //"captureDate": "2019-02-01 13:10:19",
                         val date =   SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(r.captureDate)
                         var gps : Gps = Gps(r.latitude,r.longitude,r.altitude,r.accuracy, r.mother!!.id,date)
@@ -222,7 +229,7 @@ class SSUtils {
                         updateLastRetrievedRow(GPS, r.id!!)
                     }
                     if (response.body().orEmpty().isNotEmpty()) {
-                        createDataPost(motherIds, R.string.card_title_gps,DATA_GPS,R.string.post_title_gps,R.string.post_subtitle_gps)
+                        createDataPost(motherIds, R.string.card_title_gps,DATA_GPS,R.string.post_title_gps,R.string.post_subtitle_gps,StandStrong.POST_CARD_GPS)
                     }
                 } catch (e: HttpException) {
                     Crashlytics.logException(e)
@@ -236,12 +243,12 @@ class SSUtils {
 
         @JvmStatic fun checkForNewActivity() {
             GlobalScope.launch(Dispatchers.Main) {
-                val motherIds = ArrayList<Int>()
+                val motherIds = ArrayList<String>()
                 val request = endpoints!!.getActivityDataAsync(getLastRow(ACTIVITY))
                 try {
                     val response = request.await()
                     for (r in response.body().orEmpty()) {
-                        motherIds.add(r.mother!!.id!!)
+                        motherIds.add(Integer.toString(r.mother!!.id!!)+"**"+ r.captureDate!!.split(" ")[0])
                         //"captureDate": "2019-02-01 13:10:19",
                         val date =   SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(r.captureDate)
                         var act : Activity= Activity(r.activityType,r.confidence,r.mother!!.id!!,date,r.id)
@@ -251,7 +258,7 @@ class SSUtils {
                         updateLastRetrievedRow(ACTIVITY, r.id!!)
                     }
                     if (response.body().orEmpty().isNotEmpty()) {
-                        createDataPost(motherIds, R.string.card_title_activity, DATA_ACTIVITY,R.string.post_title_activity,R.string.post_subtitle_activity)
+                        createDataPost(motherIds, R.string.card_title_activity, DATA_ACTIVITY,R.string.post_title_activity,R.string.post_subtitle_activity,StandStrong.POST_CARD_ACTIVITY)
                     }
                 } catch (e: HttpException) {
                     Crashlytics.logException(e)
@@ -320,7 +327,7 @@ class SSUtils {
                                 } catch(e:Exception) {
                                     Log.d("SSS","Error")
                                 }
-                                var p: Post = Post(ssId, a.motherId, Date(), "https://www.tinygraphs.com/squares/" + a.motherId + "?theme=heatwave&numcolors=4&size=50&fmt=png", StandStrong.applicationContext().getString(R.string.card_title_award), ssId, NEW_AWARD, false, 0, 2, ssId + " " +StandStrong.applicationContext().getString(R.string.post_title_award), StandStrong.applicationContext().getString(R.string.post_subtitle_award))
+                                var p: Post = Post(ssId, a.motherId, Date(), "https://www.tinygraphs.com/squares/" + a.motherId + "?theme=heatwave&numcolors=4&size=50&fmt=png", StandStrong.applicationContext().getString(R.string.card_title_award), ssId, NEW_AWARD, false, 0, StandStrong.POST_CARD_AWARD, ssId + " " +StandStrong.applicationContext().getString(R.string.post_title_award), StandStrong.applicationContext().getString(R.string.post_subtitle_award))
 
                                 try {
                                     database.postDao().insertPost(p)
@@ -406,7 +413,7 @@ class SSUtils {
                                     var aURL = "https://www.tinygraphs.com/squares/"+r.mother!!.id!!+"?theme=heatwave&numcolors=4&size=50&fmt=png"
                                     var postTitle = StandStrong.applicationContext().getString(R.string.post_title_msg)
                                     var postTxt =StandStrong.applicationContext().getString(R.string.post_subtitle_msg)
-                                    var p: Post = Post( ssId, r.mother!!.id!!,dateMsg,aURL,cardTitle,ssId,mURL,false,0,2,postTitle,postTxt)
+                                    var p: Post = Post( ssId, r.mother!!.id!!,dateMsg,aURL,cardTitle,ssId,mURL,false,0,StandStrong.POST_CARD_MESSAGE,postTitle,postTxt)
                                     try {
                                         runBlocking {
                                             insertRowIdRow = database.postDao().insertPost(p)

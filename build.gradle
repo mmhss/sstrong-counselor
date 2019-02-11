@@ -47,7 +47,7 @@ buildscript {
         supportLibraryVersion = '1.0.2'
         uiAutomatorVersion = '2.2.0-alpha4'
         workVersion = '1.0.0-alpha11'
-
+        googlePlayVersion = '15.0.0'
     }
 
     repositories {

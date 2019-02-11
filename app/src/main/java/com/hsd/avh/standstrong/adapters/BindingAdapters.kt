@@ -50,6 +50,6 @@ fun setImageDrawable(view: ImageView, imageStr: String?) {
 
 @BindingAdapter("readableDate")
 fun bindServerDate(textView: TextView, date: Date) {
-    var sdfDate = SimpleDateFormat("yyyy-MM-dd HH:mm")
+    var sdfDate = SimpleDateFormat("EEE, MMM d, yyyy")
     textView.text = sdfDate.format(date)
 }

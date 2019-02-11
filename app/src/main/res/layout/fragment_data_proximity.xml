@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:williamchart="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+<!--
+    <data>
+        <variable
+            name="vm"
+            type="com.hsd.avh.standstrong.viewmodels.PersonDetailViewModel" />
+    </data>
+
+-->
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+        <com.db.chart.view.HorizontalStackBarChartView
+            android:id="@+id/chart"
+            android:layout_width="match_parent"
+            android:layout_height="600dp"
+            android:paddingTop="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            williamchart:chart_axis="false"
+            williamchart:chart_barSpacing="5dp"
+            williamchart:chart_cornerRadius="5dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:gravity="center|center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/electric_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_toStartOf="@+id/label_sep"
+            android:layout_toLeftOf="@+id/label_sep"
+            android:text="@string/proximity_alone"
+            android:textColor="#870000"
+            android:textSize="18sp" />
+
+        <View
+            android:id="@+id/label_sep"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="#b8c7b4" />
+
+        <TextView
+            android:id="@+id/fuel_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_toEndOf="@+id/label_sep"
+            android:layout_toRightOf="@+id/label_sep"
+            android:text="@string/proximity_together"
+            android:textColor="#f9683a"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+    </LinearLayout>
+</layout>
