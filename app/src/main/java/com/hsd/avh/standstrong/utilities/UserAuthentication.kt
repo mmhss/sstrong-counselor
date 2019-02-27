@@ -8,13 +8,14 @@ class UserAuthentication(txt1:String,txt2:String,txt3:String,txt4:String) {
     var t2: String
     var t3: String
     var t4: String
-    lateinit var code: String
+    var code: String
 
     init{
         t1 = txt1
         t2 = txt2
         t3 = txt3
         t4 = txt4
+        code = "9999"
     }
 
 

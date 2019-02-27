@@ -32,6 +32,8 @@ class PersonRepository private constructor(
 
     fun getPostListById(postId: String) = postDao.getPostsForPerson(postId)
 
+    fun getRAPostListById(postId: String) = postDao.getRAPostsForPerson(postId)
+
 
     fun refreshPersonList() {
         SSUtils.checkForNewPeople()

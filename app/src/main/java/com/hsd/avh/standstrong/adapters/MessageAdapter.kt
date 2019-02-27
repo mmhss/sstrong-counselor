@@ -10,23 +10,52 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.hsd.avh.standstrong.StandStrong
 import com.hsd.avh.standstrong.data.messages.Message
 import com.hsd.avh.standstrong.databinding.ListItemMessagesBinding
+import com.hsd.avh.standstrong.databinding.ListItemMsgMeBinding
+import com.hsd.avh.standstrong.databinding.ListItemMsgYouBinding
 
 /**
  * Adapter for the [RecyclerView] in [MessageFragment].
  */
-class MessageAdapter : ListAdapter<Message, MessageAdapter.ViewHolder>(MessageDiffCallback()) {
+class MessageAdapter : ListAdapter<Message, RecyclerView.ViewHolder>(MessageDiffCallback()) {
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+    override  fun onBindViewHolder(holder:RecyclerView.ViewHolder , position:Int) {
         val msg = getItem(position)
-        holder.apply {
-            bind(msg) //, createHeartOnClickListener(post)
-            itemView.tag = msg
+        if (msg.direction == StandStrong.MESSAGE_DIRECTION_IN) {
+            val viewHolderYou:ViewHolderYou = holder as ViewHolderYou
+            viewHolderYou.apply {
+                bind(msg) //, createHeartOnClickListener(post)
+                itemView.tag = msg
+            }
+        } else {
+            val viewHolderMe:ViewHolderMe = holder as ViewHolderMe
+            viewHolderMe.apply {
+                bind(msg) //, createHeartOnClickListener(post)
+                itemView.tag = msg
+            }
         }
+
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(com.hsd.avh.standstrong.databinding.ListItemMessagesBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false))
+    @Override
+    override  fun onCreateViewHolder( parent:ViewGroup, viewType:Int) : RecyclerView.ViewHolder {
+
+        return if (viewType == 0)
+            ViewHolderYou(com.hsd.avh.standstrong.databinding.ListItemMsgYouBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false))
+        else
+            ViewHolderMe(com.hsd.avh.standstrong.databinding.ListItemMsgMeBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false))
+
+    }
+
+
+    override fun getItemViewType(position: Int): Int {
+        val msg = getItem(position)
+        return if (msg.direction == StandStrong.MESSAGE_DIRECTION_IN) {
+            0
+        } else
+            1
     }
 
     private fun createMessageButtonOnClickListener(): View.OnClickListener {
@@ -39,8 +68,8 @@ class MessageAdapter : ListAdapter<Message, MessageAdapter.ViewHolder>(MessageDi
     }
 
 
-    class ViewHolder(
-        private val binding: ListItemMessagesBinding
+    class ViewHolderMe(
+            private val binding: ListItemMsgMeBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item : Message) {  //, item: Post, heartListener : View.OnClickListener
@@ -52,7 +81,21 @@ class MessageAdapter : ListAdapter<Message, MessageAdapter.ViewHolder>(MessageDi
                 executePendingBindings()
             }
         }
-
-
     }
+
+    class ViewHolderYou(
+            private val binding: ListItemMsgYouBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(item : Message) {  //, item: Post, heartListener : View.OnClickListener
+
+            binding.apply {
+                //sendClickListener = listener
+                //keepClickListener = heartListener
+                msg = item
+                executePendingBindings()
+            }
+        }
+    }
+
 }

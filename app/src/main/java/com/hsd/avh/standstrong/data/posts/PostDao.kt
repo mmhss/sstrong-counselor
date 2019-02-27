@@ -13,8 +13,18 @@ interface PostDao {
     @Query("SELECT * FROM posts ORDER BY date desc")
     fun getPosts(): LiveData<List<Post>>
 
+    @Query("SELECT * FROM posts WHERE type=2 ORDER BY date desc")
+    fun getRAPosts(): LiveData<List<Post>>
+
+
+
     @Query("SELECT * FROM posts WHERE id = :postId")
     fun getPost(postId: Int): LiveData<Post>
+
+
+    //@Query("SELECT * FROM posts WHERE type=2 ORDER BY date desc")
+    //fun getRAPost(postId: Int): LiveData<Post>
+
 
     /*@Query("SELECT id FROM posts WHERE id = :postId")
     fun getPostId(postId: String): Int
@@ -22,6 +32,10 @@ interface PostDao {
 
     @Query("SELECT * FROM posts WHERE person_id = :personId")
     fun getPostsForPerson(personId: String): LiveData<List<Post>>
+
+    @Query("SELECT * FROM posts WHERE type=2 AND person_id = :personId")
+    fun getRAPostsForPerson(personId: String): LiveData<List<Post>>
+
 
     @Query("SELECT count(*) FROM posts WHERE person_id = :personId")
     fun getPostCountForPerson(personId: String): LiveData<Int>

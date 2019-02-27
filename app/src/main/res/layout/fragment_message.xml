@@ -14,7 +14,7 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="100dp"
+        android:paddingBottom="56dp"
         android:orientation="vertical"
         >
 
@@ -22,7 +22,7 @@
             android:id="@+id/message_list"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:layout_marginBottom="80dp"
+            android:layout_marginBottom="2dp"
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
             android:scrollbars="vertical"
@@ -67,7 +67,7 @@
                 android:text="SEND"
                 android:textSize="12dp"
                 android:clickable="true"
-                android:layout_width="64dp"
+                android:layout_width="96dp"
                 android:layout_height="48dp"
                 android:gravity="center"
                 android:onClick="@{() -> viewmodel.addMessage()}"

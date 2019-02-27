@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.hsd.avh.standstrong.StandStrong
 import com.hsd.avh.standstrong.data.people.Person
 import com.hsd.avh.standstrong.data.people.PersonRepository
 import com.hsd.avh.standstrong.data.posts.Post
@@ -29,8 +30,14 @@ class PersonDetailViewModel(
         val liveMessageCount = personRepository.getMessageCount(personId)
         val livePostCount = personRepository.getPostCount(personId)
 
-        postList.addSource(livePostList, postList::setValue)
-
+        //postList.addSource(livePostList, postList::setValue)
+        if(StandStrong.isNotRA()) {
+            val livePostList = personRepository.getPostListById(personId)
+            postList.addSource(livePostList, postList::setValue)
+        } else {
+            val livePostList = personRepository.getRAPostListById(personId)
+            postList.addSource(livePostList, postList::setValue)
+        }
         awardCount.addSource(liveAwardCount, awardCount::setValue)
         messageCount.addSource(liveMessageCount, messageCount::setValue)
         postCount.addSource(livePostCount, postCount::setValue)

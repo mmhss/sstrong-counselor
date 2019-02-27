@@ -11,6 +11,6 @@ enum class UserTypes(val userGroupName: String,val userGroupCode:String) {
     C2222("Counsellor","2222"),
     C3333("Supervisor","3333"),
     C1111("Admin","1111"),
-    C8765("RA","8765")
+    C5555("RA","5555")
 }
 

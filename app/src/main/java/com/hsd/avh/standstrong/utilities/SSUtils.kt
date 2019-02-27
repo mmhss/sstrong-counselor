@@ -137,12 +137,12 @@ class SSUtils {
 
         @JvmStatic fun checkForNewPosts() {
             //Education Comes through a workManager
-
             checkForNewProximity()
             checkForNewGPS()
             checkForNewMessages()
-            //A message worker upload and downloads messages
             checkForNewActivity()
+
+
         }
 
         @JvmStatic private fun createDataPost(motherIds:ArrayList<String>,ct : Int,drawable:String, pstTitle : Int, pstTxt : Int, type:Int) {

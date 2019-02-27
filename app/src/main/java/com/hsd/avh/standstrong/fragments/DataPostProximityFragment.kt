@@ -75,37 +75,45 @@ class DataPostProximityFragment : Fragment() {
  private val mValues = arrayOf(floatArrayOf(1f, 0f, 0f, 1f, 1f, 1f, 1f, 0f, 0f, 0f),
          floatArrayOf(0f, -1f, -1f, 0f, 0f, 0f, 0f, -1f, -1f, -1f))
 */
+
+                val allLabels = arrayOf("4AM","5AM","6AM","7AM","8AM", "9AM","10AM","11AM","12PM", "1PM","2PM","3PM","4PM", "5PM", "6PM", "7PM", "8PM", "9PM", "10PM")
+
+
                 val dFormat = SimpleDateFormat("ha")
                 //var mValues : Array<FloatArray> = Array<FloatArray>(2,2)
 
-                var togetherPoints :FloatArray = FloatArray(data.size)
-                var apartPoints :FloatArray = FloatArray(data.size)
+                var togetherPoints :FloatArray = FloatArray(19)
+                var apartPoints :FloatArray = FloatArray(19)
                 var mLabels : ArrayList<String> = ArrayList<String>()
-                var index : Int = 0
-                for (d in data) {
-                    mLabels.add(dFormat.format(d.chartDate))
-                    //togetherPoints[index] = d.chartValue!!.toFloat()
+                var index = 0
 
-                    if(Math.random() < 0.5)
+                for (label in allLabels) {
+                    var found = false;
+                    for (d in data) {
+                        if(dFormat.format(d.chartDate) == label) {
+                            togetherPoints[index] = d.chartValue!!.toFloat()
+                            if (togetherPoints[index] == 1f) {
+                                apartPoints[index] = 0f
+                            } else {
+                                apartPoints[index] = -1f
+                            }
+                            found = true
+                        }
+                    }
+                    if(!found) {
                         togetherPoints[index] = 0f
-                    else
-                        togetherPoints[index] = 1f
-
-                    if(togetherPoints[index] == 1f) {
                         apartPoints[index] = 0f
-                    } else {
-                        apartPoints[index] = -1f
+
                     }
                     index++
                 }
-
-                val array = arrayOfNulls<String>(mLabels.size)
+                //val array = arrayOfNulls<String>(mLabels.size)
                 val mValues = arrayOf(togetherPoints,apartPoints)
-                var dataset = BarSet(mLabels.toArray(array), mValues[0])
+                var dataset = BarSet(allLabels, mValues[0])
                 dataset.color = Color.parseColor("#f9683a")
                 binding.root.chart.addData(dataset)
 
-                dataset = BarSet(mLabels.toArray(array), mValues[1])
+                dataset = BarSet(allLabels, mValues[1])
                 dataset.color = Color.parseColor("#870000")
                 binding.root.chart.addData(dataset)
 

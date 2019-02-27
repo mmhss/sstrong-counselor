@@ -26,7 +26,11 @@ class PostRepository private constructor(
 
     fun getPosts() = postDao.getPosts()
 
+    fun getRAPosts() = postDao.getRAPosts()
+
     fun getPost(postId: Int) = postDao.getPost(postId)
+
+    //fun getRAPost(postId: Int) = postDao.getRAPost(postId)
 
     //Activity
     fun getActivityByDate(motherId:Int,confidence:Int,stDate:Long,endDate: Long) = activityDao.getActivityByDate(motherId,confidence,stDate,endDate)

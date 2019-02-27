@@ -19,7 +19,7 @@ import android.view.inputmethod.InputMethodManager
 class LoginActivity : AppCompatActivity() {
 
     lateinit var bindings : ActivityLoginBinding
-    var user: UserAuthentication = UserAuthentication("","","","")
+    private var user: UserAuthentication = UserAuthentication("","","","")
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +35,7 @@ class LoginActivity : AppCompatActivity() {
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, FirebaseUtils.loginAttempt(user.code))
             if(user.isValidUser()){
                 setFirebaseUser()
+                StandStrong.setUser(user)
                 val mainIntent = Intent(this.applicationContext, MainActivity::class.java)
                 mainIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                 startActivity(mainIntent)
