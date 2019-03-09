@@ -8,6 +8,7 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.preference.PreferenceManager
+import androidx.collection.ArrayMap
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
@@ -37,6 +38,15 @@ class StandStrong : Application() {
             const val POST_CARD_ACTIVITY = 4
             const val POST_CARD_AWARD = 5
             const val POST_CARD_CONTENT = 6
+            const val POST_CARD_GOAL = 7
+            const val POST_CARD_STRING_MESSAGE = "Messages"
+            const val POST_CARD_STRING_PROXIMITY = "Proximity"
+            const val POST_CARD_STRING_GPS = "Movement"
+            const val POST_CARD_STRING_ACTIVITY = "Activity"
+            const val POST_CARD_STRING_GOAL = "Goals"
+            const val POST_CARD_STRING_AWARD = "Awards"
+            const val POST_CARD_STRING_CONTENT = "Information"
+
             const val ACTIVITY_CONFIDENCE= 50
             const val GPS_ACCURACY = 200
             const val ACTIVITY_RUNNING = "Running"
@@ -48,6 +58,8 @@ class StandStrong : Application() {
             const val ACTIVITY_BICYCLE = "On Bicycle"
             const val TAG = "SSTNG"
 
+            private val filter_list = ArrayMap<String, List<String>>()
+            private val filter_people_list = ArrayMap<String, List<String>>()
             private var instance: StandStrong? = null
 
             fun firebaseInstance():FirebaseAnalytics{
@@ -84,6 +96,13 @@ class StandStrong : Application() {
                 val us = sharedPref!!.getString("user","1111").toCharArray()
                 var user: UserAuthentication = UserAuthentication(us[0].toString(),us[1].toString(),us[2].toString(),us[3].toString())
                 return user.userType() != UserTypes.C5555
+            }
+
+            fun getFilters(): ArrayMap<String,List<String>> {
+                return filter_list
+            }
+            fun getFiltersPeople(): ArrayMap<String,List<String>> {
+                return filter_people_list
             }
         }
 

@@ -56,7 +56,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
+    configurations {
+        cleanedAnnotations
+        compile.exclude group: 'org.jetbrains' , module:'annotations'
+    }
     buildToolsVersion '28.0.3'
 }
 
@@ -97,6 +100,9 @@ dependencies {
     implementation "com.google.android.gms:play-services-maps:$googlePlayVersion"
     implementation "com.google.android.gms:play-services-location:$googlePlayVersion"
     implementation 'com.diogobernardino:williamchart:2.5.0'
+    implementation 'com.allattentionhere:fabulousfilter:0.0.5'
+    implementation 'com.github.keyrunHORNET:date_picker_converter:2.2'
+    implementation 'com.google.android:flexbox:1.1.0'
     // Testing dependencies
     androidTestImplementation "androidx.arch.core:core-testing:$rootProject.coreTestingVersion"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$rootProject.espressoVersion"

@@ -21,6 +21,9 @@ interface PersonDao {
     @Query("SELECT * FROM people WHERE ss_id = :ssId")
     fun getPersonByMotherSsId(ssId: String): LiveData<Person>
 
+    @Query("SELECT * FROM people WHERE ss_id = :ssId")
+    fun getImmutablePersonByMotherSsId(ssId: String): Person
+
     @Query("SELECT ss_id FROM people WHERE id = :motherId")
     fun getMotherSsId(motherId: Int): String
 

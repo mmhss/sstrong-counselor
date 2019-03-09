@@ -14,9 +14,12 @@ import com.hsd.avh.standstrong.api.ApiEndpoints
 import androidx.annotation.NonNull
 import android.R.attr.name
 import androidx.lifecycle.LiveData
+import androidx.sqlite.db.SimpleSQLiteQuery
 import com.crashlytics.android.Crashlytics
 import com.hsd.avh.standstrong.data.awards.AwardDao
 import com.hsd.avh.standstrong.data.awards.MessageDao
+import com.hsd.avh.standstrong.data.messages.Message
+import com.hsd.avh.standstrong.data.posts.Post
 import com.hsd.avh.standstrong.data.posts.PostDao
 import com.hsd.avh.standstrong.utilities.SSUtils
 import com.hsd.avh.standstrong.workers.MyAPIException
@@ -45,6 +48,16 @@ class PersonRepository private constructor(
         }
     }
 
+    suspend fun insertPost(post: Post) : Long {
+        return postDao.insertPost(post)
+    }
+
+    suspend fun insertMessage(msg: Message) {
+        withContext(IO) {
+            messageDao.insertMessage(msg)
+        }
+    }
+
     suspend fun removePerson(person: Person) {
         withContext(IO) {
             personDao.deletePerson(person)
@@ -53,6 +66,15 @@ class PersonRepository private constructor(
 
     fun getPersonById(personId: String) =
             personDao.getPersonByMotherSsId(personId)
+
+    suspend fun  getImmutablePersonById (personId: String) : Person {
+        return withContext(IO){
+            personDao.getImmutablePersonByMotherSsId(personId)
+        }
+    }
+
+
+    fun getPostListByIdAndFilters(sql: SimpleSQLiteQuery) =  postDao.getFilteredPosts(sql)
 
     fun getAllPeople() = personDao.getAllPeople()
 

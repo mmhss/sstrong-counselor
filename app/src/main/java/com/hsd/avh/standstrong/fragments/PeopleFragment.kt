@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.hsd.avh.standstrong.StandStrong
 import com.hsd.avh.standstrong.adapters.PeopleAdapter
 import com.hsd.avh.standstrong.databinding.FragmentPeopleBinding
 import com.hsd.avh.standstrong.utilities.FirebaseTrackingUtil
@@ -44,6 +45,7 @@ class PeopleFragment : Fragment() {
             }, 3000)
 
         }
+
         subscribeUi(adapter)
 
         setHasOptionsMenu(true)

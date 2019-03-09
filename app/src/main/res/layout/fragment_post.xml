@@ -32,11 +32,25 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/list_item_posts"/>
 
+
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 <!--
         <include layout="@layout/empty_state_no_home_posts"
             app:isGone="@{hasPosts}"/>
 -->
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/post_list"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="78dp"
+            android:backgroundTint="@color/colorPrimary"
+            app:srcCompat="@drawable/ic_filter" />
 
     </FrameLayout>
 

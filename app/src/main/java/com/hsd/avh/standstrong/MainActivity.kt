@@ -13,7 +13,10 @@ import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
 
 //import com.hsd.avh.standstrong
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(){
+
+
+
     private lateinit var navController: NavController
     private lateinit var navControllerPeople: NavController
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         val binding: ActivityHomeBinding= DataBindingUtil.setContentView(this,
                 R.layout.activity_home)
 
+
         //Main Navigation
         navController = Navigation.findNavController(this, R.id.main_nav_fragment)
         // Set up navigation menu
@@ -35,8 +39,6 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-
-
 
 
 }

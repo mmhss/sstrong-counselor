@@ -1,6 +1,8 @@
 package com.hsd.avh.standstrong.data.posts
 
 import android.net.ProxyInfo
+import androidx.collection.ArrayMap
+import androidx.sqlite.db.SimpleSQLiteQuery
 import com.crashlytics.android.Crashlytics
 import com.hsd.avh.standstrong.data.people.ApiPerson
 import com.hsd.avh.standstrong.data.people.Person
@@ -27,6 +29,10 @@ class PostRepository private constructor(
     fun getPosts() = postDao.getPosts()
 
     fun getRAPosts() = postDao.getRAPosts()
+
+    //fun getFilteredPosts(filter: List<Int>) =  postDao.getFilteredPosts(filter)
+
+    fun getFilteredPosts(sql:SimpleSQLiteQuery) =  postDao.getFilteredPosts(sql)
 
     fun getPost(postId: Int) = postDao.getPost(postId)
 

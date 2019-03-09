@@ -6,21 +6,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.google.android.material.snackbar.Snackbar
 import com.hsd.avh.standstrong.R
 import com.hsd.avh.standstrong.StandStrong
 import com.hsd.avh.standstrong.adapters.PostAdapter
 import com.hsd.avh.standstrong.databinding.FragmentPeopleDetailsBinding
-import com.hsd.avh.standstrong.databinding.FragmentPostBinding
 import com.hsd.avh.standstrong.utilities.FirebaseTrackingUtil
 import com.hsd.avh.standstrong.utilities.InjectorUtils
 import com.hsd.avh.standstrong.viewmodels.PersonDetailViewModel
-import com.hsd.avh.standstrong.viewmodels.PostListViewModel
-import kotlinx.android.synthetic.main.fragment_post.view.*
 
 class PeopleDetailFragment : Fragment() {
 
@@ -38,7 +33,12 @@ class PeopleDetailFragment : Fragment() {
         val context = context ?: return binding.root
         val factory = InjectorUtils.providePersonDetailViewModelFactory(requireActivity(), personId)
 
-        vm = ViewModelProviders.of(this, factory).get(PersonDetailViewModel::class.java)
+       // vm = ViewModelProviders.of(this, factory).get(PersonDetailViewModel::class.java)
+        vm  = activity?.run {
+            ViewModelProviders.of(this, factory).get(PersonDetailViewModel::class.java)
+        } ?: throw Exception("Invalid Activity")
+
+
 
         val adapter = PostAdapter()
         binding.postList.adapter = adapter
@@ -57,6 +57,14 @@ class PeopleDetailFragment : Fragment() {
             binding.awardCountTextView.text = Integer.toString(ac)  + " " + StandStrong.applicationContext().getString(R.string.awards)
         })
 */
+
+        val fab =  binding.fab3
+        fab.setOnClickListener{
+            val dialogFrag = FilterPersonFabFragment.newInstance(personId)
+            dialogFrag.setParentFab(fab)
+            dialogFrag.show(fragmentManager, dialogFrag.tag)
+        }
+
         setHasOptionsMenu(true)
         return binding.root
     }
