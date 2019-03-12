@@ -41,6 +41,7 @@ class SSUtils {
         const val DATA_ACTIVITY = "@drawable/data_activity"
         const val DATA_ROUTINE = "@drawable/data_routine"
         const val NEW_MESSAGE_DRAWABLE = "@drawable/new_message"
+        const val GOAL_DRAWABLE = "@drawable/data_goal"
         const val NEW_AWARD = "@drawable/new_award"
         //Tables
         const val PROXIMITY = "proximity"
@@ -56,17 +57,19 @@ class SSUtils {
         var endpoints: ApiEndpoints? = ApiService.service
         lateinit var returnSsId : String
 
-        @JvmStatic fun setNextEducationalPost(currentPost:String) {
+        @JvmStatic fun setNextEducationalPost() {
             val sharedPref = PreferenceManager.getDefaultSharedPreferences(StandStrong.applicationContext())
             val editor = sharedPref.edit()
-            val nextPost = "a" + Integer.toString(Integer.parseInt(currentPost.substring(1))+1)
+            val currentPost:Int = StandStrong.getEduPostsShown()
+            val nextPost = "post_" + Integer.toString(currentPost+1)
             editor.putString("eduPost",nextPost)
             editor.apply()
+            StandStrong.settEduPostsShown(currentPost+1)
         }
 
         @JvmStatic fun getNextEducationalPost():String {
             val sharedPref = PreferenceManager.getDefaultSharedPreferences(StandStrong.applicationContext())
-            return sharedPref!!.getString("eduPost","a1")
+            return sharedPref!!.getString("eduPost","post_1")
         }
 
         @JvmStatic fun getEducationalPostTitle(name: String): String {

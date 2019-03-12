@@ -38,12 +38,16 @@
     <!-- Data Posts -->
     <!-- Education -->
     <string name="card_title_education">Continued Learning</string>
-    <string name="post_title_edu_a1">अवसादको कारण</string>
-    <string name="post_title_edu_a2">Title 2</string>
-    <string name="post_title_edu_a3">Title 3</string>
-    <string name="post_subtitle_edu_a1">Sub Title 1. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
-    <string name="post_subtitle_edu_a2">Sub Title 2. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
-    <string name="post_subtitle_edu_a3">Sub Title 3. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
+    <string name="post_title_edu_post_1">Title1</string>
+    <string name="post_title_edu_post_2">Title 2</string>
+    <string name="post_title_edu_post_3">Title 3</string>
+    <string name="post_title_edu_post_4">Title 4</string>
+    <string name="post_title_edu_post_5">Title 5</string>
+    <string name="post_subtitle_edu_post_1">Sub Title 1. सन्देश पढ्न र जवाफ दिनका लागि कमेन्टमा  क्लिक गर्नुहोस्।</string>
+    <string name="post_subtitle_edu_post_2">Sub Title 2. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
+    <string name="post_subtitle_edu_post_3">Sub Title 3. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
+    <string name="post_subtitle_edu_post_4">Sub Title 4. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
+    <string name="post_subtitle_edu_post_5">Sub Title 5. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
 
     <string name="card_title_award">New Award</string>
     <string name="post_title_award">has unlocked a new award</string>
@@ -65,18 +69,15 @@
     <string name="card_title_msg">New Message</string>
     <string name="post_title_msg">You have been sent a new message from </string>
     <string name="post_subtitle_msg">Click the comment icon to read the message and to reply.</string>
-    <!-- Temp -->
-    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
-    <string name="lorem2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."\n""\n"
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
-    <string name="no_translate_post_frag_label">post list nav fragment</string>
-    <string name="no_translate_post_detail_label">post detail label</string>
     <string name="send">Send</string>
 
+    <!--TO TRANSLATE -->
+    <string name="card_title_goal">New Goal</string>
+    <string name="post_title_goal">A new goal was set</string>
+    <string name="filter_date">Filter Date</string>
+    <string name="enter_goal">Enter Goal</string>
+    <string name="enter_message">Enter Message</string>
+
+    <string name="notification_description_edu">New Educational Post</string>
 
 </resources>

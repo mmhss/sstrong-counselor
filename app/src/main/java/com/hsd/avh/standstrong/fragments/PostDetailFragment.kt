@@ -8,7 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.snackbar.Snackbar
 import com.hsd.avh.standstrong.R
 import com.hsd.avh.standstrong.databinding.*
 import com.hsd.avh.standstrong.utilities.FirebaseTrackingUtil
@@ -42,9 +44,12 @@ class PostDetailFragment : Fragment() {
             setLifecycleOwner(this@PostDetailFragment)
         }
 
-        /*vm.post.observe(this, Observer { post->
-            Snackbar.make(binding.root, "Post", Snackbar.LENGTH_LONG).show()
-        })*/
+
+        vm.post.observe(this, Observer { post->
+            val postHtml = "file:///android_asset/post_" + post.cardHeader.substring(post.cardHeader.length - 1, post.cardHeader.length) +".html"
+            binding.webview.loadUrl(postHtml)
+        })
+
         return binding.root
     }
 

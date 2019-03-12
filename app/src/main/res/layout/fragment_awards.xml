@@ -5,9 +5,10 @@
 
     <data>
         <variable
-            name="hasAwards"
-            type="Boolean"/>
+            name="viewmodel"
+            type="com.hsd.avh.standstrong.viewmodels.AwardViewModel"/>
     </data>
+
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -31,10 +32,8 @@
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-<!--
         <include layout="@layout/empty_state_no_awards"
-            app:isGone="@{hasAwards}"/>
--->
+            app:isGone="@{viewmodel.hasAwards}"/>
 
     </FrameLayout>
 

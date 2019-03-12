@@ -20,7 +20,7 @@ import java.util.*
 
 class PersonDetailViewModel(
         private val personRepository: PersonRepository,
-        personId: String
+        private var personId: String
 ) : ViewModel() {
 
 
@@ -29,29 +29,26 @@ class PersonDetailViewModel(
     private var messageCount = MediatorLiveData<Int>()
     private var postCount = MediatorLiveData<Int>()
     val person: LiveData<Person> = personRepository.getPersonById(personId)
-    private val postFilterList = MutableLiveData<Int>()
 
-    private lateinit var appliedFilters : ArrayMap<String, List<String>>
+    private val postFilterList = MutableLiveData<Int>()
+    private var appliedFilters : ArrayMap<String, List<String>> = ArrayMap<String, List<String>>()
+
     init {
         val livePostList = personRepository.getPostListById(personId)
         val liveAwardCount = personRepository.getAwardCount(personId)
         val liveMessageCount = personRepository.getMessageCount(personId)
         val livePostCount = personRepository.getPostCount(personId)
         postFilterList.value = PersonDetailViewModel.NO_FILTER
-
         if(StandStrong.isNotRA()) {
-            //val livePostList = postRepository.getPosts()
-            //postList.addSource(livePostList, postList::setValue)
 
             var sDate: Long =-1
             var eDate: Long =-1
             val livePostList = Transformations.switchMap(postFilterList) {
-                if (it == NO_FILTER) {
-                    personRepository.getPostListById(personId)
-                } else {
-                    var fl : ArrayList<Int> = ArrayList<Int>()
-                    var q: String = "SELECT * FROM posts WHERE person_id = '$personId' "
-                    var hasFilters : Boolean = false
+                var fl : ArrayList<Int> = ArrayList<Int>()
+                var q: String = "SELECT * FROM posts WHERE "
+                var hasFilters : Boolean = false
+                if(!appliedFilters.isNullOrEmpty()){
+                    q = "$q person_id = '" + appliedFilters["pid"]!![0].toString() +"' "
                     for ((k, v) in appliedFilters) {
                         if(k == "date") {
                             var stringDate = appliedFilters["date"]!![0].toString()
@@ -65,7 +62,7 @@ class PersonDetailViewModel(
                                 e.printStackTrace()
                             }
                         }
-                        if(k != "date") {
+                        if(k != "date" && k != "pid") {
                             hasFilters = true
                             q = "$q AND type IN ("
                             v.forEach { filterItem ->
@@ -90,19 +87,16 @@ class PersonDetailViewModel(
                     } else {
                         "$q ORDER BY date desc"
                     }
-                    val query = SimpleSQLiteQuery(q)
-
-                    personRepository.getPostListByIdAndFilters(query)
                 }
+                val query = SimpleSQLiteQuery(q)
+                personRepository.getPostListByIdAndFilters(query)
             }
+
             postList.addSource(livePostList, postList::setValue)
         } else {
             val livePostList = personRepository.getRAPostListById(personId)
             postList.addSource(livePostList, postList::setValue)
         }
-
-
-
         awardCount.addSource(liveAwardCount, awardCount::setValue)
         messageCount.addSource(liveMessageCount, messageCount::setValue)
         postCount.addSource(livePostCount, postCount::setValue)
@@ -117,44 +111,81 @@ class PersonDetailViewModel(
 
     fun newMessage(msg :String) {
         runBlocking {
-        withContext(IO) {
-            lateinit var immPerson : Person
-            runBlocking {
-                immPerson = personRepository.getImmutablePersonById("personId")
-            }
-            val dateMsg = Date()
-            var cardTitle = StandStrong.applicationContext().getString(com.hsd.avh.standstrong.R.string.card_title_msg)
-            var mURL = SSUtils.NEW_MESSAGE_DRAWABLE
-            var aURL = "https://www.tinygraphs.com/squares/" + immPerson.mother_id + "?theme=heatwave&numcolors=4&size=50&fmt=png"
-            var postTitle = StandStrong.applicationContext().getString(com.hsd.avh.standstrong.R.string.post_title_msg)
-            var postTxt = StandStrong.applicationContext().getString(com.hsd.avh.standstrong.R.string.post_subtitle_msg)
-            var p: Post = Post(immPerson.ssId, immPerson.mother_id, dateMsg, aURL, cardTitle, immPerson.ssId, mURL, false, 0, StandStrong.POST_CARD_MESSAGE, postTitle, postTxt)
-            var insertRowIdRow: Long = 0
-            try {
+            withContext(IO) {
+                lateinit var immPerson : Person
                 runBlocking {
-                    insertRowIdRow = personRepository.insertPost(p)
-                    val m = Message(immPerson.mother_id, msg, StandStrong.MESSAGE_DIRECTION_OUT, insertRowIdRow.toInt(), dateMsg)
-                    personRepository.insertMessage(m)
+                    immPerson = personRepository.getImmutablePersonById(personId)
                 }
-            } catch (e: Exception) {
-                Log.d("SSS", "Error")
-            }
+                val dateMsg = Date()
+                var cardTitle = StandStrong.applicationContext().getString(com.hsd.avh.standstrong.R.string.card_title_msg)
+                var mURL = SSUtils.NEW_MESSAGE_DRAWABLE
+                var aURL = "https://www.tinygraphs.com/squares/" + immPerson.mother_id + "?theme=heatwave&numcolors=4&size=50&fmt=png"
+                var postTitle = StandStrong.applicationContext().getString(com.hsd.avh.standstrong.R.string.post_title_msg)
+                var postTxt = StandStrong.applicationContext().getString(com.hsd.avh.standstrong.R.string.post_subtitle_msg)
+                var p: Post = Post(immPerson.ssId, immPerson.mother_id, dateMsg, aURL, cardTitle, immPerson.ssId, mURL, false, 0, StandStrong.POST_CARD_MESSAGE, postTitle, postTxt)
+                var insertRowIdRow: Long = 0
+                try {
+                    runBlocking {
+                        insertRowIdRow = personRepository.insertPost(p)
+                        val m = Message(immPerson.mother_id, msg, StandStrong.MESSAGE_DIRECTION_OUT, insertRowIdRow.toInt(), dateMsg)
+                        personRepository.insertMessage(m)
+                    }
+                } catch (e: Exception) {
+                    Log.d("SSS", "Error")
+                }
 
         }
         }
     }
-    fun setFilter(filter: ArrayMap<String, List<String>>) {
+
+    fun newGoal(msg :String) {
+        runBlocking {
+            withContext(IO) {
+                lateinit var immPerson : Person
+                runBlocking {
+                    immPerson = personRepository.getImmutablePersonById(personId)
+                }
+                val dateMsg = Date()
+                var cardTitle = StandStrong.applicationContext().getString(com.hsd.avh.standstrong.R.string.card_title_goal)
+                var mURL = SSUtils.GOAL_DRAWABLE
+                var aURL = "https://www.tinygraphs.com/squares/" + immPerson.mother_id + "?theme=heatwave&numcolors=4&size=50&fmt=png"
+                var postTitle = StandStrong.applicationContext().getString(com.hsd.avh.standstrong.R.string.post_title_goal)
+                var postTxt = msg
+                var p: Post = Post(immPerson.ssId, immPerson.mother_id, dateMsg, aURL, cardTitle, immPerson.ssId, mURL, false, 0, StandStrong.POST_CARD_MESSAGE, postTitle, postTxt)
+                try {
+                    runBlocking {
+                        personRepository.insertPost(p)
+                    }
+                } catch (e: Exception) {
+                    Log.d("SSS", "Error")
+                }
+            }
+        }
+    }
+
+    fun setFilter(filter: ArrayMap<String, List<String>>, pid : String) {
         //ArrayMap<String, List<String>> applied_filters = new ArrayMap<>();
         appliedFilters = filter
+        val temp = ArrayList<String>()
+        temp.add(pid)
+        appliedFilters["pid"] = null
+        appliedFilters["pid"] = temp
+        postFilterList.value = Random().nextInt(20000 )
+    }
 
+    fun updatePostList(ppid : String) {
+        val temp = ArrayList<String>()
+        temp.add(ppid)
+        appliedFilters["pid"] = null
+        appliedFilters["pid"] = temp
         postFilterList.value = Random().nextInt(20000 )
     }
 
     fun clearFilter() {
-        postFilterList.value = PersonDetailViewModel.NO_FILTER
+        appliedFilters = ArrayMap<String,List<String>>()
     }
 
-    fun isFiltered() = postFilterList.value != PersonDetailViewModel.NO_FILTER
+    fun isFiltered() = appliedFilters.isNullOrEmpty()
 
 
 

@@ -90,7 +90,7 @@ public class FilterPersonFabFragment extends AAH_FabulousFragment implements Dat
         contentView.findViewById(R.id.imgbtn_apply).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewModel.setFilter(person_filters);
+                viewModel.setFilter(person_filters,personId);
                 closeFilter(person_filters);
 
             }
@@ -253,13 +253,14 @@ public class FilterPersonFabFragment extends AAH_FabulousFragment implements Dat
     }
 
     private void inflateLayoutWithGoal(ViewGroup layout) {
-        final Button sendBtn  = ((Button) layout.findViewById(R.id.sendNewGoalBtn));
+        final Button goalBtn  = ((Button) layout.findViewById(R.id.sendNewGoalBtn));
         EditText newGoal = ((EditText) layout.findViewById(R.id.goalText));
 
-        sendBtn.setOnClickListener(new View.OnClickListener() {
+        goalBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar now = Calendar.getInstance();
+                viewModel.newGoal(newGoal.getText().toString());
                 closeFilter(person_filters);
             }
         });

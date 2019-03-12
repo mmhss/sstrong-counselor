@@ -37,7 +37,7 @@ class PeopleDetailFragment : Fragment() {
         vm  = activity?.run {
             ViewModelProviders.of(this, factory).get(PersonDetailViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
-
+        vm.updatePostList(personId)
 
 
         val adapter = PostAdapter()

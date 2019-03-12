@@ -10,7 +10,7 @@
         android:layout_margin="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Goal"
+        android:hint="@string/enter_goal"
         android:inputType="textCapSentences|textMultiLine"
         android:maxLength="1000"
         android:maxLines="3"
@@ -29,6 +29,6 @@
         android:layout_gravity="center_horizontal|end"
         android:layout_marginTop="10dp"
         android:layout_marginRight="16dp"
-        android:text="Send" />
+        android:text="@string/send" />
 
 </LinearLayout>

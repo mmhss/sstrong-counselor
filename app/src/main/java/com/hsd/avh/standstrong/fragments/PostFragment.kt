@@ -18,15 +18,15 @@ import com.hsd.avh.standstrong.viewmodels.PostListViewModel
 class PostListFragment : Fragment(){
 
     private lateinit var viewModel: PostListViewModel
-
-
+    private var hasPosts:Boolean = false
+    private lateinit var binding: FragmentPostBinding
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
 
-        val binding = FragmentPostBinding.inflate(inflater, container, false)
+        binding = FragmentPostBinding.inflate(inflater, container, false)
         val context = context ?: return binding.root
 
         val factory = InjectorUtils.providePostListViewModelFactory(context)
@@ -70,8 +70,14 @@ class PostListFragment : Fragment(){
     }
 
     private fun subscribeUi(adapter: PostAdapter) {
-        viewModel.getPosts().observe(viewLifecycleOwner, Observer { posts->
-            if (posts != null) adapter.submitList(posts)
+        viewModel.getPosts().observe(viewLifecycleOwner, Observer { posts ->
+            if (posts != null) {
+                adapter.submitList(posts)
+                binding.noPosts.visibility =  View.GONE;
+            }
+            if (posts.isNullOrEmpty()){
+                binding.noPosts.visibility =  View.VISIBLE;
+            }
         })
     }
 

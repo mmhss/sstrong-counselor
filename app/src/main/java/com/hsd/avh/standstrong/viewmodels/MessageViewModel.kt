@@ -58,10 +58,10 @@ class MessageViewModel internal constructor(
                 val inputData = Data.Builder().putLong(StandStrong.MESSAGE_ROW_ID, id).build()
                 val notificationWork = OneTimeWorkRequest.Builder(MessagesWorker::class.java)
                         .setInitialDelay(1, TimeUnit.SECONDS)
-                        .addTag(StandStrong.TAG)
+                        .addTag(StandStrong.TAG_MSG)
                         .setInputData(inputData)
                         .build()
-                WorkManager.getInstance().enqueueUniqueWork("SSMsg", ExistingWorkPolicy.REPLACE, notificationWork);
+                WorkManager.getInstance().enqueueUniqueWork(StandStrong.TAG_MSG, ExistingWorkPolicy.REPLACE, notificationWork);
             }
         }
     }

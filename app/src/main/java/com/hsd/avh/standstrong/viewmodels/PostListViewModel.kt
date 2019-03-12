@@ -1,10 +1,7 @@
 package com.hsd.avh.standstrong.viewmodels
 
 import androidx.collection.ArrayMap
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.hsd.avh.standstrong.StandStrong
 import com.hsd.avh.standstrong.data.posts.Post
 import com.hsd.avh.standstrong.data.posts.PostRepository
@@ -23,16 +20,12 @@ class PostListViewModel internal constructor(
     private val postFilterList = MutableLiveData<Int>()
     private val postList = MediatorLiveData<List<Post>>()
     private lateinit var appliedFilters : ArrayMap<String, List<String>>
+    //val hasPosts: LiveData<Boolean>
+
+
     init {
         postFilterList.value = NO_FILTER
-
-        //EACH TIME YOU LOAD VIEWMODEL CHECK FOR NEW POSTS
-        //ALSO A SCHEDULED BACKGROUND SERVICE THAT CHECKS DAILY
-        //postRepository.refreshPostList()
         if(StandStrong.isNotRA()) {
-            //val livePostList = postRepository.getPosts()
-            //postList.addSource(livePostList, postList::setValue)
-
             var sDate: Long =-1
             var eDate: Long =-1
             val livePostList = Transformations.switchMap(postFilterList) {
@@ -98,6 +91,7 @@ class PostListViewModel internal constructor(
 
     }
     fun getPosts() = postList
+
 
     fun setFilter(filter: ArrayMap<String, List<String>> ) {
         //ArrayMap<String, List<String>> applied_filters = new ArrayMap<>();

@@ -48,4 +48,24 @@
     <string name="post_title_msg">...... बाट तपाईंले नयाँ सन्देश प्राप्त गर्नुभएको छ </string>
     <string name="post_subtitle_msg">सन्देश पढ्न र जवाफ दिनका लागि कमेन्टमा  क्लिक गर्नुहोस्।</string>
     <string name="send">पठाउनुहोस्</string>
+
+    <!--TO TRANSLATE -->
+    <string name="card_title_goal">New Goal</string>
+    <string name="post_title_goal">A new goal was set</string>
+    <string name="filter_date">Filter Date</string>
+    <string name="enter_goal">Enter Goal</string>
+    <string name="enter_message">Enter Message</string>
+    <string name="post_title_edu_post_1">Title 1</string>
+    <string name="post_title_edu_post_2">Title 2</string>
+    <string name="post_title_edu_post_3">Title 3</string>
+    <string name="post_title_edu_post_4">Title 4</string>
+    <string name="post_title_edu_post_5">Title 5</string>
+    <string name="post_subtitle_edu_post_1">Sub Title 1. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
+    <string name="post_subtitle_edu_post_2">Sub Title 2. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
+    <string name="post_subtitle_edu_post_3">Sub Title 3. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
+    <string name="post_subtitle_edu_post_4">Sub Title 4. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
+    <string name="post_subtitle_edu_post_5">Sub Title 5. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
+    <string name="notification_description_edu">New Educational Post</string>
+
+
 </resources>

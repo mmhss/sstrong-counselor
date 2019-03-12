@@ -6,8 +6,8 @@
 
     <data>
         <variable
-            name="hasPosts"
-            type="Boolean" />
+            name="viewmodel"
+            type="com.hsd.avh.standstrong.viewmodels.PostListViewModel"/>
     </data>
 
 
@@ -34,10 +34,6 @@
 
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-<!--
-        <include layout="@layout/empty_state_no_home_posts"
-            app:isGone="@{hasPosts}"/>
--->
 
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -51,6 +47,10 @@
             android:layout_marginBottom="78dp"
             android:backgroundTint="@color/colorPrimary"
             app:srcCompat="@drawable/ic_filter" />
+
+        <include layout="@layout/empty_state_no_home_posts"
+            android:id="@+id/noPosts"
+            />
 
     </FrameLayout>
 
