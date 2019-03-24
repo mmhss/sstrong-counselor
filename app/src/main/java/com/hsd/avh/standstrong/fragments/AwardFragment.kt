@@ -25,13 +25,14 @@ import com.hsd.avh.standstrong.viewmodels.PostListViewModel
 class AwardFragment : Fragment() {
 
     private lateinit var viewModel: AwardViewModel
+    private lateinit var binding:FragmentAwardsBinding
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentAwardsBinding.inflate(inflater, container, false)
+        binding = FragmentAwardsBinding.inflate(inflater, container, false)
         val context = context ?: return binding.root
 
         val factory = InjectorUtils.provideAwardListViewModelFactory(context)
@@ -56,7 +57,15 @@ class AwardFragment : Fragment() {
 
     private fun subscribeUi(adapter: AwardAdapter) {
         viewModel.getAwards().observe(viewLifecycleOwner, Observer { awards->
-            if (awards != null) adapter.submitList(awards)
+
+            if (awards != null) {
+                adapter.submitList(awards)
+                binding.noAwards.visibility =  View.GONE;
+            }
+            if (awards.isNullOrEmpty()){
+                binding.noAwards.visibility =  View.VISIBLE;
+            }
+
         })
     }
 

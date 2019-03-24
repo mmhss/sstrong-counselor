@@ -31,10 +31,9 @@
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
-<!--
         <include layout="@layout/empty_state_no_people"
-            app:isGone="@{viewmodel.hasPeople}"/>
--->
+            android:id="@+id/noPeople"
+            />
 
 
     </FrameLayout>

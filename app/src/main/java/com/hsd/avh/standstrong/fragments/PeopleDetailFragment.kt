@@ -20,7 +20,7 @@ import com.hsd.avh.standstrong.viewmodels.PersonDetailViewModel
 class PeopleDetailFragment : Fragment() {
 
     private lateinit var vm: PersonDetailViewModel
-
+    private lateinit var binding:FragmentPeopleDetailsBinding
 
 
     override fun onCreateView(
@@ -29,7 +29,7 @@ class PeopleDetailFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         val personId = PeopleDetailFragmentArgs.fromBundle(arguments).personId
-        val binding = FragmentPeopleDetailsBinding.inflate(inflater, container, false)
+        binding = FragmentPeopleDetailsBinding.inflate(inflater, container, false)
         val context = context ?: return binding.root
         val factory = InjectorUtils.providePersonDetailViewModelFactory(requireActivity(), personId)
 
@@ -48,10 +48,10 @@ class PeopleDetailFragment : Fragment() {
 
         //Dao is LiveData<Int>, Repository os MediatorData and here we observe a change
         vm.getMessageCount().observe(viewLifecycleOwner, Observer { mc: Int ->
-            binding.messageCountTextView.text = Integer.toString(mc)  + " " + StandStrong.applicationContext().getString(R.string.messages)
+            //binding.messageCountTextView.text = Integer.toString(mc)  + " " + StandStrong.applicationContext().getString(R.string.messages)
         })
         vm.getPostCount().observe(viewLifecycleOwner, Observer { pc: Int ->
-            binding.postCountTextView.text = Integer.toString(pc)  + " " + StandStrong.applicationContext().getString(R.string.posts)
+            //binding.postCountTextView.text = Integer.toString(pc)  + " " + StandStrong.applicationContext().getString(R.string.posts)
         })
         /*vm.getAwardCount().observe(viewLifecycleOwner, Observer { ac: Int ->
             binding.awardCountTextView.text = Integer.toString(ac)  + " " + StandStrong.applicationContext().getString(R.string.awards)
@@ -78,7 +78,16 @@ class PeopleDetailFragment : Fragment() {
 
     private fun subscribeUi(adapter: PostAdapter) {
         vm.getPosts().observe(viewLifecycleOwner, Observer { posts->
-            if (posts != null) adapter.submitList(posts)
+
+            if (posts != null) {
+                adapter.submitList(posts)
+                binding.noPosts.visibility =  View.GONE;
+            }
+            if (posts.isNullOrEmpty()){
+                binding.noPosts.visibility =  View.VISIBLE;
+            }
+
+
         })
     }
 

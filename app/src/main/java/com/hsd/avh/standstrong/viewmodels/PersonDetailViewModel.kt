@@ -20,7 +20,7 @@ import java.util.*
 
 class PersonDetailViewModel(
         private val personRepository: PersonRepository,
-        private var personId: String
+        personId: String
 ) : ViewModel() {
 
 
@@ -29,11 +29,12 @@ class PersonDetailViewModel(
     private var messageCount = MediatorLiveData<Int>()
     private var postCount = MediatorLiveData<Int>()
     val person: LiveData<Person> = personRepository.getPersonById(personId)
-
+    private var pid : String =""
     private val postFilterList = MutableLiveData<Int>()
     private var appliedFilters : ArrayMap<String, List<String>> = ArrayMap<String, List<String>>()
 
     init {
+        setPid(personId)
         val livePostList = personRepository.getPostListById(personId)
         val liveAwardCount = personRepository.getAwardCount(personId)
         val liveMessageCount = personRepository.getMessageCount(personId)
@@ -104,7 +105,9 @@ class PersonDetailViewModel(
     }
 
     fun getPosts() = postList
-
+    fun setPid(id:String) {
+        pid = id
+    }
     fun getAwardCount() = awardCount
     fun getMessageCount() = messageCount
     fun getPostCount() = postCount
@@ -114,7 +117,7 @@ class PersonDetailViewModel(
             withContext(IO) {
                 lateinit var immPerson : Person
                 runBlocking {
-                    immPerson = personRepository.getImmutablePersonById(personId)
+                    immPerson = personRepository.getImmutablePersonById(pid)
                 }
                 val dateMsg = Date()
                 var cardTitle = StandStrong.applicationContext().getString(com.hsd.avh.standstrong.R.string.card_title_msg)
@@ -143,7 +146,7 @@ class PersonDetailViewModel(
             withContext(IO) {
                 lateinit var immPerson : Person
                 runBlocking {
-                    immPerson = personRepository.getImmutablePersonById(personId)
+                    immPerson = personRepository.getImmutablePersonById(pid)
                 }
                 val dateMsg = Date()
                 var cardTitle = StandStrong.applicationContext().getString(com.hsd.avh.standstrong.R.string.card_title_goal)
@@ -178,6 +181,7 @@ class PersonDetailViewModel(
         temp.add(ppid)
         appliedFilters["pid"] = null
         appliedFilters["pid"] = temp
+        setPid(ppid)
         postFilterList.value = Random().nextInt(20000 )
     }
 

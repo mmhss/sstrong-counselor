@@ -19,14 +19,14 @@ import com.hsd.avh.standstrong.viewmodels.PeopleViewModel
 class PeopleFragment : Fragment() {
 
     private lateinit var viewModel: PeopleViewModel
-
+    private lateinit var binding:FragmentPeopleBinding
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentPeopleBinding.inflate(inflater, container, false)
+        binding = FragmentPeopleBinding.inflate(inflater, container, false)
         val context = context ?: return binding.root
 
         val factory = InjectorUtils.providePersonViewModelFactory(context)
@@ -55,7 +55,14 @@ class PeopleFragment : Fragment() {
 
     private fun subscribeUi(adapter: PeopleAdapter) {
         viewModel.getPeople().observe(viewLifecycleOwner, Observer { people->
-            if (people != null) adapter.submitList(people)
+            if (people != null) {
+                adapter.submitList(people)
+                binding.noPeople.visibility =  View.GONE;
+            }
+            if (people.isNullOrEmpty()){
+                binding.noPeople.visibility =  View.VISIBLE;
+            }
+
         })
     }
 

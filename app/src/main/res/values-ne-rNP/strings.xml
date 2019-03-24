@@ -46,7 +46,7 @@
     <string name="post_subtitle_activity">उपलब्ध डाटाको बारेमा बढि जान्नको लागि यस डाटामा ट्याप गर्नुहोस् ।</string>
     <string name="card_title_msg">नयाँ सन्देश</string>
     <string name="post_title_msg">...... बाट तपाईंले नयाँ सन्देश प्राप्त गर्नुभएको छ </string>
-    <string name="post_subtitle_msg">सन्देश पढ्न र जवाफ दिनका लागि कमेन्टमा  क्लिक गर्नुहोस्।</string>
+    <string name="post_subtitle_msg">;</string>
     <string name="send">पठाउनुहोस्</string>
 
     <!--TO TRANSLATE -->

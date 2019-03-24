@@ -218,6 +218,10 @@
 
                     </androidx.cardview.widget.CardView>
 
+                    <include layout="@layout/empty_state_no_home_posts"
+                        android:id="@+id/noPosts"
+                        />
+
                     <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/post_list"
                 android:layout_width="match_parent"
@@ -231,6 +235,7 @@
                 </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
+
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab3"

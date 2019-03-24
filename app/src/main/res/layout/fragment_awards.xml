@@ -33,7 +33,8 @@
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <include layout="@layout/empty_state_no_awards"
-            app:isGone="@{viewmodel.hasAwards}"/>
+            android:id="@+id/noAwards"
+            />
 
     </FrameLayout>
 
