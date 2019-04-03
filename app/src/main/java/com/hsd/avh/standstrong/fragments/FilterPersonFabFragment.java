@@ -131,8 +131,13 @@ public class FilterPersonFabFragment extends AAH_FabulousFragment implements Dat
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+
         String date = "You picked the following date: " + dayOfMonth + " " + getResources().getString(DateConverter.getNepaliMonthString(monthOfYear)) + " " + year;
         outputDatePicker.setText(date);
+
+        //Month of year starts with 0, thus adding +1 will change month to 1-12
+        monthOfYear = monthOfYear + 1;
+
         Model engDate = dateConverter.getEnglishDate(year, monthOfYear, dayOfMonth);
         String d = "" + engDate.getYear() + " " + getEnglishMonth(engDate.getMonth()) + " " +
                 engDate.getDay();
