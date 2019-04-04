@@ -9,7 +9,7 @@ class AwardRepository private constructor(
 ) {
 
     fun refreshAwardList() {
-      SSUtils.checkForNewAwards()
+      SSUtils.getAllAwards()
     }
 
     suspend fun createAward(award: Award) {

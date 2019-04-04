@@ -56,4 +56,7 @@ interface PersonDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(people: List<Person>)
+
+    @Query("SELECT * FROM people ORDER BY ss_id")
+    fun getAllPeopleList(): List<Person>
 }

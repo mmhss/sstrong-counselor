@@ -42,7 +42,7 @@ class ScheduleNotificationWorker(context : Context, params : WorkerParameters)
     }
 
     private fun getAwards() {
-      SSUtils.checkForNewAwards()
+        SSUtils.getAllAwards()
     }
 
     private fun setupNextScheduledNotification(){

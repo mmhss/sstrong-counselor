@@ -68,10 +68,10 @@
                     <ImageView
                         android:id="@+id/pin_image"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/award_pic_height"
                         android:adjustViewBounds="true"
                         android:background="@color/lightgrey"
-                        android:scaleType="fitCenter"
+                        android:scaleType="centerCrop"
                         app:srcFromDrawable="@{awardFragment.fileName}" />
                 </LinearLayout>
 

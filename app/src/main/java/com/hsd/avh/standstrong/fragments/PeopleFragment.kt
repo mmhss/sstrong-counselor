@@ -54,15 +54,17 @@ class PeopleFragment : Fragment() {
 
 
     private fun subscribeUi(adapter: PeopleAdapter) {
-        viewModel.getPeople().observe(viewLifecycleOwner, Observer { people->
-            if (people != null) {
+
+        viewModel.subscribeOnPeople().observe(this, Observer { people ->
+
+            if (people.isNotEmpty()) {
+
                 adapter.submitList(people)
                 binding.noPeople.visibility =  View.GONE;
             }
             if (people.isNullOrEmpty()){
                 binding.noPeople.visibility =  View.VISIBLE;
             }
-
         })
     }
 

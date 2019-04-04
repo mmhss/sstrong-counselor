@@ -37,4 +37,5 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="navWidth">0dp</dimen>
     <dimen name="source_margin_sides">0dp</dimen>
     <dimen name="source_margin_top">8dp</dimen>
+    <dimen name="award_pic_height">200dp</dimen>
 </resources>

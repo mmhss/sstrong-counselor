@@ -14,12 +14,14 @@ import com.hsd.avh.standstrong.StandStrong
 import com.hsd.avh.standstrong.api.ApiEndpoints
 import com.hsd.avh.standstrong.api.ApiService
 import com.hsd.avh.standstrong.data.AppDatabase
+import com.hsd.avh.standstrong.data.awards.ApiAward
 import com.hsd.avh.standstrong.data.awards.Award
 import com.hsd.avh.standstrong.data.messages.Message
 import com.hsd.avh.standstrong.data.people.Person
 import com.hsd.avh.standstrong.data.posts.*
 import com.hsd.avh.standstrong.workers.MyAPIException
 import kotlinx.coroutines.*
+import org.jetbrains.anko.doAsync
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.HttpException
@@ -31,6 +33,7 @@ import java.util.*
 class SSUtils {
 
     companion object {
+        const val TAG = "SSUtils"
         const val SOCIAL_SUPPORT= "SocialSupport"
         const val SELF_CARE = "SelfCare"
         const val ROUTINE = "Routine"
@@ -309,46 +312,56 @@ class SSUtils {
             return sharedPref!!.getInt(table,0) //start on first row
         }
 
+        @JvmStatic fun getAllAwards() {
 
-        @JvmStatic fun checkForNewAwards() {
-            GlobalScope.launch(Dispatchers.Main) {
-                val request = endpoints!!.getAwardsAsync(getLastRow(AWARDS))
-                try {
-                    val response = request.await()
-                        for (award in response.body().orEmpty()) {
-                            var ssId = ""
-                            ssId = getSsId(award.mother!!.id!!)
+            doAsync {
 
-                            var a: Award = Award(award.mother!!.id!!,
-                                    SimpleDateFormat("yyyy-MM-dd").parse(award.awardForDate),
-                                    ssId,
-                                    "@drawable/" + switchAward(award.awardType!!)+ "_l"+Integer.toString(award.awardLevel!!))
-                            withContext(Dispatchers.IO) {
+                    endpoints!!.getAwardsList(getLastRow(AWARDS)).enqueue(object : Callback<List<ApiAward>> {
+                        override fun onFailure(call: Call<List<ApiAward>>, t: Throwable) {
 
-                                try {
-                                    database.awardDao().insertAward(a)
-                                } catch(e:Exception) {
-                                    Log.d("SSS","Error")
+                            Log.e(TAG, "error while get awards: " + Log.getStackTraceString(t))
+                        }
+
+                        override fun onResponse(call: Call<List<ApiAward>>, response: Response<List<ApiAward>>) {
+
+                            Log.d(TAG, "loaded awards ${response.body()?.size}")
+
+                            val awards = response.body()!!
+                            val awardsToSave = mutableListOf<Award>()
+                            val postsToSave = mutableListOf<Post>()
+                            val ssIdsByMother = mutableMapOf<Int, String>()
+
+                            if (awards.isNotEmpty()) {
+
+                                for (award in awards) {
+
+                                    var ssId = ssIdsByMother[award.mother!!.id]
+
+                                    if (ssId.isNullOrEmpty()) {
+
+                                        ssId = getSsId(award.mother!!.id!!)
+                                        ssIdsByMother[award.mother!!.id!!] = ssId
+                                    }
+
+                                    var a: Award = Award(award.mother!!.id!!,
+                                            SimpleDateFormat("yyyy-MM-dd").parse(award.awardForDate),
+                                            ssId,
+                                            "@drawable/" + switchAward(award.awardType!!) + "_l" + Integer.toString(award.awardLevel!!))
+                                    var p: Post = Post(ssId, a.motherId, Date(), "https://www.tinygraphs.com/squares/" + a.motherId + "?theme=heatwave&numcolors=4&size=50&fmt=png", StandStrong.applicationContext().getString(R.string.card_title_award), ssId, NEW_AWARD, false, 0, StandStrong.POST_CARD_AWARD, ssId + " " + StandStrong.applicationContext().getString(R.string.post_title_award), StandStrong.applicationContext().getString(R.string.post_subtitle_award))
+
+                                    awardsToSave.add(a)
+                                    postsToSave.add(p)
                                 }
-                                var p: Post = Post(ssId, a.motherId, Date(), "https://www.tinygraphs.com/squares/" + a.motherId + "?theme=heatwave&numcolors=4&size=50&fmt=png", StandStrong.applicationContext().getString(R.string.card_title_award), ssId, NEW_AWARD, false, 0, StandStrong.POST_CARD_AWARD, ssId + " " +StandStrong.applicationContext().getString(R.string.post_title_award), StandStrong.applicationContext().getString(R.string.post_subtitle_award))
 
-                                try {
-                                    database.postDao().insertPost(p)
-                                } catch(e:Exception) {
-                                    Log.d("SSS","Error")
+                                doAsync {
+
+                                    database.awardDao().insertAll(awardsToSave)
+                                    database.postDao().insertAll(postsToSave)
+                                    updateLastRetrievedRow(AWARDS, awards.last().id!!)
                                 }
                             }
-                            updateLastRetrievedRow(AWARDS, award.id!!)
                         }
-                    if(response.body().orEmpty().isNotEmpty())
-                        triggerNotification(999,StandStrong.applicationContext().resources.getString(com.hsd.avh.standstrong.R.string.notification_description_award))
-                } catch (e: HttpException) {
-                    Crashlytics.logException(e)
-                } catch (e: Throwable) {
-                    Crashlytics.logException(e)
-                } catch (e: Exception) {
-                    Crashlytics.logException(e)
-                }
+                    })
             }
         }
 

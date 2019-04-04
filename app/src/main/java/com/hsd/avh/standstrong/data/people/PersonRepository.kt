@@ -95,7 +95,9 @@ class PersonRepository private constructor(
         return messageDao.getMessageCountForPerson(personId)
     }
 
-
+    fun getAllPeopleList(): List<Person>? {
+        return personDao.getAllPeopleList()
+    }
 
 
     companion object {

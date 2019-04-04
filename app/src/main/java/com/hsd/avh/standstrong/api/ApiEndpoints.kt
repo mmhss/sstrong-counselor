@@ -20,10 +20,11 @@ interface ApiEndpoints{
     @GET("/api/mothers/{id}")
     fun getMotherByIdAsync(@Path("id") id:Int): Deferred<Response<ApiPerson>>
 
-
     @GET("/api/awards?")
     fun getAwardsAsync(@Query("search") searchId:String ): Deferred<Response<List<ApiAward>>>  // e.g id>2
 
+    @GET("/api/awards")
+    fun getAwardsList(@Query("search") searchId: String): Call<List<ApiAward>>
 
     @GET("/api/gpss?")
     fun getGPSDataAsync(@Query("search") searchId:String ): Deferred<Response<List<ApiGPS>>>

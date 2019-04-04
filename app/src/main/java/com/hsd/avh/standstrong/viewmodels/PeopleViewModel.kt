@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import com.hsd.avh.standstrong.data.people.Person
 import com.hsd.avh.standstrong.data.people.PersonRepository
 import kotlinx.coroutines.runBlocking
+import org.jetbrains.anko.doAsync
 
 
 class PeopleViewModel internal constructor(
@@ -26,6 +27,11 @@ class PeopleViewModel internal constructor(
 
     fun updatePeople() {
         peopleRepository.refreshPersonList()
+    }
+
+    fun subscribeOnPeople() : LiveData<List<Person>> {
+
+        return peopleRepository.getAllPeople()
     }
 
 }

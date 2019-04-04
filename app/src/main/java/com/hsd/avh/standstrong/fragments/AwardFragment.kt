@@ -2,6 +2,7 @@ package com.hsd.avh.standstrong.fragments
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -26,6 +27,7 @@ class AwardFragment : Fragment() {
 
     private lateinit var viewModel: AwardViewModel
     private lateinit var binding:FragmentAwardsBinding
+    private val TAG = javaClass.canonicalName
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -56,16 +58,15 @@ class AwardFragment : Fragment() {
     }
 
     private fun subscribeUi(adapter: AwardAdapter) {
-        viewModel.getAwards().observe(viewLifecycleOwner, Observer { awards->
 
-            if (awards != null) {
-                adapter.submitList(awards)
-                binding.noAwards.visibility =  View.GONE;
-            }
-            if (awards.isNullOrEmpty()){
-                binding.noAwards.visibility =  View.VISIBLE;
-            }
+        viewModel.subscribeOnAwards().observe(this, Observer {
 
+            if (it.isNotEmpty()) {
+                binding.noAwards.visibility = View.GONE
+                adapter.submitList(it)
+            } else {
+                binding.noAwards.visibility = View.VISIBLE
+            }
         })
     }
 
@@ -74,6 +75,7 @@ class AwardFragment : Fragment() {
         super.onResume()
         //StandStrong.firebaseInstance().setCurrentScreen(this!!.activity!!, activity?.javaClass?.simpleName, activity?.javaClass?.simpleName);
         FirebaseTrackingUtil(activity!!).track(FirebaseTrackingUtil.Screens.Awards)
+        viewModel.updateAwardList()
     }
 
 }
