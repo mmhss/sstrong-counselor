@@ -2,6 +2,7 @@ package com.hsd.avh.standstrong.data.posts
 
 import androidx.collection.ArrayMap
 import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
 import androidx.room.*
 import com.hsd.avh.standstrong.data.awards.Award
 import com.hsd.avh.standstrong.data.people.Person
@@ -24,7 +25,11 @@ interface PostDao {
     @Query("SELECT * FROM posts WHERE type=2 ORDER BY date desc")
     fun getRAPosts(): LiveData<List<Post>>
 
+    @Query("SELECT * FROM posts ORDER BY date desc")
+    fun getAllPaged(): DataSource.Factory<Int, Post>
 
+    @Query("SELECT * FROM posts WHERE type=2 ORDER BY date desc")
+    fun getRAPostsPaged(): DataSource.Factory<Int, Post>
 
     @Query("SELECT * FROM posts WHERE id = :postId")
     fun getPost(postId: Int): LiveData<Post>
@@ -36,6 +41,9 @@ interface PostDao {
 
     @RawQuery(observedEntities = [Post::class])
     fun getFilteredPosts(query: SupportSQLiteQuery): LiveData<List<Post>>
+
+    @RawQuery(observedEntities = [Post::class])
+    fun getFilteredPostsPaged(query: SupportSQLiteQuery): DataSource.Factory<Int, Post>
 
     //@Query("SELECT * FROM posts WHERE type=2 ORDER BY date desc")
     //fun getRAPost(postId: Int): LiveData<Post>

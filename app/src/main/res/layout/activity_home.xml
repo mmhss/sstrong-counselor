@@ -7,41 +7,33 @@
 
     </data>
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <fragment
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/basic_bottom_navigation"
             android:id="@+id/main_nav_fragment"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             app:defaultNavHost="true"
             app:navGraph="@navigation/sstrong_nav"/>
-
-        <!--
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/fab2"
-
-                    android:layout_marginTop="-24dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginBottom="24dp"
-                    android:tint="@color/filters_chips"
-                    app:backgroundTint="@color/filtersfab"
-                    app:elevation="0dp"
-                    app:srcCompat="@drawable/ic_filter" />-->
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/basic_bottom_navigation"
             style="@style/Widget.Design.BottomNavigationView"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:layout_alignParentBottom="true"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:background="@android:color/white"
             android:theme="@style/AppTheme"
             app:menu="@menu/home_bottom_nav"/>
 
 
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

@@ -44,7 +44,7 @@
             android:layout_alignParentRight="true"
             android:layout_gravity="bottom|right"
             android:layout_marginRight="16dp"
-            android:layout_marginBottom="78dp"
+            android:layout_marginBottom="16dp"
             android:backgroundTint="@color/colorPrimary"
             app:srcCompat="@drawable/ic_filter" />
 
