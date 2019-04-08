@@ -31,10 +31,13 @@ data class Post(
         @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val postId: Int = 0
 
 ) {
+    fun printThis(): String {
+        return "Post(personId='$personId', motherId=$motherId, postDate=$postDate, avatarUrl='$avatarUrl', cardHeader='$cardHeader', cardSubHeader='$cardSubHeader', mediaUrl='$mediaUrl', liked=$liked, commentCount=$commentCount, type=$type, postHeader='$postHeader', postSubHeader='$postSubHeader', postId=$postId)"
+    }
 
-   /* fun shouldBeWatered(since: Calendar, lastWateringDate: Calendar) =
-        since > lastWateringDate.apply { add(DAY_OF_YEAR, wateringInterval) }
-*/
+    /* fun shouldBeWatered(since: Calendar, lastWateringDate: Calendar) =
+         since > lastWateringDate.apply { add(DAY_OF_YEAR, wateringInterval) }
+ */
 
     override fun toString() = postHeader
 }

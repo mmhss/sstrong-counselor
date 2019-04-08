@@ -2,6 +2,7 @@ package com.hsd.avh.standstrong.adapters
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,8 @@ import com.hsd.avh.standstrong.utilities.SSUtils
 import com.varunest.sparkbutton.SparkEventListener
 
 class PostsPagedAdapter(val context: Context) : PagedListAdapter<Post, PostsPagedAdapter.PostViewHolder>(PostDiffCallback()) {
+
+    private val TAG = javaClass.canonicalName
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = getItem(position)
@@ -77,7 +80,7 @@ class PostsPagedAdapter(val context: Context) : PagedListAdapter<Post, PostsPage
         }
     }
 
-    class PostViewHolder (
+    inner class PostViewHolder (
             private val binding: ListItemPostsBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 

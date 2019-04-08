@@ -2,14 +2,11 @@ package com.hsd.avh.standstrong.adapters
 
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.hsd.avh.standstrong.StandStrong
 import com.hsd.avh.standstrong.utilities.InjectorUtils
-import android.widget.TextView
-import androidx.annotation.NonNull
-import com.hsd.avh.standstrong.R
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -49,7 +46,10 @@ fun setImageDrawable(view: ImageView, imageStr: String?) {
 }
 
 @BindingAdapter("readableDate")
-fun bindServerDate(textView: TextView, date: Date) {
-    var sdfDate = SimpleDateFormat("EEE, MMM d, yyyy")
-    textView.text = sdfDate.format(date)
+fun bindServerDate(textView: TextView, date: Date?) {
+
+    if (date != null) {
+        var sdfDate = SimpleDateFormat("EEE, MMM d, yyyy")
+        textView.text = sdfDate.format(date)
+    }
 }

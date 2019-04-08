@@ -6,16 +6,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import com.hsd.avh.standstrong.databinding.ActivityHomeBinding
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
+import com.hsd.avh.standstrong.databinding.ActivityHomeBinding
 
 
 //import com.hsd.avh.standstrong
 
 class MainActivity : AppCompatActivity(){
-
-
 
     private lateinit var navController: NavController
     private lateinit var navControllerPeople: NavController
@@ -27,7 +25,6 @@ class MainActivity : AppCompatActivity(){
 
         val binding: ActivityHomeBinding= DataBindingUtil.setContentView(this,
                 R.layout.activity_home)
-
 
         //Main Navigation
         navController = Navigation.findNavController(this, R.id.main_nav_fragment)

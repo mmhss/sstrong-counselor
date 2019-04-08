@@ -13,6 +13,9 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.hsd.avh.standstrong.dagger.components.DaggerManagerComponent
+import com.hsd.avh.standstrong.dagger.components.ManagerComponent
+import com.hsd.avh.standstrong.dagger.modules.ManagerModule
 import com.hsd.avh.standstrong.utilities.UserAuthentication
 import com.hsd.avh.standstrong.utilities.UserTypes
 import com.hsd.avh.standstrong.workers.ScheduleEduPostWorker
@@ -22,6 +25,7 @@ import java.util.concurrent.TimeUnit
 
 class StandStrong : Application() {
 
+    internal lateinit var managerComponent: ManagerComponent
 
         init {
             instance = this
@@ -135,6 +139,8 @@ class StandStrong : Application() {
             StandStrong.applicationContext()
             //Begin the worker service to look for updates
             startCollection()
+
+            managerComponent = DaggerManagerComponent.builder().managerModule(ManagerModule(this)).build()
         }
 
         private fun setupNotificationChannel() {
