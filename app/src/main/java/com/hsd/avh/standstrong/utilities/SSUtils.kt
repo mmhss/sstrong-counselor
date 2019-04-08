@@ -147,8 +147,6 @@ class SSUtils {
             checkForNewGPS()
             checkForNewMessages()
             checkForNewActivity()
-
-
         }
 
         @JvmStatic private fun createDataPost(motherIds:ArrayList<String>,ct : Int,drawable:String, pstTitle : Int, pstTxt : Int, type:Int) {
@@ -162,10 +160,9 @@ class SSUtils {
                     val thisMomsDate = SimpleDateFormat("yyyy-MM-dd").parse(mom.split("**")[1])
 
                     GlobalScope.launch(Dispatchers.Main) {
-                        val request = endpoints!!.getMotherByIdAsync(thisMomsId)
+
                         try {
-                            val response = request.await()
-                            ssId = response.body()!!.identificationNumber!!
+                            ssId = provideSSid(thisMomsId)
                             var p: Post = Post( ssId, thisMomsId,thisMomsDate, "https://www.tinygraphs.com/squares/$ssId?theme=heatwave&numcolors=4&size=50&fmt=png",StandStrong.applicationContext().getString(ct),ssId,drawable,false,0,type,StandStrong.applicationContext().getString(pstTitle) +" "+ ssId,StandStrong.applicationContext().getString(pstTxt))
                             //Makes sure to tell the UI when we are done so t can update live data
                             withContext(Dispatchers.IO){
@@ -183,7 +180,8 @@ class SSUtils {
             }
         }
 
-        @JvmStatic fun checkForNewProximity() {
+        @JvmStatic
+        fun checkForNewProximity() {
             GlobalScope.launch(Dispatchers.Main) {
                 val motherIds = ArrayList<String>()
                 val request = endpoints!!.getProximityDataAsync(getLastProxyRow(PROXIMITY))
@@ -329,19 +327,12 @@ class SSUtils {
                             val awards = response.body()!!
                             val awardsToSave = mutableListOf<Award>()
                             val postsToSave = mutableListOf<Post>()
-                            val ssIdsByMother = mutableMapOf<Int, String>()
 
                             if (awards.isNotEmpty()) {
 
                                 for (award in awards) {
 
-                                    var ssId = ssIdsByMother[award.mother!!.id]
-
-                                    if (ssId.isNullOrEmpty()) {
-
-                                        ssId = getSsId(award.mother!!.id!!)
-                                        ssIdsByMother[award.mother!!.id!!] = ssId
-                                    }
+                                    var ssId = provideSSid(award.mother!!.id!!)
 
                                     var a: Award = Award(award.mother!!.id!!,
                                             SimpleDateFormat("yyyy-MM-dd").parse(award.awardForDate),
@@ -363,6 +354,21 @@ class SSUtils {
                         }
                     })
             }
+        }
+
+        private val ssIdsByMother = mutableMapOf<Int, String>()
+
+        private fun provideSSid(motherId: Int): String {
+
+            var ssId = ssIdsByMother[motherId]
+
+            if (ssId.isNullOrEmpty()) {
+
+                ssId = getSsId(motherId)
+                ssIdsByMother[motherId] = ssId
+            }
+
+            return ssId
         }
 
         @JvmStatic private fun switchAward(s : String) : String {
@@ -416,7 +422,7 @@ class SSUtils {
                     for (r in response.body().orEmpty()) {
                         if (r.direction == StandStrong.MESSAGE_DIRECTION_IN) {
                             var ssId = ""
-                            ssId = getSsId(r.mother!!.id!!)
+                            ssId = provideSSid(r.mother!!.id!!)
                             withContext(Dispatchers.IO) {
                                 //New thread not a response
                                 insertRowIdRow = r.threadId!!.toLong()

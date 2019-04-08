@@ -52,7 +52,6 @@ class PeopleFragment : Fragment() {
         return binding.root
     }
 
-
     private fun subscribeUi(adapter: PeopleAdapter) {
 
         viewModel.subscribeOnPeople().observe(this, Observer { people ->
@@ -72,6 +71,8 @@ class PeopleFragment : Fragment() {
         super.onResume()
         //StandStrong.firebaseInstance().setCurrentScreen(this!!.activity!!, activity?.javaClass?.simpleName, activity?.javaClass?.simpleName);
         FirebaseTrackingUtil(activity!!).track(FirebaseTrackingUtil.Screens.Clients)
+
+        viewModel.updatePeople()
     }
 
 }
