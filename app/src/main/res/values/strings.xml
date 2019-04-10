@@ -79,5 +79,7 @@
     <string name="enter_message">Enter Message</string>
 
     <string name="notification_description_edu">New Educational Post</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
 
 </resources>

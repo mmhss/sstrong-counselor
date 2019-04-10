@@ -20,4 +20,11 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light"/>
 
+    <style name="SSInputStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+        <item name="android:theme">@style/SSInputStyle</item>
+        <item name="colorPrimary">@android:color/white</item>
+        <item name="colorAccent">@android:color/white</item>
+    </style>
+
 </resources>

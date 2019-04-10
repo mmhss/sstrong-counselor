@@ -14,6 +14,7 @@ import com.hsd.avh.standstrong.api.ApiEndpoints
 import androidx.annotation.NonNull
 import android.R.attr.name
 import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
 import androidx.sqlite.db.SimpleSQLiteQuery
 import com.crashlytics.android.Crashlytics
 import com.hsd.avh.standstrong.data.awards.AwardDao
@@ -73,8 +74,9 @@ class PersonRepository private constructor(
         }
     }
 
-
     fun getPostListByIdAndFilters(sql: SimpleSQLiteQuery) =  postDao.getFilteredPosts(sql)
+
+    fun getPostListByIdAndFiltersPaged(sql: SimpleSQLiteQuery) =  postDao.getFilteredPostsPaged(sql)
 
     fun getAllPeople() = personDao.getAllPeople()
 
@@ -97,6 +99,20 @@ class PersonRepository private constructor(
 
     fun getAllPeopleList(): List<Person>? {
         return personDao.getAllPeopleList()
+    }
+
+    fun getRAPostListByIdPaged(personId: String): DataSource.Factory<Int, Post> {
+        return postDao.getRAPostsForPersonPaged(personId)
+    }
+
+    fun getPostListByIdPaged(personId: String): DataSource.Factory<Int, Post> {
+
+        return postDao.getPostsForPersonPaged(personId)
+    }
+
+    fun getPosts(): DataSource.Factory<Int, Post> {
+
+        return postDao.getAllPaged()
     }
 
 

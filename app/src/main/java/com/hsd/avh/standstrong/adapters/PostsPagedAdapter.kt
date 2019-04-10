@@ -80,8 +80,7 @@ class PostsPagedAdapter(val context: Context) : PagedListAdapter<Post, PostsPage
         }
     }
 
-    inner class PostViewHolder (
-            private val binding: ListItemPostsBinding
+    inner class PostViewHolder (val binding: ListItemPostsBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(listener: View.OnClickListener, item: Post, commentListener : View.OnClickListener) {

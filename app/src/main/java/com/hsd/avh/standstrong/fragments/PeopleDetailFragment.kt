@@ -3,24 +3,34 @@ package com.hsd.avh.standstrong.fragments
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.hsd.avh.standstrong.R
-import com.hsd.avh.standstrong.StandStrong
-import com.hsd.avh.standstrong.adapters.PostAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.hsd.avh.standstrong.adapters.PostsPagedAdapter
 import com.hsd.avh.standstrong.databinding.FragmentPeopleDetailsBinding
 import com.hsd.avh.standstrong.utilities.FirebaseTrackingUtil
 import com.hsd.avh.standstrong.utilities.InjectorUtils
 import com.hsd.avh.standstrong.viewmodels.PersonDetailViewModel
+import kotlinx.android.synthetic.main.fragment_people_details.*
 
 class PeopleDetailFragment : Fragment() {
 
+    private val TAG = javaClass.canonicalName
+
     private lateinit var vm: PersonDetailViewModel
     private lateinit var binding:FragmentPeopleDetailsBinding
+    private lateinit var postsPagedAdapter: PostsPagedAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        postsPagedAdapter = PostsPagedAdapter(activity!!)
+    }
 
 
     override fun onCreateView(
@@ -35,16 +45,13 @@ class PeopleDetailFragment : Fragment() {
 
        // vm = ViewModelProviders.of(this, factory).get(PersonDetailViewModel::class.java)
         vm  = activity?.run {
-            ViewModelProviders.of(this, factory).get(PersonDetailViewModel::class.java)
+            ViewModelProviders.of(this@PeopleDetailFragment, factory).get(PersonDetailViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
         vm.updatePostList(personId)
 
-
-        val adapter = PostAdapter()
-        binding.postList.adapter = adapter
-
-
-        subscribeUi(adapter)
+        binding.postList.layoutManager = LinearLayoutManager(activity!!)
+        binding.postList.adapter = postsPagedAdapter
+        subscribeUi()
 
         //Dao is LiveData<Int>, Repository os MediatorData and here we observe a change
         vm.getMessageCount().observe(viewLifecycleOwner, Observer { mc: Int ->
@@ -55,7 +62,7 @@ class PeopleDetailFragment : Fragment() {
         })
         /*vm.getAwardCount().observe(viewLifecycleOwner, Observer { ac: Int ->
             binding.awardCountTextView.text = Integer.toString(ac)  + " " + StandStrong.applicationContext().getString(R.string.awards)
-        })
+ a        })
 */
 
         val fab =  binding.fab3
@@ -69,25 +76,27 @@ class PeopleDetailFragment : Fragment() {
         return binding.root
     }
 
-
     override fun onResume() {
         super.onResume()
         //StandStrong.firebaseInstance().setCurrentScreen(this!!.activity!!, activity?.javaClass?.simpleName, activity?.javaClass?.simpleName);
         FirebaseTrackingUtil(activity!!).track(FirebaseTrackingUtil.Screens.ClientDetail)
+
+        if (postsPagedAdapter != null)
+            appBar.setExpanded(false, false)
     }
 
-    private fun subscribeUi(adapter: PostAdapter) {
-        vm.getPosts().observe(viewLifecycleOwner, Observer { posts->
+    private fun subscribeUi() {
+
+        vm.getPersonPostsPaged().observe(this, Observer { posts ->
 
             if (posts != null) {
-                adapter.submitList(posts)
-                binding.noPosts.visibility =  View.GONE;
+
+                postsPagedAdapter.submitList(posts)
+                binding.noPosts.visibility =  View.GONE
             }
             if (posts.isNullOrEmpty()){
-                binding.noPosts.visibility =  View.VISIBLE;
+                binding.noPosts.visibility =  View.VISIBLE
             }
-
-
         })
     }
 

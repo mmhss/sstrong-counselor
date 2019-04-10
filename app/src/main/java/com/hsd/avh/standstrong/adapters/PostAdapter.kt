@@ -1,6 +1,7 @@
 package com.hsd.avh.standstrong.adapters
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,8 +23,12 @@ import java.text.SimpleDateFormat
  */
 class PostAdapter : ListAdapter<Post, PostAdapter.ViewHolder>(PostDiffCallback()) {
 
+    private val TAG = javaClass.canonicalName
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val post = getItem(position)
+        Log.d(TAG, "post $post")
+        if (post !=null)
         holder.apply {
             bind(createOnClickListener(post), post,createCommentOnClickListener(post))
             itemView.tag = post
@@ -104,9 +109,9 @@ class PostAdapter : ListAdapter<Post, PostAdapter.ViewHolder>(PostDiffCallback()
             })
 
             binding.apply {
-                clickListener = listener
-                commentClickListener = commentListener
-                post = item
+//                clickListener = listener
+//                commentClickListener = commentListener
+//                post = item
                 executePendingBindings()
             }
         }

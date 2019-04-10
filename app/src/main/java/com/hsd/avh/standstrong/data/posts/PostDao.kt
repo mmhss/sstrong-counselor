@@ -56,6 +56,9 @@ interface PostDao {
     @Query("SELECT * FROM posts WHERE person_id = :personId order by date desc")
     fun getPostsForPerson(personId: String): LiveData<List<Post>>
 
+    @Query("SELECT * FROM posts WHERE person_id = :personId order by date desc")
+    fun getPostsForPersonPaged(personId: String): DataSource.Factory<Int, Post>
+
     @Query("SELECT * FROM posts WHERE type=2 AND person_id = :personId order by date desc")
     fun getRAPostsForPerson(personId: String): LiveData<List<Post>>
 
@@ -82,4 +85,7 @@ interface PostDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(posts: List<Post>)
+
+    @Query("SELECT * FROM posts WHERE type=2 AND person_id = :personId order by date desc")
+    fun getRAPostsForPersonPaged(personId: String): DataSource.Factory<Int, Post>
 }

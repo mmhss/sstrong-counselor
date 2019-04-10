@@ -1,9 +1,12 @@
 package com.hsd.avh.standstrong.viewmodels
 
+import android.nfc.tech.MifareUltralight.PAGE_SIZE
 import android.util.Log
 import android.view.View
 import androidx.collection.ArrayMap
 import androidx.lifecycle.*
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import androidx.sqlite.db.SimpleSQLiteQuery
 import com.hsd.avh.standstrong.StandStrong
 import com.hsd.avh.standstrong.data.messages.Message
@@ -11,6 +14,7 @@ import com.hsd.avh.standstrong.data.people.Person
 import com.hsd.avh.standstrong.data.people.PersonRepository
 import com.hsd.avh.standstrong.data.posts.Post
 import com.hsd.avh.standstrong.data.posts.PostRepository
+import com.hsd.avh.standstrong.utilities.Const
 import com.hsd.avh.standstrong.utilities.SSUtils
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.runBlocking
@@ -20,11 +24,10 @@ import java.util.*
 
 class PersonDetailViewModel(
         private val personRepository: PersonRepository,
-        personId: String
+        val personId: String
 ) : ViewModel() {
 
 
-    private val postList = MediatorLiveData<List<Post>>()
     private var awardCount = MediatorLiveData<Int>()
     private var messageCount = MediatorLiveData<Int>()
     private var postCount = MediatorLiveData<Int>()
@@ -32,6 +35,7 @@ class PersonDetailViewModel(
     private var pid : String =""
     private val postFilterList = MutableLiveData<Int>()
     private var appliedFilters : ArrayMap<String, List<String>> = ArrayMap<String, List<String>>()
+    val TAG = javaClass.canonicalName
 
     init {
         setPid(personId)
@@ -40,71 +44,87 @@ class PersonDetailViewModel(
         val liveMessageCount = personRepository.getMessageCount(personId)
         val livePostCount = personRepository.getPostCount(personId)
         postFilterList.value = PersonDetailViewModel.NO_FILTER
-        if(StandStrong.isNotRA()) {
 
-            var sDate: Long =-1
-            var eDate: Long =-1
-            val livePostList = Transformations.switchMap(postFilterList) {
-                var fl : ArrayList<Int> = ArrayList<Int>()
-                var q: String = "SELECT * FROM posts WHERE "
-                var hasFilters : Boolean = false
-                if(!appliedFilters.isNullOrEmpty()){
-                    q = "$q person_id = '" + appliedFilters["pid"]!![0].toString() +"' "
-                    for ((k, v) in appliedFilters) {
-                        if(k == "date") {
-                            var stringDate = appliedFilters["date"]!![0].toString()
-                            val format = SimpleDateFormat("yyyy-MM-dd")
-                            try {
-                                val date = format.parse(stringDate)
-                                sDate = setTime(date.time,0,0,0)
-                                eDate = setTime(date.time,23,59,59)
-                                System.out.println(date)
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                            }
-                        }
-                        if(k != "date" && k != "pid") {
-                            hasFilters = true
-                            q = "$q AND type IN ("
-                            v.forEach { filterItem ->
-                                when (filterItem) {
-                                    StandStrong.POST_CARD_STRING_MESSAGE -> q = q + StandStrong.POST_CARD_MESSAGE + ","
-                                    StandStrong.POST_CARD_STRING_PROXIMITY -> q = q + StandStrong.POST_CARD_PROXIMITY+ ","
-                                    StandStrong.POST_CARD_STRING_GPS -> q = q + StandStrong.POST_CARD_GPS+ ","
-                                    StandStrong.POST_CARD_STRING_ACTIVITY -> q = q + StandStrong.POST_CARD_ACTIVITY+ ","
-                                    StandStrong.POST_CARD_STRING_AWARD -> q = q + StandStrong.POST_CARD_AWARD+ ","
-                                    StandStrong.POST_CARD_STRING_CONTENT -> q = q + StandStrong.POST_CARD_CONTENT+ ","
-                                    StandStrong.POST_CARD_STRING_GOAL -> q = q + StandStrong.POST_CARD_GOAL+ ","
-                                }
-                            }
-                            if(q.substring(q.length - 1) == ",") {
-                                q = q.substring(0, q.length - 1);
-                                q = "$q)"
-                            }
-                        }
-                    }
-                    if(sDate > 0 ) {
-                        "$q AND date BETWEEN $sDate AND $eDate ORDER BY date desc"
-                    } else {
-                        "$q ORDER BY date desc"
-                    }
-                }
-                val query = SimpleSQLiteQuery(q)
-                personRepository.getPostListByIdAndFilters(query)
-            }
-
-            postList.addSource(livePostList, postList::setValue)
-        } else {
-            val livePostList = personRepository.getRAPostListById(personId)
-            postList.addSource(livePostList, postList::setValue)
-        }
         awardCount.addSource(liveAwardCount, awardCount::setValue)
         messageCount.addSource(liveMessageCount, messageCount::setValue)
         postCount.addSource(livePostCount, postCount::setValue)
 
     }
 
-    fun getPosts() = postList
+    private val pagedPersonPosts: LiveData<PagedList<Post>> = Transformations.switchMap(postFilterList) {
+
+        Log.d(TAG, "post filter ${postFilterList.value}")
+
+        if(StandStrong.isNotRA()) {
+
+            var sDate: Long =-1
+            var eDate: Long =-1
+
+            var fl : ArrayList<Int> = ArrayList<Int>()
+            var q: String = "SELECT * FROM posts WHERE "
+            var hasFilters : Boolean = false
+
+            if(!appliedFilters.isNullOrEmpty()){
+                q = "$q person_id = '" + appliedFilters["pid"]!![0].toString() +"' "
+                for ((k, v) in appliedFilters) {
+                    if(k == "date") {
+                        var stringDate = appliedFilters["date"]!![0].toString()
+                        val format = SimpleDateFormat("yyyy-MM-dd")
+                        try {
+                            val date = format.parse(stringDate)
+                            sDate = setTime(date.time,0,0,0)
+                            eDate = setTime(date.time,23,59,59)
+                            System.out.println(date)
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                    if(k != "date" && k != "pid") {
+                        hasFilters = true
+                        q = "$q AND type IN ("
+                        v.forEach { filterItem ->
+                            when (filterItem) {
+                                StandStrong.POST_CARD_STRING_MESSAGE -> q = q + StandStrong.POST_CARD_MESSAGE + ","
+                                StandStrong.POST_CARD_STRING_PROXIMITY -> q = q + StandStrong.POST_CARD_PROXIMITY+ ","
+                                StandStrong.POST_CARD_STRING_GPS -> q = q + StandStrong.POST_CARD_GPS+ ","
+                                StandStrong.POST_CARD_STRING_ACTIVITY -> q = q + StandStrong.POST_CARD_ACTIVITY+ ","
+                                StandStrong.POST_CARD_STRING_AWARD -> q = q + StandStrong.POST_CARD_AWARD+ ","
+                                StandStrong.POST_CARD_STRING_CONTENT -> q = q + StandStrong.POST_CARD_CONTENT+ ","
+                                StandStrong.POST_CARD_STRING_GOAL -> q = q + StandStrong.POST_CARD_GOAL+ ","
+                            }
+                        }
+                        if(q.substring(q.length - 1) == ",") {
+                            q = q.substring(0, q.length - 1);
+                            q = "$q)"
+                        }
+                    }
+                }
+                q = if(sDate > 0 ) {
+                    "$q AND date BETWEEN $sDate AND $eDate ORDER BY date desc"
+                } else {
+                    "$q ORDER BY date desc"
+                }
+
+                val query = SimpleSQLiteQuery(q)
+
+                Log.d(TAG, "taking by query")
+
+                return@switchMap LivePagedListBuilder<Int, Post>(personRepository.getPostListByIdAndFiltersPaged(query), Const.PAGE_SIZE).build()
+            } else {
+
+                Log.d(TAG, "taking all ")
+                return@switchMap LivePagedListBuilder<Int, Post>(personRepository.getPostListByIdPaged(personId), Const.PAGE_SIZE).build()
+            }
+        } else {
+
+            Log.d(TAG, "showing RA")
+            return@switchMap LivePagedListBuilder<Int, Post>(personRepository.getRAPostListByIdPaged(personId), Const.PAGE_SIZE).build()
+        }
+    }
+
+    fun getPersonPostsPaged() = pagedPersonPosts
+
+
     fun setPid(id:String) {
         pid = id
     }
@@ -173,7 +193,7 @@ class PersonDetailViewModel(
         temp.add(pid)
         appliedFilters["pid"] = null
         appliedFilters["pid"] = temp
-        postFilterList.value = Random().nextInt(20000 )
+        postFilterList.postValue(1)
     }
 
     fun updatePostList(ppid : String) {
