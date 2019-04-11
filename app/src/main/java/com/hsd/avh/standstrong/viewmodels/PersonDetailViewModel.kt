@@ -64,6 +64,8 @@ class PersonDetailViewModel(
             var q: String = "SELECT * FROM posts WHERE "
             var hasFilters : Boolean = false
 
+            Log.d(TAG, "applied $appliedFilters")
+
             if(!appliedFilters.isNullOrEmpty()){
                 q = "$q person_id = '" + appliedFilters["pid"]!![0].toString() +"' "
                 for ((k, v) in appliedFilters) {
@@ -99,7 +101,7 @@ class PersonDetailViewModel(
                         }
                     }
                 }
-                q = if(sDate > 0 ) {
+                if(sDate > 0 ) {
                     "$q AND date BETWEEN $sDate AND $eDate ORDER BY date desc"
                 } else {
                     "$q ORDER BY date desc"
@@ -107,7 +109,7 @@ class PersonDetailViewModel(
 
                 val query = SimpleSQLiteQuery(q)
 
-                Log.d(TAG, "taking by query")
+                Log.d(TAG, "taking by query $q")
 
                 return@switchMap LivePagedListBuilder<Int, Post>(personRepository.getPostListByIdAndFiltersPaged(query), Const.PAGE_SIZE).build()
             } else {
@@ -193,7 +195,10 @@ class PersonDetailViewModel(
         temp.add(pid)
         appliedFilters["pid"] = null
         appliedFilters["pid"] = temp
-        postFilterList.postValue(1)
+
+        Log.d(TAG, "filters $appliedFilters")
+
+        postFilterList.value = Random().nextInt(20000 )
     }
 
     fun updatePostList(ppid : String) {

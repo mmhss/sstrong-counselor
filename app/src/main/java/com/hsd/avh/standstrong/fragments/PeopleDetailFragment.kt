@@ -45,7 +45,7 @@ class PeopleDetailFragment : Fragment() {
 
        // vm = ViewModelProviders.of(this, factory).get(PersonDetailViewModel::class.java)
         vm  = activity?.run {
-            ViewModelProviders.of(this@PeopleDetailFragment, factory).get(PersonDetailViewModel::class.java)
+            ViewModelProviders.of(activity!!, factory).get(PersonDetailViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
         vm.updatePostList(personId)
 
