@@ -4,7 +4,7 @@ import android.app.Application
 import com.hsd.avh.standstrong.utilities.SSUtils
 import javax.inject.Inject
 
-class DataLoadManger @Inject constructor(val app: Application) {
+class DataLoadManger constructor(val app: Application) {
 
     fun updateAll() {
 

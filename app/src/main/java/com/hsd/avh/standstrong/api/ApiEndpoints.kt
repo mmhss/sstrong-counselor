@@ -1,6 +1,8 @@
 package com.hsd.avh.standstrong.api
 
 
+import com.hsd.avh.standstrong.data.LoginBody
+import com.hsd.avh.standstrong.data.SignInResponse
 import com.hsd.avh.standstrong.data.awards.ApiAward
 import com.hsd.avh.standstrong.data.messages.ApiMessage
 import com.hsd.avh.standstrong.data.messages.Message
@@ -41,6 +43,9 @@ interface ApiEndpoints{
 
     @GET("/api/posts?")
     fun getMessagesAsync(@Query("search") searchId:String ): Deferred<Response<List<ApiMessage>>>
+
+    @POST("/api/auth/signin")
+    fun login(@Body loginBody: LoginBody) : Call<SignInResponse>
 
 
 }

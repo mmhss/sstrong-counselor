@@ -14,6 +14,8 @@ import com.hsd.avh.standstrong.StandStrong
 import com.hsd.avh.standstrong.api.ApiEndpoints
 import com.hsd.avh.standstrong.api.ApiService
 import com.hsd.avh.standstrong.data.AppDatabase
+import com.hsd.avh.standstrong.data.LoginBody
+import com.hsd.avh.standstrong.data.SignInResponse
 import com.hsd.avh.standstrong.data.awards.ApiAward
 import com.hsd.avh.standstrong.data.awards.Award
 import com.hsd.avh.standstrong.data.messages.Message
@@ -68,6 +70,14 @@ class SSUtils {
             editor.putString("eduPost",nextPost)
             editor.apply()
             StandStrong.settEduPostsShown(currentPost+1)
+        }
+
+        @JvmStatic fun login(userName: String, password: String, callback: Callback<SignInResponse>) {
+
+            doAsync {
+
+                endpoints?.login(LoginBody(userName, password))?.enqueue(callback)
+            }
         }
 
         @JvmStatic fun getNextEducationalPost():String {
