@@ -101,7 +101,7 @@ class PersonDetailViewModel(
                         }
                     }
                 }
-                if(sDate > 0 ) {
+                q = if(sDate > 0) {
                     "$q AND date BETWEEN $sDate AND $eDate ORDER BY date desc"
                 } else {
                     "$q ORDER BY date desc"
