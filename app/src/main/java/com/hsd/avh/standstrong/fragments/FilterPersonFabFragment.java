@@ -52,6 +52,7 @@ public class FilterPersonFabFragment extends AAH_FabulousFragment implements Dat
     TextView outputConversion;
     EditText msg;
     DateConverter dateConverter = new DateConverter();
+    private String TAG = getClass().getName();
 
 
 
@@ -251,6 +252,7 @@ public class FilterPersonFabFragment extends AAH_FabulousFragment implements Dat
             @Override
             public void onClick(View v) {
                 Calendar now = Calendar.getInstance();
+                Log.d(TAG, "clicked");
                 viewModel.newMessage(newMsg.getText().toString());
                 closeFilter(person_filters);
             }

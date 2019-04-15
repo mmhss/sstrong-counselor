@@ -53,10 +53,8 @@ class PersonRepository private constructor(
         return postDao.insertPost(post)
     }
 
-    suspend fun insertMessage(msg: Message) {
-        withContext(IO) {
-            messageDao.insertMessage(msg)
-        }
+    suspend fun insertMessage(msg: Message) : Long {
+        return messageDao.insertMessage(msg)
     }
 
     suspend fun removePerson(person: Person) {

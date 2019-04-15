@@ -41,6 +41,9 @@ interface ApiEndpoints{
     @FormUrlEncoded
     fun postMessages(@Body msg: Message): Call<Message>
 
+    @POST("/api/posts")
+    fun sendMessageToServer(@Body msg: ApiMessage): Call<Message>
+
     @GET("/api/posts?")
     fun getMessagesAsync(@Query("search") searchId:String ): Deferred<Response<List<ApiMessage>>>
 

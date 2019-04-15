@@ -98,6 +98,15 @@ class PeopleDetailFragment : Fragment() {
                 binding.noPosts.visibility =  View.VISIBLE
             }
         })
+
+        vm.subscribeOnScrollToTop().observe(this, Observer {
+
+            Log.d(TAG, "need scroll ? $it")
+
+            if (it!!) {
+                binding.postList.layoutManager?.scrollToPosition(0)
+            }
+        })
     }
 
 }

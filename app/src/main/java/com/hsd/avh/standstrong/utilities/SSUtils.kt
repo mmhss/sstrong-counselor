@@ -18,6 +18,7 @@ import com.hsd.avh.standstrong.data.LoginBody
 import com.hsd.avh.standstrong.data.SignInResponse
 import com.hsd.avh.standstrong.data.awards.ApiAward
 import com.hsd.avh.standstrong.data.awards.Award
+import com.hsd.avh.standstrong.data.messages.ApiMessage
 import com.hsd.avh.standstrong.data.messages.Message
 import com.hsd.avh.standstrong.data.people.Person
 import com.hsd.avh.standstrong.data.posts.*
@@ -420,6 +421,28 @@ class SSUtils {
                 }
             }
 
+        }
+
+        @JvmStatic fun uploadMessage(message : ApiMessage) {
+
+            var endpoints: ApiEndpoints? = ApiService.service
+
+            doAsync {
+                endpoints?.sendMessageToServer(message)?.enqueue(object : Callback<Message> {
+                override fun onResponse(call: Call<Message>, response: Response<Message>) {
+                    if (response.isSuccessful) {
+                        Log.d("SSTRNG","Success")
+                    } else {
+                        var e = MyAPIException(response.message(),response.code())
+                        Crashlytics.logException(e)
+                    }
+                }
+                override fun onFailure(call: Call<Message>, t: Throwable) {
+                    var e = MyAPIException("Upload New Messages Failed",98)
+                    Crashlytics.logException(e)
+                }
+            })
+            }
         }
 
         @JvmStatic fun checkForNewMessages(){

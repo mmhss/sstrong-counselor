@@ -9,6 +9,7 @@ import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import androidx.sqlite.db.SimpleSQLiteQuery
 import com.hsd.avh.standstrong.StandStrong
+import com.hsd.avh.standstrong.data.messages.ApiMessage
 import com.hsd.avh.standstrong.data.messages.Message
 import com.hsd.avh.standstrong.data.people.Person
 import com.hsd.avh.standstrong.data.people.PersonRepository
@@ -36,6 +37,7 @@ class PersonDetailViewModel(
     private val postFilterList = MutableLiveData<Int>()
     private var appliedFilters : ArrayMap<String, List<String>> = ArrayMap<String, List<String>>()
     val TAG = javaClass.canonicalName
+    private val scrollToTop = MutableLiveData<Boolean>()
 
     init {
         setPid(personId)
@@ -126,6 +128,7 @@ class PersonDetailViewModel(
 
     fun getPersonPostsPaged() = pagedPersonPosts
 
+    fun subscribeOnScrollToTop() : LiveData<Boolean> = scrollToTop
 
     fun setPid(id:String) {
         pid = id
@@ -153,7 +156,10 @@ class PersonDetailViewModel(
                     runBlocking {
                         insertRowIdRow = personRepository.insertPost(p)
                         val m = Message(immPerson.mother_id, msg, StandStrong.MESSAGE_DIRECTION_OUT, insertRowIdRow.toInt(), dateMsg)
+                        val apiMessage = ApiMessage(0, m.msg, SimpleDateFormat(Const.MESSAGE_DATE_FORMAT).format(m.msgDate), m.msgThread, m.direction, ApiMessage.Mother(immPerson.mother_id))
                         personRepository.insertMessage(m)
+                        SSUtils.uploadMessage(apiMessage)
+                        scrollToTop.postValue(true)
                     }
                 } catch (e: Exception) {
                     Log.d("SSS", "Error")

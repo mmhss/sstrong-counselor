@@ -48,7 +48,7 @@ class ApiMessage {
         this.mother = mother
     }
 
-    inner class Mother {
+    class Mother {
 
         @SerializedName("id")
         @Expose

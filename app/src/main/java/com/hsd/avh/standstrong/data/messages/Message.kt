@@ -1,6 +1,8 @@
 package com.hsd.avh.standstrong.data.messages
 
 import androidx.room.*
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 import com.hsd.avh.standstrong.data.people.Person
 import java.util.*
 
