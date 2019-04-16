@@ -156,7 +156,7 @@ class PersonDetailViewModel(
                     runBlocking {
                         insertRowIdRow = personRepository.insertPost(p)
                         val m = Message(immPerson.mother_id, msg, StandStrong.MESSAGE_DIRECTION_OUT, insertRowIdRow.toInt(), dateMsg)
-                        val apiMessage = ApiMessage(0, m.msg, SimpleDateFormat(Const.MESSAGE_DATE_FORMAT).format(m.msgDate), m.msgThread, m.direction, ApiMessage.Mother(immPerson.mother_id))
+                        val apiMessage = ApiMessage(m.msg, SimpleDateFormat(Const.MESSAGE_DATE_FORMAT).format(m.msgDate), m.msgThread, m.direction, ApiMessage.Mother(immPerson.mother_id))
                         personRepository.insertMessage(m)
                         SSUtils.uploadMessage(apiMessage)
                         scrollToTop.postValue(true)
@@ -164,7 +164,6 @@ class PersonDetailViewModel(
                 } catch (e: Exception) {
                     Log.d("SSS", "Error")
                 }
-
         }
         }
     }

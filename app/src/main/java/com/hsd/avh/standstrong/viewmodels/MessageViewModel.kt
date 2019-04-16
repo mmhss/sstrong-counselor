@@ -1,5 +1,6 @@
 package com.hsd.avh.standstrong.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import com.hsd.avh.standstrong.data.awards.MessageRepository
@@ -11,10 +12,14 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.hsd.avh.standstrong.StandStrong
 import com.hsd.avh.standstrong.data.AppDatabase
+import com.hsd.avh.standstrong.data.messages.ApiMessage
+import com.hsd.avh.standstrong.utilities.SSUtils
 import com.hsd.avh.standstrong.workers.MessagesWorker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -27,6 +32,8 @@ class MessageViewModel internal constructor(
 ) : ViewModel() {
 
     //private val growZoneNumber = MutableLiveData<Int>()
+
+    private val TAG = javaClass.simpleName
 
     private val messageList = MediatorLiveData<List<Message>>()
     val txtMessage = ObservableField<String>()
@@ -44,24 +51,23 @@ class MessageViewModel internal constructor(
         if(!txtMessage.get().toString().isNullOrEmpty()) {
             val txtMsg = txtMessage.get().toString()
             txtMessage.set("")
-            CoroutineScope(Dispatchers.IO).launch {
+
+            doAsync {
+
                 val m = Message(motherId,
                         txtMsg, StandStrong.MESSAGE_DIRECTION_OUT,
                         postId,
-                        Date()
-                )
+                        Date())
 
                 val id = database.messageDao().insertMessage(m)
                 database.postDao().updateCommentCount(postId)
 
-                //Now upload using WorkManager (Also Checks for new messages)
-                val inputData = Data.Builder().putLong(StandStrong.MESSAGE_ROW_ID, id).build()
-                val notificationWork = OneTimeWorkRequest.Builder(MessagesWorker::class.java)
-                        .setInitialDelay(1, TimeUnit.SECONDS)
-                        .addTag(StandStrong.TAG_MSG)
-                        .setInputData(inputData)
-                        .build()
-                WorkManager.getInstance().enqueueUniqueWork(StandStrong.TAG_MSG, ExistingWorkPolicy.REPLACE, notificationWork);
+                Log.d(TAG, "message added locally $id")
+
+                uiThread {
+                    SSUtils.uploadMessage(ApiMessage(m))
+                    SSUtils.checkForNewMessages()
+                }
             }
         }
     }

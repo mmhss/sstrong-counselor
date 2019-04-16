@@ -395,32 +395,16 @@ class SSUtils {
 
         @JvmStatic fun uploadMessage(id : Long) {
 
-            var m : Message? = null
-            var endpoints: ApiEndpoints? = ApiService.service
-            runBlocking {
-                m = withContext(Dispatchers.Default) {
-                    CoroutineScope(Dispatchers.IO).async {
-                        database.messageDao().getMessageById(id)
-                    }.await()
-                }
+            doAsync {
+
+                val m: Message? = database.messageDao().getMessageById(id)
+
+                Log.d(TAG, "message from db $m")
+
                 if (m != null) {
-                    endpoints?.postMessages(m!!)?.enqueue(object : Callback<Message> {
-                        override fun onResponse(call: Call<Message>, response: Response<Message>) {
-                            if (response.isSuccessful) {
-                                Log.d("SSTRNG","Success")
-                            } else {
-                                var e = MyAPIException(response.message(),response.code())
-                                Crashlytics.logException(e)
-                            }
-                        }
-                        override fun onFailure(call: Call<Message>, t: Throwable) {
-                            var e = MyAPIException("Upload New Messages Failed",98)
-                            Crashlytics.logException(e)
-                        }
-                    })
+                    uploadMessage(ApiMessage(m))
                 }
             }
-
         }
 
         @JvmStatic fun uploadMessage(message : ApiMessage) {

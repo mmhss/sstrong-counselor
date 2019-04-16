@@ -2,11 +2,12 @@ package com.hsd.avh.standstrong.data.messages
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.hsd.avh.standstrong.utilities.Const
+import java.text.SimpleDateFormat
 
 class ApiMessage {
 
     @SerializedName("id")
-    @Expose
     var id: Int? = null
     @SerializedName("message")
     @Expose
@@ -46,6 +47,22 @@ class ApiMessage {
         this.threadId = threadId
         this.direction = direction
         this.mother = mother
+    }
+
+    constructor(message: String, postedDate: String, threadId: Int?, direction: String, mother: Mother) : super() {
+        this.message = message
+        this.postedDate = postedDate
+        this.threadId = threadId
+        this.direction = direction
+        this.mother = mother
+    }
+
+    constructor(dbMessage: Message) {
+        this.message = dbMessage.msg
+        this.postedDate = SimpleDateFormat(Const.MESSAGE_DATE_FORMAT).format(dbMessage.msgDate)
+        this.threadId = dbMessage.msgThread
+        this.direction = dbMessage.direction
+        this.mother = Mother(dbMessage.motherId)
     }
 
     class Mother {
