@@ -23,6 +23,7 @@ import com.hornet.dateconverter.DatePicker.DatePickerDialog;
 import com.hornet.dateconverter.Model;
 import com.hsd.avh.standstrong.R;
 import com.hsd.avh.standstrong.StandStrong;
+import com.hsd.avh.standstrong.managers.AnalyticsManager;
 import com.hsd.avh.standstrong.utilities.FirebaseTrackingUtil;
 import com.hsd.avh.standstrong.utilities.InjectorUtils;
 import com.hsd.avh.standstrong.viewmodels.PersonDetailViewModel;
@@ -39,6 +40,8 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import javax.inject.Inject;
+
 
 public class FilterPersonFabFragment extends AAH_FabulousFragment implements DatePickerDialog.OnDateSetListener   {
 
@@ -54,7 +57,8 @@ public class FilterPersonFabFragment extends AAH_FabulousFragment implements Dat
     DateConverter dateConverter = new DateConverter();
     private String TAG = getClass().getName();
 
-
+    @Inject
+    AnalyticsManager analyticsManager;
 
     public static FilterPersonFabFragment newInstance(String personId) {
         FilterPersonFabFragment f = new FilterPersonFabFragment();
@@ -75,6 +79,8 @@ public class FilterPersonFabFragment extends AAH_FabulousFragment implements Dat
         person_filters = StandStrong.Companion.getFiltersPeople();
         final PersonDetailViewModelFactory pdFactory= InjectorUtils.INSTANCE.providePersonDetailViewModelFactory(getActivity(),personId);
         viewModel = ViewModelProviders.of(getActivity(),pdFactory).get(PersonDetailViewModel.class);
+
+        ((StandStrong) getActivity().getApplication()).managerComponent.inject(this);
     }
 
 
@@ -94,6 +100,21 @@ public class FilterPersonFabFragment extends AAH_FabulousFragment implements Dat
                 viewModel.setFilter(person_filters,personId);
                 closeFilter(person_filters);
 
+                Bundle args = new Bundle();
+
+                StringBuilder compositeFilter = new StringBuilder();
+
+                for (List<String> lists : person_filters.values()) {
+
+                    for (String s : lists) {
+                        compositeFilter.append(s);
+                        compositeFilter.append(",");
+                    }
+                }
+
+                args.putString("Filters person", compositeFilter.toString());
+
+                analyticsManager.trackEvent("Selected filters for person", args);
             }
         });
 
@@ -105,6 +126,8 @@ public class FilterPersonFabFragment extends AAH_FabulousFragment implements Dat
                     tv.setBackgroundResource(R.drawable.filter_chip_unselected);
                     tv.setTextColor(ContextCompat.getColor(getContext(), R.color.filter_chip));
                 }
+
+                analyticsManager.trackEvent("Clear filer click", null);
                 person_filters.clear();
                 viewModel.clearFilter();
                 closeFilter(person_filters);
@@ -254,6 +277,9 @@ public class FilterPersonFabFragment extends AAH_FabulousFragment implements Dat
                 Calendar now = Calendar.getInstance();
                 Log.d(TAG, "clicked");
                 viewModel.newMessage(newMsg.getText().toString());
+                Bundle args = new Bundle();
+                args.putString("To", personId);
+                analyticsManager.trackEvent("Message sent", args);
                 closeFilter(person_filters);
             }
         });
@@ -269,6 +295,10 @@ public class FilterPersonFabFragment extends AAH_FabulousFragment implements Dat
                 Calendar now = Calendar.getInstance();
                 viewModel.newGoal(newGoal.getText().toString());
                 closeFilter(person_filters);
+
+                Bundle args = new Bundle();
+                args.putString("To", personId);
+                analyticsManager.trackEvent("Goal sent", args);
             }
         });
     }
@@ -378,6 +408,10 @@ public class FilterPersonFabFragment extends AAH_FabulousFragment implements Dat
                         tv.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
                         addToSelectedMap(filter_category, finalKeys.get(finalI));
                     }
+
+                    Bundle args = new Bundle();
+                    args.putString("Type", filter_category);
+                    analyticsManager.trackEvent("On filter chip click", args);
                 }
             });
             try {

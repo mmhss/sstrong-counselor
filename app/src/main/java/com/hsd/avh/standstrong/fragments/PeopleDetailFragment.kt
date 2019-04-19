@@ -13,12 +13,13 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hsd.avh.standstrong.adapters.PostsPagedAdapter
 import com.hsd.avh.standstrong.databinding.FragmentPeopleDetailsBinding
+import com.hsd.avh.standstrong.fragments.baseFragments.BaseFragment
 import com.hsd.avh.standstrong.utilities.FirebaseTrackingUtil
 import com.hsd.avh.standstrong.utilities.InjectorUtils
 import com.hsd.avh.standstrong.viewmodels.PersonDetailViewModel
 import kotlinx.android.synthetic.main.fragment_people_details.*
 
-class PeopleDetailFragment : Fragment() {
+class PeopleDetailFragment : BaseFragment() {
 
     private val TAG = javaClass.canonicalName
 
@@ -29,7 +30,7 @@ class PeopleDetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        postsPagedAdapter = PostsPagedAdapter(activity!!)
+        postsPagedAdapter = PostsPagedAdapter(activity!!, analyticsManager)
     }
 
 
@@ -70,6 +71,8 @@ class PeopleDetailFragment : Fragment() {
             val dialogFrag = FilterPersonFabFragment.newInstance(personId)
             dialogFrag.setParentFab(fab)
             dialogFrag.show(fragmentManager, dialogFrag.tag)
+
+            analyticsManager.trackEvent("Open filter for people click")
         }
 
         setHasOptionsMenu(true)
@@ -78,9 +81,6 @@ class PeopleDetailFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        //StandStrong.firebaseInstance().setCurrentScreen(this!!.activity!!, activity?.javaClass?.simpleName, activity?.javaClass?.simpleName);
-        FirebaseTrackingUtil(activity!!).track(FirebaseTrackingUtil.Screens.ClientDetail)
-
         if (postsPagedAdapter != null)
             appBar.setExpanded(false, false)
     }

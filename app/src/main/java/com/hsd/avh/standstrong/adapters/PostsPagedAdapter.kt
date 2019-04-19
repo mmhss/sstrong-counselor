@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -17,10 +18,12 @@ import com.hsd.avh.standstrong.StandStrong
 import com.hsd.avh.standstrong.data.posts.Post
 import com.hsd.avh.standstrong.databinding.ListItemPostsBinding
 import com.hsd.avh.standstrong.fragments.PostListFragmentDirections
+import com.hsd.avh.standstrong.managers.AnalyticsManager
 import com.hsd.avh.standstrong.utilities.SSUtils
 import com.varunest.sparkbutton.SparkEventListener
+import org.jetbrains.anko.bundleOf
 
-class PostsPagedAdapter(val context: Context) : PagedListAdapter<Post, PostsPagedAdapter.PostViewHolder>(PostDiffCallback()) {
+class PostsPagedAdapter(val context: Context, val analyticsManager: AnalyticsManager) : PagedListAdapter<Post, PostsPagedAdapter.PostViewHolder>(PostDiffCallback()) {
 
     private val TAG = javaClass.canonicalName
 
@@ -47,6 +50,11 @@ class PostsPagedAdapter(val context: Context) : PagedListAdapter<Post, PostsPage
             StandStrong.firebaseInstance().logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle)
             //val dateFormat = SimpleDateFormat("yyyy-mm-dd hh:mm:ss")
             //val strDate = dateFormat.format(
+
+            val args = Bundle()
+            args.putInt("id", post.postId)
+
+            analyticsManager.trackEvent("on post click", args)
 
             when (post.type) {
                 StandStrong.POST_CARD_CONTENT ->
@@ -76,6 +84,11 @@ class PostsPagedAdapter(val context: Context) : PagedListAdapter<Post, PostsPage
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "post")
             StandStrong.firebaseInstance().logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle)
             val direction = PostListFragmentDirections.actionPostListToMessages( post.motherId,post.postId)
+
+            val args = Bundle()
+            args.putInt("id", post.postId)
+
+            analyticsManager.trackEvent("on comments section click", args)
             it.findNavController().navigate(direction)
         }
     }

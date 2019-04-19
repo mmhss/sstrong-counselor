@@ -18,23 +18,23 @@ import com.hsd.avh.standstrong.utilities.UserAuthentication
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.hsd.avh.standstrong.data.SignInResponse
+import com.hsd.avh.standstrong.managers.AnalyticsManager
 import com.hsd.avh.standstrong.utilities.Const
 import com.hsd.avh.standstrong.utilities.SSUtils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : BaseActivity() {
 
     lateinit var bindings : ActivityLoginBinding
     private var user: UserAuthentication = UserAuthentication("","","","")
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        firebaseAnalytics = StandStrong.firebaseInstance()
         bindings = DataBindingUtil.setContentView(this, R.layout.activity_login)
         bindings.userAuthentication = user
 
@@ -44,13 +44,15 @@ class LoginActivity : AppCompatActivity() {
         bindings.verifyBtn.startAnimation(AnimationUtils.loadAnimation(this.applicationContext,R.anim.grow))
         bindings.verifyBtn.setOnClickListener {
             user.setCode()
-            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, FirebaseUtils.loginAttempt(user.code))
+            analyticsManager.trackEvent(FirebaseAnalytics.Event.LOGIN, FirebaseUtils.loginAttempt(user.code))
             if(user.isValidUser()) {
 
                 SSUtils.login(user.code, "111111", object : Callback<SignInResponse> {
                     override fun onFailure(call: Call<SignInResponse>, t: Throwable) {
 
                         Log.e(SSUtils.TAG, "error while sign in: " + Log.getStackTraceString(t))
+
+                        analyticsManager.trackEvent("Login failed")
 
                         Toast.makeText(this@LoginActivity, R.string.login_failed, Toast.LENGTH_SHORT).show()
                     }
@@ -69,6 +71,7 @@ class LoginActivity : AppCompatActivity() {
                     }
                 })
             } else {
+
                 bindings.verifyBtn.startAnimation(AnimationUtils.loadAnimation(this.applicationContext,R.anim.shake))
                 user.clearCode()
                 bindings.otp1.setText("")
@@ -76,6 +79,8 @@ class LoginActivity : AppCompatActivity() {
                 bindings.otp3.setText("")
                 bindings.otp4.setText("")
                 bindings.otp1.requestFocus()
+
+                analyticsManager.trackEvent("User typed wrong code")
             }
 
         }
@@ -101,9 +106,9 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setFirebaseUser(){
         //Sets the user ID property.
-        firebaseAnalytics.setUserId(user.userType()?.userGroupCode)
+        analyticsManager.setUserId(user.userType()?.userGroupCode)
         //Sets a user property to a given value.
-        firebaseAnalytics.setUserProperty("user_type", user.userType()?.userGroupName)
+        analyticsManager.setUserProperty("user_type", user.userType()?.userGroupName)
 
     }
     private fun shiftRequest(from: EditText, to: EditText) {

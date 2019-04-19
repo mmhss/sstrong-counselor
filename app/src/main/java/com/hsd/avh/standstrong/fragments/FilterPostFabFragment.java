@@ -20,12 +20,14 @@ import com.hornet.dateconverter.DatePicker.DatePickerDialog;
 import com.hornet.dateconverter.Model;
 import com.hsd.avh.standstrong.R;
 import com.hsd.avh.standstrong.StandStrong;
+import com.hsd.avh.standstrong.managers.AnalyticsManager;
 import com.hsd.avh.standstrong.utilities.FirebaseTrackingUtil;
 import com.hsd.avh.standstrong.viewmodels.PersonDetailViewModel;
 import com.hsd.avh.standstrong.viewmodels.PersonDetailViewModelFactory;
 import com.hsd.avh.standstrong.viewmodels.PostListViewModel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -37,6 +39,8 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import com.hsd.avh.standstrong.utilities.InjectorUtils;
 import com.hsd.avh.standstrong.viewmodels.PostListViewModelFactory;
+
+import javax.inject.Inject;
 
 
 public class FilterPostFabFragment extends AAH_FabulousFragment implements DatePickerDialog.OnDateSetListener   {
@@ -50,6 +54,8 @@ public class FilterPostFabFragment extends AAH_FabulousFragment implements DateP
     TextView outputConversion;
     DateConverter dateConverter = new DateConverter();
 
+    @Inject
+    AnalyticsManager analyticsManager;
 
 
     public static FilterPostFabFragment newInstance() {
@@ -74,6 +80,8 @@ public class FilterPostFabFragment extends AAH_FabulousFragment implements DateP
         final PostListViewModelFactory factory= InjectorUtils.INSTANCE.providePostListViewModelFactory(getActivity());
         viewModel = ViewModelProviders.of(getActivity(),factory).get(PostListViewModel.class);
 
+
+        ((StandStrong) getActivity().getApplication()).managerComponent.inject(this);
     }
 
 
@@ -92,6 +100,22 @@ public class FilterPostFabFragment extends AAH_FabulousFragment implements DateP
             public void onClick(View v) {
                 viewModel.setFilter(applied_filters);
                 closeFilter(applied_filters);
+
+                Bundle args = new Bundle();
+
+                StringBuilder compositeFilter = new StringBuilder();
+
+                for (List<String> lists : applied_filters.values()) {
+
+                    for (String s : lists) {
+                        compositeFilter.append(s);
+                        compositeFilter.append(",");
+                    }
+                }
+
+                args.putString("Filters post", compositeFilter.toString());
+
+                analyticsManager.trackEvent("Selected filters for person", args);
             }
         });
 
@@ -106,6 +130,8 @@ public class FilterPostFabFragment extends AAH_FabulousFragment implements DateP
                 applied_filters.clear();
                 viewModel.clearFilter();
                 closeFilter(applied_filters);
+
+                analyticsManager.trackEvent("Clear filer click", null);
             }
         });
 
@@ -336,6 +362,10 @@ public class FilterPostFabFragment extends AAH_FabulousFragment implements DateP
                         tv.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
                         addToSelectedMap(filter_category, finalKeys.get(finalI));
                     }
+
+                    Bundle args = new Bundle();
+                    args.putString("Type", filter_category);
+                    analyticsManager.trackEvent("On filter chip click", args);
                 }
             });
             try {

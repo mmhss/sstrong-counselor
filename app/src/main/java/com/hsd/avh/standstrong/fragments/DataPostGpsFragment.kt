@@ -32,11 +32,12 @@ import android.graphics.Color
 import android.text.method.LinkMovementMethod
 import com.google.android.gms.maps.model.TileOverlayOptions
 import com.hsd.avh.standstrong.data.posts.Gps
+import com.hsd.avh.standstrong.fragments.baseFragments.BaseFragment
 import java.io.InputStream
 import java.util.*
 
 
-class DataPostGpsFragment : Fragment(), OnMapReadyCallback {
+class DataPostGpsFragment : BaseFragment(), OnMapReadyCallback {
 
     /**
      * Alternative radius for convolution
@@ -155,8 +156,6 @@ class DataPostGpsFragment : Fragment(), OnMapReadyCallback {
 
     override fun onResume() {
         super.onResume()
-        //StandStrong.firebaseInstance().setCurrentScreen(this!!.activity!!, activity?.javaClass?.simpleName, activity?.javaClass?.simpleName);
-        FirebaseTrackingUtil(activity!!).track(FirebaseTrackingUtil.Screens.GpsData)
         mMapView?.onResume()
     }
 

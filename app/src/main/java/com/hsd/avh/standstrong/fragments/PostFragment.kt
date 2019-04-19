@@ -13,12 +13,13 @@ import com.hsd.avh.standstrong.adapters.PostAdapter
 import com.hsd.avh.standstrong.adapters.PostsPagedAdapter
 import com.hsd.avh.standstrong.data.posts.Post
 import com.hsd.avh.standstrong.databinding.FragmentPostBinding
+import com.hsd.avh.standstrong.fragments.baseFragments.BaseFragment
 import com.hsd.avh.standstrong.utilities.FirebaseTrackingUtil
 import com.hsd.avh.standstrong.utilities.InjectorUtils
 import com.hsd.avh.standstrong.viewmodels.PostListViewModel
 
 
-class PostListFragment : Fragment(){
+class PostListFragment : BaseFragment() {
 
     private lateinit var viewModel: PostListViewModel
     private var hasPosts:Boolean = false
@@ -41,7 +42,7 @@ class PostListFragment : Fragment(){
         } ?: throw Exception("Invalid Activity")
 
 
-        val adapter = PostsPagedAdapter(activity!!)
+        val adapter = PostsPagedAdapter(activity!!, analyticsManager)
         binding.postList.adapter = adapter
 
         val fab =  binding.fab2
@@ -49,6 +50,8 @@ class PostListFragment : Fragment(){
             val dialogFrag = FilterPostFabFragment.newInstance()
             dialogFrag.setParentFab(fab)
             dialogFrag.show(fragmentManager, dialogFrag.tag)
+
+            analyticsManager.trackEvent("Open filter for post click")
         }
 
         val swipeRefreshLayout =  binding.swiping
@@ -64,13 +67,6 @@ class PostListFragment : Fragment(){
 
         setHasOptionsMenu(true)
         return binding.root
-    }
-
-
-    override fun onResume() {
-        super.onResume()
-        //StandStrong.firebaseInstance().setCurrentScreen(this!!.activity!!, activity?.javaClass?.simpleName, activity?.javaClass?.simpleName);
-        FirebaseTrackingUtil(activity!!).track(FirebaseTrackingUtil.Screens.Post)
     }
 
     private fun subscribeUi(adapter: PostsPagedAdapter) {

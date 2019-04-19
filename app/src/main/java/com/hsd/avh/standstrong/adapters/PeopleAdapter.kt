@@ -8,18 +8,17 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.hsd.avh.standstrong.data.people.Person
-import com.hsd.avh.standstrong.data.posts.Post
 import com.hsd.avh.standstrong.databinding.ListItemPeopleBinding
-import com.hsd.avh.standstrong.databinding.ListItemPostsBinding
 import com.hsd.avh.standstrong.fragments.PeopleFragmentDirections
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.hsd.avh.standstrong.StandStrong
+import com.hsd.avh.standstrong.managers.AnalyticsManager
 
 
 /**
  * Adapter for the [RecyclerView] in [PeopleListFragment].
  */
-class PeopleAdapter : ListAdapter<Person, PeopleAdapter.ViewHolder>(PeopleDiffCallback()) {
+class PeopleAdapter(val analyticsManager: AnalyticsManager) : ListAdapter<Person, PeopleAdapter.ViewHolder>(PeopleDiffCallback()) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val person = getItem(position)
@@ -42,6 +41,11 @@ class PeopleAdapter : ListAdapter<Person, PeopleAdapter.ViewHolder>(PeopleDiffCa
             bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Person Viewed")
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "person")
             StandStrong.firebaseInstance().logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle)
+
+            val args = Bundle()
+            args.putString("id", personId)
+
+            analyticsManager.trackEvent("on person click", args)
 
             val direction = PeopleFragmentDirections.actionPeopleListToPersonDetail(personId)
             it.findNavController().navigate(direction)

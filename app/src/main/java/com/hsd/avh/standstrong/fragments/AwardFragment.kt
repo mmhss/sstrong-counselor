@@ -2,28 +2,19 @@ package com.hsd.avh.standstrong.fragments
 
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.hsd.avh.standstrong.adapters.AwardAdapter
-import com.hsd.avh.standstrong.adapters.PostAdapter
 import com.hsd.avh.standstrong.databinding.FragmentAwardsBinding
-import com.hsd.avh.standstrong.databinding.FragmentPostBinding
-import com.hsd.avh.standstrong.utilities.FirebaseTrackingUtil
+import com.hsd.avh.standstrong.fragments.baseFragments.BaseFragment
 import com.hsd.avh.standstrong.utilities.InjectorUtils
 import com.hsd.avh.standstrong.viewmodels.AwardViewModel
-import com.hsd.avh.standstrong.viewmodels.PostListViewModel
 
-class AwardFragment : Fragment() {
+class AwardFragment : BaseFragment() {
 
     private lateinit var viewModel: AwardViewModel
     private lateinit var binding:FragmentAwardsBinding
@@ -40,7 +31,7 @@ class AwardFragment : Fragment() {
         val factory = InjectorUtils.provideAwardListViewModelFactory(context)
         viewModel = ViewModelProviders.of(this, factory).get(AwardViewModel::class.java)
 
-        val adapter = AwardAdapter()
+        val adapter = AwardAdapter(analyticsManager)
         binding.awardList.adapter = adapter
         val swipeRefreshLayout =  binding.swiping
         swipeRefreshLayout.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
@@ -48,6 +39,7 @@ class AwardFragment : Fragment() {
             //Just a hack with no error or success being returned.
             swipeRefreshLayout.postDelayed({
                 swipeRefreshLayout.isRefreshing = false
+                analyticsManager.trackEvent("Refresh of awards launched by swipe")
             }, 3000)
 
         })
@@ -73,8 +65,6 @@ class AwardFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        //StandStrong.firebaseInstance().setCurrentScreen(this!!.activity!!, activity?.javaClass?.simpleName, activity?.javaClass?.simpleName);
-        FirebaseTrackingUtil(activity!!).track(FirebaseTrackingUtil.Screens.Awards)
         viewModel.updateAwardList()
     }
 

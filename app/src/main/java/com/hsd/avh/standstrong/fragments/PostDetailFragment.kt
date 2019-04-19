@@ -13,11 +13,12 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.hsd.avh.standstrong.R
 import com.hsd.avh.standstrong.databinding.*
+import com.hsd.avh.standstrong.fragments.baseFragments.BaseFragment
 import com.hsd.avh.standstrong.utilities.FirebaseTrackingUtil
 import com.hsd.avh.standstrong.utilities.InjectorUtils
 import com.hsd.avh.standstrong.viewmodels.*
 
-class PostDetailFragment : Fragment() {
+class PostDetailFragment : BaseFragment() {
 
     private lateinit var vm: PostDetailViewModel
 
@@ -51,11 +52,5 @@ class PostDetailFragment : Fragment() {
         })
 
         return binding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
-        //StandStrong.firebaseInstance().setCurrentScreen(this!!.activity!!, activity?.javaClass?.simpleName, activity?.javaClass?.simpleName);
-        FirebaseTrackingUtil(activity!!).track(FirebaseTrackingUtil.Screens.PostDetails)
     }
 }

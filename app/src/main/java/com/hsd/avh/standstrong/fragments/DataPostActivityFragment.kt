@@ -16,12 +16,13 @@ import androidx.lifecycle.ViewModelProviders
 import com.hsd.avh.standstrong.R
 import com.hsd.avh.standstrong.StandStrong
 import com.hsd.avh.standstrong.databinding.*
+import com.hsd.avh.standstrong.fragments.baseFragments.BaseFragment
 import com.hsd.avh.standstrong.utilities.FirebaseTrackingUtil
 import com.hsd.avh.standstrong.utilities.InjectorUtils
 import com.hsd.avh.standstrong.viewmodels.*
 import kotlinx.android.synthetic.main.fragment_data_activity.view.*
 
-class DataPostActivityFragment : Fragment() {
+class DataPostActivityFragment : BaseFragment() {
 
     private lateinit var vm: DataPostViewModel
 
@@ -86,11 +87,5 @@ class DataPostActivityFragment : Fragment() {
         })
 
         return binding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
-        //StandStrong.firebaseInstance().setCurrentScreen(this!!.activity!!, activity?.javaClass?.simpleName, activity?.javaClass?.simpleName);
-        FirebaseTrackingUtil(activity!!).track(FirebaseTrackingUtil.Screens.ActivityData)
     }
 }

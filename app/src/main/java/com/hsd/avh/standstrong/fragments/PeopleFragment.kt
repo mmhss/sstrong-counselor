@@ -6,17 +6,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.hsd.avh.standstrong.StandStrong
 import com.hsd.avh.standstrong.adapters.PeopleAdapter
 import com.hsd.avh.standstrong.databinding.FragmentPeopleBinding
-import com.hsd.avh.standstrong.utilities.FirebaseTrackingUtil
+import com.hsd.avh.standstrong.fragments.baseFragments.BaseFragment
 import com.hsd.avh.standstrong.utilities.InjectorUtils
 import com.hsd.avh.standstrong.viewmodels.PeopleViewModel
 
-class PeopleFragment : Fragment() {
+class PeopleFragment : BaseFragment() {
 
     private lateinit var viewModel: PeopleViewModel
     private lateinit var binding:FragmentPeopleBinding
@@ -33,7 +31,7 @@ class PeopleFragment : Fragment() {
         viewModel = ViewModelProviders.of(this, factory).get(PeopleViewModel::class.java)
 
 
-        val adapter = PeopleAdapter()
+        val adapter = PeopleAdapter(analyticsManager)
         binding.peopleList.adapter = adapter
 
         val swipeRefreshLayout =  binding.swiping
@@ -41,6 +39,8 @@ class PeopleFragment : Fragment() {
             viewModel.updatePeople()
             //Just a hack with no error or success being returned.
             swipeRefreshLayout.postDelayed({
+
+                analyticsManager.trackEvent("Refresh of people")
                 swipeRefreshLayout.isRefreshing = false
             }, 3000)
 
@@ -69,9 +69,6 @@ class PeopleFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        //StandStrong.firebaseInstance().setCurrentScreen(this!!.activity!!, activity?.javaClass?.simpleName, activity?.javaClass?.simpleName);
-        FirebaseTrackingUtil(activity!!).track(FirebaseTrackingUtil.Screens.Clients)
-
         viewModel.updatePeople()
     }
 
