@@ -8,12 +8,14 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.crashlytics.android.Crashlytics
+import com.google.gson.Gson
 import com.hsd.avh.standstrong.LoginActivity
 import com.hsd.avh.standstrong.R
 import com.hsd.avh.standstrong.StandStrong
 import com.hsd.avh.standstrong.api.ApiEndpoints
 import com.hsd.avh.standstrong.api.ApiService
 import com.hsd.avh.standstrong.data.AppDatabase
+import com.hsd.avh.standstrong.data.ErrorModel
 import com.hsd.avh.standstrong.data.LoginBody
 import com.hsd.avh.standstrong.data.SignInResponse
 import com.hsd.avh.standstrong.data.awards.ApiAward
@@ -73,7 +75,17 @@ class SSUtils {
             StandStrong.settEduPostsShown(currentPost+1)
         }
 
-        @JvmStatic fun login(userName: String, password: String, callback: Callback<SignInResponse>) {
+        @JvmStatic fun login(userName: String, password: String, callback: Callback<SignInResponse> = object : Callback<SignInResponse> {
+            override fun onFailure(call: Call<SignInResponse>, t: Throwable) {
+                Log.e(TAG, "error while login " + Log.getStackTraceString(t))
+            }
+
+            override fun onResponse(call: Call<SignInResponse>, response: Response<SignInResponse>) {
+
+                Log.d(TAG, "success relogin " + response.body()?.token)
+                PreferenceManager.getDefaultSharedPreferences(StandStrong.applicationContext()).edit().putString(Const.ARG_TOKEN, response.body()!!.token).apply()
+            }
+        }) {
 
             doAsync {
 
@@ -335,31 +347,49 @@ class SSUtils {
 
                             Log.d(TAG, "loaded awards ${response.body()?.size}")
 
-                            val awards = response.body()!!
-                            val awardsToSave = mutableListOf<Award>()
-                            val postsToSave = mutableListOf<Post>()
+                            val errorString = response.errorBody()?.string()
 
-                            if (awards.isNotEmpty()) {
+                            if (errorString.isNullOrEmpty()) {
 
-                                for (award in awards) {
+                                Log.d(TAG, "error str $errorString")
 
-                                    var ssId = provideSSid(award.mother!!.id!!)
+                                val awards = response.body()
+                                val awardsToSave = mutableListOf<Award>()
+                                val postsToSave = mutableListOf<Post>()
 
-                                    var a: Award = Award(award.mother!!.id!!,
-                                            SimpleDateFormat("yyyy-MM-dd").parse(award.awardForDate),
-                                            ssId,
-                                            "@drawable/" + switchAward(award.awardType!!) + "_l" + Integer.toString(award.awardLevel!!))
-                                    var p: Post = Post(ssId, a.motherId, Date(), "https://www.tinygraphs.com/squares/" + a.motherId + "?theme=heatwave&numcolors=4&size=50&fmt=png", StandStrong.applicationContext().getString(R.string.card_title_award), ssId, NEW_AWARD, false, 0, StandStrong.POST_CARD_AWARD, ssId + " " + StandStrong.applicationContext().getString(R.string.post_title_award), StandStrong.applicationContext().getString(R.string.post_subtitle_award))
+                                if (!awards.isNullOrEmpty()) {
 
-                                    awardsToSave.add(a)
-                                    postsToSave.add(p)
+                                    for (award in awards) {
+
+                                        var ssId = provideSSid(award.mother!!.id!!)
+
+                                        var a: Award = Award(award.mother!!.id!!,
+                                                SimpleDateFormat("yyyy-MM-dd").parse(award.awardForDate),
+                                                ssId,
+                                                "@drawable/" + switchAward(award.awardType!!) + "_l" + Integer.toString(award.awardLevel!!))
+                                        var p: Post = Post(ssId, a.motherId, Date(), "https://www.tinygraphs.com/squares/" + a.motherId + "?theme=heatwave&numcolors=4&size=50&fmt=png", StandStrong.applicationContext().getString(R.string.card_title_award), ssId, NEW_AWARD, false, 0, StandStrong.POST_CARD_AWARD, ssId + " " + StandStrong.applicationContext().getString(R.string.post_title_award), StandStrong.applicationContext().getString(R.string.post_subtitle_award))
+
+                                        awardsToSave.add(a)
+                                        postsToSave.add(p)
+                                    }
+
+                                    doAsync {
+
+                                        database.awardDao().insertAll(awardsToSave)
+                                        database.postDao().insertAll(postsToSave)
+                                        updateLastRetrievedRow(AWARDS, awards.last().id!!)
+                                    }
                                 }
+                            } else {
 
-                                doAsync {
+                                //trying error parse
+                                val error = Gson().fromJson(errorString, ErrorModel::class.java)
 
-                                    database.awardDao().insertAll(awardsToSave)
-                                    database.postDao().insertAll(postsToSave)
-                                    updateLastRetrievedRow(AWARDS, awards.last().id!!)
+                                Log.d(TAG, "error $error")
+
+                                if (error.status==401) {
+
+                                    login("1111", Const.TEMP_PASS)
                                 }
                             }
                         }

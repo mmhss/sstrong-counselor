@@ -79,7 +79,7 @@ class DataPostGpsFragment : BaseFragment(), OnMapReadyCallback {
         //mMap!!.moveCamera(CameraUpdateFactory.newLatLng(sydney))
 
         vm.getGPSData().observe(viewLifecycleOwner, Observer { data->
-            if (data != null) {
+            if (data != null && data.isNotEmpty()) {
                 val point = LatLng(data[0].latitude!!, data[0].longitude!!)
                 mMap!!.moveCamera( CameraUpdateFactory.newLatLngZoom(point , 14.0f) );
 

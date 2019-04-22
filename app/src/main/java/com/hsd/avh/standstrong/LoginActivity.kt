@@ -47,7 +47,7 @@ class LoginActivity : BaseActivity() {
             analyticsManager.trackEvent(FirebaseAnalytics.Event.LOGIN, FirebaseUtils.loginAttempt(user.code))
             if(user.isValidUser()) {
 
-                SSUtils.login(user.code, "111111", object : Callback<SignInResponse> {
+                SSUtils.login(user.code, Const.TEMP_PASS, object : Callback<SignInResponse> {
                     override fun onFailure(call: Call<SignInResponse>, t: Throwable) {
 
                         Log.e(SSUtils.TAG, "error while sign in: " + Log.getStackTraceString(t))
