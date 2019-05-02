@@ -17,6 +17,8 @@ import com.hsd.avh.standstrong.utilities.FirebaseUtils
 import com.hsd.avh.standstrong.utilities.UserAuthentication
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import com.google.gson.Gson
+import com.hsd.avh.standstrong.data.ErrorModel
 import com.hsd.avh.standstrong.data.SignInResponse
 import com.hsd.avh.standstrong.managers.AnalyticsManager
 import com.hsd.avh.standstrong.utilities.Const
@@ -59,15 +61,25 @@ class LoginActivity : BaseActivity() {
 
                     override fun onResponse(call: Call<SignInResponse>, response: Response<SignInResponse>) {
 
-                        Log.d(SSUtils.TAG, "success login " + response.body())
+                        if (response.body() != null) {
+                            Log.d(SSUtils.TAG, "success login " + response.body())
 
-                        Toast.makeText(this@LoginActivity, R.string.login_success, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@LoginActivity, R.string.login_success, Toast.LENGTH_SHORT).show()
 
-                        PreferenceManager.getDefaultSharedPreferences(StandStrong.applicationContext()).edit().putString(Const.ARG_TOKEN, response.body()!!.token).apply()
+                            PreferenceManager.getDefaultSharedPreferences(StandStrong.applicationContext()).edit().putString(Const.ARG_TOKEN, response.body()!!.token).apply()
 
-                        setFirebaseUser()
-                        StandStrong.setUser(user)
-                        moveToMain()
+                            setFirebaseUser()
+                            StandStrong.setUser(user)
+                            moveToMain()
+                        } else if (response.errorBody() != null) {
+
+                            //trying error parse
+                            val error = Gson().fromJson(response.errorBody()!!.string(), ErrorModel::class.java)
+
+                            Log.d(SSUtils.TAG, "error $error")
+
+                            Toast.makeText(this@LoginActivity, error.message, Toast.LENGTH_SHORT).show()
+                        }
                     }
                 })
             } else {

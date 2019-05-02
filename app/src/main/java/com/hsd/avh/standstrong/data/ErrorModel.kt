@@ -1,6 +1,6 @@
 package com.hsd.avh.standstrong.data
 
-class ErrorModel {
+open class ErrorModel {
 
     var timestamp: String? = null
     val status: Int? = null

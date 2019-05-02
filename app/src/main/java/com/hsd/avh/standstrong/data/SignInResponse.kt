@@ -3,7 +3,7 @@ package com.hsd.avh.standstrong.data
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class SignInResponse {
+class SignInResponse : ErrorModel() {
 
     @SerializedName("token")
     @Expose

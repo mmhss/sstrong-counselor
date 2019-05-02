@@ -491,9 +491,12 @@ class SSUtils {
                                         Log.d("SSS","Error")
                                     }
 
+                                    Log.d(TAG, "post inserted $insertRowIdRow" + p.printThis())
+
                                     val m = Message(r.mother!!.id!!,r.message!!,StandStrong.MESSAGE_DIRECTION_IN,insertRowIdRow.toInt() ,dateMsg)
                                     try {
                                         database.messageDao().insertMessage(m)
+                                        Log.d(TAG, "message inserted $m")
                                     } catch(e:Exception) {
                                         Log.d("SSS","Error")
                                     }
