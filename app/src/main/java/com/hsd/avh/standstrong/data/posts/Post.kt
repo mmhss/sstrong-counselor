@@ -12,7 +12,7 @@ onDelete = ForeignKey.CASCADE)],*/
 @Entity(
         tableName = "posts",
 
-        indices = [Index("person_id")]
+        indices = [Index(value = ["date", "person_id"], unique = true)]
 )
 data class Post(
 

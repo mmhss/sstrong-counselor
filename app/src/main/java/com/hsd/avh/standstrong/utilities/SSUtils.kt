@@ -459,63 +459,80 @@ class SSUtils {
             }
         }
 
-        @JvmStatic fun checkForNewMessages(){
-            GlobalScope.launch(Dispatchers.Main) {
-                val request = endpoints!!.getMessagesAsync(getLastRow(MESSAGES))
-                try {
-                    val response = request.await()
-                    val motherIds = ArrayList<Int>()
-                    var insertRowIdRow : Long = 0;
-                    for (r in response.body().orEmpty()) {
-                        if (r.direction == StandStrong.MESSAGE_DIRECTION_IN) {
-                            var ssId = ""
-                            ssId = provideSSid(r.mother!!.id!!)
-                            withContext(Dispatchers.IO) {
-                                //New thread not a response
-                                insertRowIdRow = r.threadId!!.toLong()
-                                if(r.threadId == -1) {
-                                    motherIds.add(r.mother!!.id!!)
-                                    //"postedDate": "2019-02-06 00:00:00",
-                                    val dateMsg =   SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(r.postedDate)
-                                    var cardTitle = StandStrong.applicationContext().getString(R.string.card_title_msg)
-                                    var mURL = NEW_MESSAGE_DRAWABLE
-                                    var aURL = "https://www.tinygraphs.com/squares/"+r.mother!!.id!!+"?theme=heatwave&numcolors=4&size=50&fmt=png"
-                                    var postTitle = StandStrong.applicationContext().getString(R.string.post_title_msg)
-                                    var postTxt =StandStrong.applicationContext().getString(R.string.post_subtitle_msg)
-                                    var p: Post = Post( ssId, r.mother!!.id!!,dateMsg,aURL,cardTitle,ssId,mURL,false,0,StandStrong.POST_CARD_MESSAGE,postTitle,postTxt)
-                                    try {
-                                        runBlocking {
-                                            insertRowIdRow = database.postDao().insertPost(p)
-                                        }
-                                    } catch(e:Exception) {
-                                        Log.d("SSS","Error")
-                                    }
+        @JvmStatic fun checkForNewMessages() {
 
-                                    Log.d(TAG, "post inserted $insertRowIdRow" + p.printThis())
+            doAsync {
 
-                                    val m = Message(r.mother!!.id!!,r.message!!,StandStrong.MESSAGE_DIRECTION_IN,insertRowIdRow.toInt() ,dateMsg)
-                                    try {
-                                        database.messageDao().insertMessage(m)
-                                        Log.d(TAG, "message inserted $m")
-                                    } catch(e:Exception) {
-                                        Log.d("SSS","Error")
-                                    }
-                                }
-                            }
-                            updateLastRetrievedRow(MESSAGES, r.id!!)
-                        }
-                        var uniqueMomIds: Set<Int> = HashSet<Int>(motherIds)
-                        if(uniqueMomIds.orEmpty().isNotEmpty())
-                            triggerNotification(999,StandStrong.applicationContext().resources.getString(com.hsd.avh.standstrong.R.string.notification_description_message))
+                endpoints!!.getMessagesAsync(getLastRow(MESSAGES)).enqueue(object : Callback<List<ApiMessage>> {
+                    override fun onFailure(call: Call<List<ApiMessage>>, t: Throwable) {
+
+                        Log.e(TAG, "error while get messages " + Log.getStackTraceString(t))
                     }
-                } catch (e: HttpException) {
-                    Crashlytics.logException(e)
-                } catch (e: Throwable) {
-                    Crashlytics.logException(e)
-                } catch (e: Exception) {
-                    Crashlytics.logException(e)
+
+                    override fun onResponse(call: Call<List<ApiMessage>>, response: Response<List<ApiMessage>>) {
+
+                        val motherIds = ArrayList<Int>()
+                        for (apiMessage in response.body().orEmpty()) {
+
+                            Log.d(TAG, "r $apiMessage")
+
+                            motherIds.add(apiMessage.mother!!.id!!)
+                            saveMessage(apiMessage)
+
+                            updateLastRetrievedRow(MESSAGES, apiMessage.id!!)
+
+                            var uniqueMomIds: Set<Int> = HashSet<Int>(motherIds)
+
+                            if(uniqueMomIds.isNotEmpty())
+                                triggerNotification(999,StandStrong.applicationContext().resources.getString(R.string.notification_description_message))
+                        }
+                    }
+
+                })
+            }
+        }
+
+        private fun saveMessage(apiMessage: ApiMessage) {
+
+            var ssId = provideSSid(apiMessage.mother!!.id!!)
+            var threadId = apiMessage.threadId!!.toInt()
+            val dateMsg =   SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(apiMessage.postedDate)
+
+            doAsync {
+
+                if (apiMessage.direction == StandStrong.MESSAGE_DIRECTION_IN) {
+                    createMessagePostLocally(apiMessage, ssId, dateMsg)
+
+                    val m = Message(
+                        apiMessage.mother!!.id!!,
+                        apiMessage.message!!,
+                        apiMessage.direction!!,
+                        threadId,
+                        dateMsg
+                    )
+                    try {
+                        database.messageDao().insertMessage(m)
+                        Log.d(TAG, "message inserted $m")
+                    } catch (e: Exception) {
+                        Log.d("SSS", "Error")
+                    }
                 }
             }
+        }
+
+        private fun createMessagePostLocally(r: ApiMessage, ssId: String, dateMsg: Date): Int {
+
+            //"postedDate": "2019-02-06 00:00:00",
+            var cardTitle = StandStrong.applicationContext().getString(R.string.card_title_msg)
+            var mURL = NEW_MESSAGE_DRAWABLE
+            var aURL = "https://www.tinygraphs.com/squares/"+r.mother!!.id!!+"?theme=heatwave&numcolors=4&size=50&fmt=png"
+            var postTitle = StandStrong.applicationContext().getString(R.string.post_title_msg)
+            var postTxt =StandStrong.applicationContext().getString(R.string.post_subtitle_msg)
+            var p: Post = Post( ssId, r.mother!!.id!!,dateMsg,aURL,cardTitle,ssId,mURL,false,0,StandStrong.POST_CARD_MESSAGE,postTitle,postTxt)
+
+            Log.d(TAG, "post inserted " + p.printThis())
+
+            return database.postDao().insertPost(p).toInt()
         }
 
 

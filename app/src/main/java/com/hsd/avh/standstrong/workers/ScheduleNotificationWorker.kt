@@ -1,6 +1,7 @@
 package com.hsd.avh.standstrong.workers
 
 import android.content.Context
+import android.util.Log
 import androidx.work.*
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -19,6 +20,8 @@ class ScheduleNotificationWorker(context : Context, params : WorkerParameters)
     val database = AppDatabase.getInstance(applicationContext)
 
     override fun doWork(): Result {
+
+        Log.d("Worker", "dataload init")
 
         queryAPIForNewData()
         setupNextScheduledNotification()

@@ -2,6 +2,7 @@ package com.hsd.avh.standstrong
 
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
@@ -17,6 +18,7 @@ import com.hsd.avh.standstrong.viewmodels.MainViewModel
 
 class MainActivity : AppCompatActivity(){
 
+    private val TAG = javaClass.canonicalName
 
     private lateinit var navController: NavController
     private lateinit var navControllerPeople: NavController
@@ -40,11 +42,7 @@ class MainActivity : AppCompatActivity(){
             onNavDestinationSelected(item, Navigation.findNavController(this, R.id.main_nav_fragment))
         }
 
-    }
-
-    override fun onStart() {
-        super.onStart()
-
+        Log.d(TAG, "data retreive")
         mainViewModel.updateAll()
     }
 }

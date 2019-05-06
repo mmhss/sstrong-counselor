@@ -61,6 +61,10 @@ class PostRepository private constructor(
        SSUtils.checkForNewPosts()
     }
 
+    fun refreshMessagesList() {
+        SSUtils.checkForNewMessages()
+    }
+
     companion object {
 
         // For Singleton instantiation

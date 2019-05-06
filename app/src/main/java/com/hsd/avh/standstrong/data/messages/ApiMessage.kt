@@ -86,4 +86,8 @@ class ApiMessage {
         }
 
     }
+
+    override fun toString(): String {
+        return "ApiMessage(id=$id, message=$message, postedDate=$postedDate, threadId=$threadId, direction=$direction, mother=$mother)"
+    }
 }

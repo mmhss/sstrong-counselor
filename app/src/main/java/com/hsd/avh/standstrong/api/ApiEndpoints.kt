@@ -45,7 +45,7 @@ interface ApiEndpoints{
     fun sendMessageToServer(@Body msg: ApiMessage): Call<Message>
 
     @GET("/api/posts?")
-    fun getMessagesAsync(@Query("search") searchId:String ): Deferred<Response<List<ApiMessage>>>
+    fun getMessagesAsync(@Query("search") searchId:String ): Call<List<ApiMessage>>
 
     @POST("/api/auth/signin")
     fun login(@Body loginBody: LoginBody) : Call<SignInResponse>

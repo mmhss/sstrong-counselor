@@ -74,7 +74,7 @@ interface PostDao {
     fun updateCommentCount(postId: Int): Int
 
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPost(post: Post): Long
 
     @Delete
