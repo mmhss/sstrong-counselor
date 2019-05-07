@@ -56,7 +56,7 @@ class MessageViewModel internal constructor(
 
                 val m = Message(motherId,
                         txtMsg, StandStrong.MESSAGE_DIRECTION_OUT,
-                        postId,
+                        System.currentTimeMillis(),
                         Date())
 
                 val id = database.messageDao().insertMessage(m)

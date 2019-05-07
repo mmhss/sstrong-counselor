@@ -495,27 +495,27 @@ class SSUtils {
         private fun saveMessage(apiMessage: ApiMessage) {
 
             var ssId = provideSSid(apiMessage.mother!!.id!!)
-            var threadId = apiMessage.threadId!!.toInt()
+            var threadId = apiMessage.threadId!!
             val dateMsg =   SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(apiMessage.postedDate)
 
             doAsync {
 
                 if (apiMessage.direction == StandStrong.MESSAGE_DIRECTION_IN) {
                     createMessagePostLocally(apiMessage, ssId, dateMsg)
+                }
 
-                    val m = Message(
-                        apiMessage.mother!!.id!!,
-                        apiMessage.message!!,
-                        apiMessage.direction!!,
-                        threadId,
-                        dateMsg
-                    )
-                    try {
-                        database.messageDao().insertMessage(m)
-                        Log.d(TAG, "message inserted $m")
-                    } catch (e: Exception) {
-                        Log.d("SSS", "Error")
-                    }
+                val m = Message(
+                    apiMessage.mother!!.id!!,
+                    apiMessage.message!!,
+                    apiMessage.direction!!,
+                    threadId,
+                    dateMsg)
+
+                try {
+                    database.messageDao().insertMessage(m)
+                    Log.d(TAG, "message inserted $m")
+                } catch (e: Exception) {
+                    Log.d("SSS", "Error")
                 }
             }
         }

@@ -17,7 +17,7 @@ class ApiMessage {
     var postedDate: String? = null
     @SerializedName("threadId")
     @Expose
-    var threadId: Int? = null
+    var threadId: Long? = null
     @SerializedName("direction")
     @Expose
     var direction: String? = null
@@ -40,7 +40,7 @@ class ApiMessage {
      * @param threadId
      * @param direction
      */
-    constructor(id: Int?, message: String, postedDate: String, threadId: Int?, direction: String, mother: Mother) : super() {
+    constructor(id: Int?, message: String, postedDate: String, threadId: Long?, direction: String, mother: Mother) : super() {
         this.id = id
         this.message = message
         this.postedDate = postedDate
@@ -49,7 +49,7 @@ class ApiMessage {
         this.mother = mother
     }
 
-    constructor(message: String, postedDate: String, threadId: Int?, direction: String, mother: Mother) : super() {
+    constructor(message: String, postedDate: String, threadId: Long?, direction: String, mother: Mother) : super() {
         this.message = message
         this.postedDate = postedDate
         this.threadId = threadId
