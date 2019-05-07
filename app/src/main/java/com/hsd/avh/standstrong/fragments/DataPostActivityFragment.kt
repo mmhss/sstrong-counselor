@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.fragment_data_activity.view.*
 class DataPostActivityFragment : BaseFragment() {
 
     private lateinit var vm: DataPostViewModel
+    private val TAG = javaClass.canonicalName
 
 
     override fun onCreateView(
@@ -63,17 +64,31 @@ class DataPostActivityFragment : BaseFragment() {
             Snackbar.make(binding.root, "Post", Snackbar.LENGTH_LONG).show()
         })*/
 
+        binding.root.arc_chart_view.setSectionValue(0,0)
+        binding.root.arc_chart_view.setSectionValue(1,0)
+        binding.root.arc_chart_view.setSectionValue(2,0)
+        binding.root.arc_chart_view.setSectionValue(3,0)
+        binding.root.arc_chart_view.setSectionValue(4,0)
+        binding.root.arc_chart_view.setSectionValue(5,0)
+        binding.root.arc_chart_view.setSectionValue(6,0)
+
+
         vm.getActivityData().observe(viewLifecycleOwner, Observer { data->
             if (data != null) {
                 val byActivity = data.groupBy { it.activityType }
                 var total = 0
 
+                Log.d(TAG, "by ${byActivity.keys}")
+                Log.d(TAG, "by vals ${byActivity.values}")
+
                 byActivity.forEach { (key, value) -> total += value.size }
 
                 byActivity.forEach { (key, value) ->
-                    var rings = ((value.size / total)*10)
+
+                    var rings = ((value.size.toFloat() / total.toFloat())*10f).toInt()
+
                     when (key) {
-                        StandStrong.ACTIVITY_BICYCLE -> binding.root.arc_chart_view.setSectionValue(0,rings )
+                        StandStrong.ACTIVITY_BICYCLE -> binding.root.arc_chart_view.setSectionValue(0,rings)
                         StandStrong.ACTIVITY_RUNNING -> binding.root.arc_chart_view.setSectionValue(1,rings)
                         StandStrong.ACTIVITY_STILL -> binding.root.arc_chart_view.setSectionValue(2,rings)
                         StandStrong.ACTIVITY_TILTING -> binding.root.arc_chart_view.setSectionValue(3,rings)

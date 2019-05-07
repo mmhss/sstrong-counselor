@@ -88,7 +88,7 @@ class DataPostProximityFragment : Fragment() {
                 var index = 0
 
                 for (label in allLabels) {
-                    var found = false;
+                    var found = false
                     for (d in data) {
                         if(dFormat.format(d.chartDate) == label) {
                             togetherPoints[index] = d.chartValue!!.toFloat()
