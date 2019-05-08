@@ -121,4 +121,6 @@ dependencies {
     //dagger
     implementation 'com.google.dagger:dagger:2.15'
     kapt 'com.google.dagger:dagger-compiler:2.15'
+
+    implementation 'com.github.AnyChart:AnyChart-Android:1.1.2'
 }

@@ -17,51 +17,60 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.db.chart.view.HorizontalStackBarChartView
-            android:id="@+id/chart"
-            williamchart:layout_constraintStart_toStartOf="parent"
-            williamchart:layout_constraintTop_toTopOf="parent"
-            williamchart:layout_constraintBottom_toTopOf="@id/labelsLayout"
-            android:layout_marginBottom="@dimen/extra_base_margin"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:paddingLeft="8dp"
-            android:paddingTop="8dp"
-            android:paddingRight="8dp"
-            williamchart:chart_axis="false"
-            williamchart:chart_barSpacing="5dp"
-            williamchart:chart_cornerRadius="5dp" />
+        <com.anychart.AnyChartView
+                android:id="@+id/chart"
+                williamchart:layout_constraintEnd_toEndOf="parent"
+                williamchart:layout_constraintBottom_toBottomOf="parent"
+                williamchart:layout_constraintStart_toStartOf="parent"
+                williamchart:layout_constraintTop_toTopOf="parent"
+                android:layout_width="0dp"
+                android:layout_height="0dp"/>
+
+        <!--<com.db.chart.view.HorizontalStackBarChartView-->
+            <!--android:id="@+id/chart"-->
+            <!--williamchart:layout_constraintStart_toStartOf="parent"-->
+            <!--williamchart:layout_constraintTop_toTopOf="parent"-->
+            <!--williamchart:layout_constraintBottom_toTopOf="@id/labelsLayout"-->
+            <!--android:layout_marginBottom="@dimen/extra_base_margin"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:paddingLeft="8dp"-->
+            <!--android:paddingTop="8dp"-->
+            <!--android:paddingRight="8dp"-->
+            <!--williamchart:chart_axis="false"-->
+            <!--williamchart:chart_barSpacing="5dp"-->
+            <!--williamchart:chart_cornerRadius="5dp" />-->
 
 
-        <LinearLayout
-            android:id="@+id/labelsLayout"
-            android:layout_marginBottom="@dimen/extra_base_margin"
-            williamchart:layout_constraintBottom_toBottomOf="parent"
-            williamchart:layout_constraintStart_toStartOf="parent"
-            williamchart:layout_constraintEnd_toEndOf="parent"
-            android:orientation="horizontal"
-            android:divider="@drawable/empty_divider_horizontal"
-            android:showDividers="middle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+        <!--<LinearLayout-->
+            <!--android:id="@+id/labelsLayout"-->
+            <!--android:layout_marginBottom="@dimen/extra_base_margin"-->
+            <!--williamchart:layout_constraintBottom_toBottomOf="parent"-->
+            <!--williamchart:layout_constraintStart_toStartOf="parent"-->
+            <!--williamchart:layout_constraintEnd_toEndOf="parent"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:divider="@drawable/empty_divider_horizontal"-->
+            <!--android:showDividers="middle"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content">-->
 
-            <TextView
-                android:id="@+id/electric_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/proximity_alone"
-                android:textColor="#870000"
-                android:textSize="18sp" />
+            <!--<TextView-->
+                <!--android:id="@+id/electric_text"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/proximity_alone"-->
+                <!--android:textColor="#870000"-->
+                <!--android:textSize="18sp" />-->
 
-            <TextView
-                android:id="@+id/fuel_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/proximity_together"
-                android:textColor="#f9683a"
-                android:textSize="18sp" />
+            <!--<TextView-->
+                <!--android:id="@+id/fuel_text"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/proximity_together"-->
+                <!--android:textColor="#f9683a"-->
+                <!--android:textSize="18sp" />-->
 
-        </LinearLayout>
+        <!--</LinearLayout>-->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
