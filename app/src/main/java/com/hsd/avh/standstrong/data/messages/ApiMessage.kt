@@ -85,6 +85,10 @@ class ApiMessage {
             this.id = id
         }
 
+        override fun toString(): String {
+            return "Mother(id=$id)"
+        }
+
     }
 
     override fun toString(): String {

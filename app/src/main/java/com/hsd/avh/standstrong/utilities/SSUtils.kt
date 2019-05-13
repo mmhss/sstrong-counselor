@@ -175,7 +175,7 @@ class SSUtils {
         @JvmStatic private fun createDataPost(motherIds:ArrayList<String>,ct : Int,drawable:String, pstTitle : Int, pstTxt : Int, type:Int) {
             if (motherIds.isNotEmpty()) {
                 triggerNotification(999, StandStrong.applicationContext().resources.getString(com.hsd.avh.standstrong.R.string.notification_description_post))
-                var ssId = ""
+                var ssId: String? = null
                 var uniqueMomIds: Set<String> = HashSet<String>(motherIds)
                 for (mom in uniqueMomIds) {
                     //Split ID and Day
@@ -186,10 +186,25 @@ class SSUtils {
 
                         try {
                             ssId = provideSSid(thisMomsId)
-                            var p: Post = Post( ssId, thisMomsId,thisMomsDate, "https://www.tinygraphs.com/squares/$ssId?theme=heatwave&numcolors=4&size=50&fmt=png",StandStrong.applicationContext().getString(ct),ssId,drawable,false,0,type,StandStrong.applicationContext().getString(pstTitle) +" "+ ssId,StandStrong.applicationContext().getString(pstTxt))
-                            //Makes sure to tell the UI when we are done so t can update live data
-                            withContext(Dispatchers.IO){
-                                database.postDao().insertPost(p)
+                            if (ssId != null) {
+                                var p: Post = Post(
+                                    ssId!!,
+                                    thisMomsId,
+                                    thisMomsDate,
+                                    "https://www.tinygraphs.com/squares/$ssId?theme=heatwave&numcolors=4&size=50&fmt=png",
+                                    StandStrong.applicationContext().getString(ct),
+                                    ssId!!,
+                                    drawable,
+                                    false,
+                                    0,
+                                    type,
+                                    StandStrong.applicationContext().getString(pstTitle) + " " + ssId,
+                                    StandStrong.applicationContext().getString(pstTxt)
+                                )
+                                //Makes sure to tell the UI when we are done so t can update live data
+                                withContext(Dispatchers.IO) {
+                                    database.postDao().insertPost(p)
+                                }
                             }
                         } catch (e: HttpException) {
                             Crashlytics.logException(e)
@@ -363,14 +378,33 @@ class SSUtils {
 
                                         var ssId = provideSSid(award.mother!!.id!!)
 
-                                        var a: Award = Award(award.mother!!.id!!,
+                                        if (ssId != null) {
+                                            var a: Award = Award(
+                                                award.mother!!.id!!,
                                                 SimpleDateFormat("yyyy-MM-dd").parse(award.awardForDate),
                                                 ssId,
-                                                "@drawable/" + switchAward(award.awardType!!) + "_l" + Integer.toString(award.awardLevel!!))
-                                        var p: Post = Post(ssId, a.motherId, Date(), "https://www.tinygraphs.com/squares/" + a.motherId + "?theme=heatwave&numcolors=4&size=50&fmt=png", StandStrong.applicationContext().getString(R.string.card_title_award), ssId, NEW_AWARD, false, 0, StandStrong.POST_CARD_AWARD, ssId + " " + StandStrong.applicationContext().getString(R.string.post_title_award), StandStrong.applicationContext().getString(R.string.post_subtitle_award))
+                                                "@drawable/" + switchAward(award.awardType!!) + "_l" + Integer.toString(
+                                                    award.awardLevel!!
+                                                )
+                                            )
+                                            var p: Post = Post(
+                                                ssId,
+                                                a.motherId,
+                                                Date(),
+                                                "https://www.tinygraphs.com/squares/" + a.motherId + "?theme=heatwave&numcolors=4&size=50&fmt=png",
+                                                StandStrong.applicationContext().getString(R.string.card_title_award),
+                                                ssId,
+                                                NEW_AWARD,
+                                                false,
+                                                0,
+                                                StandStrong.POST_CARD_AWARD,
+                                                ssId + " " + StandStrong.applicationContext().getString(R.string.post_title_award),
+                                                StandStrong.applicationContext().getString(R.string.post_subtitle_award)
+                                            )
 
-                                        awardsToSave.add(a)
-                                        postsToSave.add(p)
+                                            awardsToSave.add(a)
+                                            postsToSave.add(p)
+                                        }
                                     }
 
                                     doAsync {
@@ -399,7 +433,10 @@ class SSUtils {
 
         private val ssIdsByMother = mutableMapOf<Int, String>()
 
-        private fun provideSSid(motherId: Int): String {
+        private fun provideSSid(motherId: Int?): String? {
+
+            if (motherId == null)
+                return null
 
             var ssId = ssIdsByMother[motherId]
 
@@ -476,7 +513,8 @@ class SSUtils {
 
                             Log.d(TAG, "r $apiMessage")
 
-                            motherIds.add(apiMessage.mother!!.id!!)
+                            apiMessage.mother!!.id?.let { motherIds.add(it) }
+
                             saveMessage(apiMessage)
 
                             updateLastRetrievedRow(MESSAGES, apiMessage.id!!)
@@ -494,28 +532,32 @@ class SSUtils {
 
         private fun saveMessage(apiMessage: ApiMessage) {
 
-            var ssId = provideSSid(apiMessage.mother!!.id!!)
-            var threadId = apiMessage.threadId!!
-            val dateMsg =   SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(apiMessage.postedDate)
+            var ssId = provideSSid(apiMessage.mother!!.id)
 
-            doAsync {
+            if (ssId != null) {
+                var threadId = apiMessage.threadId!!
+                val dateMsg = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(apiMessage.postedDate)
 
-                if (apiMessage.direction == StandStrong.MESSAGE_DIRECTION_IN) {
-                    createMessagePostLocally(apiMessage, ssId, dateMsg)
-                }
+                doAsync {
 
-                val m = Message(
-                    apiMessage.mother!!.id!!,
-                    apiMessage.message!!,
-                    apiMessage.direction!!,
-                    threadId,
-                    dateMsg)
+                    if (apiMessage.direction == StandStrong.MESSAGE_DIRECTION_IN) {
+                        createMessagePostLocally(apiMessage, ssId, dateMsg)
+                    }
 
-                try {
-                    database.messageDao().insertMessage(m)
-                    Log.d(TAG, "message inserted $m")
-                } catch (e: Exception) {
-                    Log.d("SSS", "Error")
+                    val m = Message(
+                        apiMessage.mother!!.id!!,
+                        apiMessage.message!!,
+                        apiMessage.direction!!,
+                        threadId,
+                        dateMsg
+                    )
+
+                    try {
+                        database.messageDao().insertMessage(m)
+                        Log.d(TAG, "message inserted $m")
+                    } catch (e: Exception) {
+                        Log.d("SSS", "Error")
+                    }
                 }
             }
         }
