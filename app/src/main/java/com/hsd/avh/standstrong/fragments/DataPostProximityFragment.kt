@@ -158,7 +158,7 @@ class DataPostProximityFragment : Fragment() {
                     .anchor(Anchor.LEFT_CENTER)
 
                 val series2 = barChart.bar(series2Data)
-                series2.name("Together").color("Blue")
+                series2.name("Together").color("Green")
                 series2.tooltip()
                     .position("left")
                     .anchor(Anchor.RIGHT_CENTER)

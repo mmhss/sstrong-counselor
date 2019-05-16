@@ -17,12 +17,15 @@ import com.hsd.avh.standstrong.utilities.FirebaseUtils
 import com.hsd.avh.standstrong.utilities.UserAuthentication
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
 import com.hsd.avh.standstrong.data.ErrorModel
 import com.hsd.avh.standstrong.data.SignInResponse
 import com.hsd.avh.standstrong.managers.AnalyticsManager
 import com.hsd.avh.standstrong.utilities.Const
 import com.hsd.avh.standstrong.utilities.SSUtils
+import kotlinx.android.synthetic.main.activity_login.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -105,6 +108,10 @@ class LoginActivity : BaseActivity() {
         shiftRequest(bindings.otp1, bindings.otp2)
         shiftRequest(bindings.otp2, bindings.otp3)
         shiftRequest(bindings.otp3, bindings.otp4)
+
+        Glide.with(this).load(R.drawable.background_circle)
+            .apply(RequestOptions.centerCropTransform())
+            .into(circleBg)
 
     }
 
