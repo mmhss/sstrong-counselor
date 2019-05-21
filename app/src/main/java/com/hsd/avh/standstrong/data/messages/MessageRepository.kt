@@ -27,7 +27,6 @@ class MessageRepository private constructor(
 
     fun getMessageByPostId(postId: Int) = messageDao.getMessageByPostId(postId) //getMessages()
 
-
     fun getMessagesByPerson(motherId: Int) = messageDao.getMessagesForMotherId(motherId)
 
     companion object {

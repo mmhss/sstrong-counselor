@@ -22,6 +22,7 @@ import com.hsd.avh.standstrong.data.awards.ApiAward
 import com.hsd.avh.standstrong.data.awards.Award
 import com.hsd.avh.standstrong.data.messages.ApiMessage
 import com.hsd.avh.standstrong.data.messages.Message
+import com.hsd.avh.standstrong.data.people.ApiPerson
 import com.hsd.avh.standstrong.data.people.Person
 import com.hsd.avh.standstrong.data.posts.*
 import com.hsd.avh.standstrong.workers.MyAPIException
@@ -115,6 +116,71 @@ class SSUtils {
 
         }
 
+        @JvmStatic fun loadPeople() {
+
+            doAsync {
+
+                endpoints!!.getPeopleAsync(getLastRow(PEOPLE)).enqueue(object : Callback<List<ApiPerson>> {
+                    override fun onFailure(call: Call<List<ApiPerson>>, t: Throwable) {
+
+                    }
+
+                    override fun onResponse(call: Call<List<ApiPerson>>, response: Response<List<ApiPerson>>) {
+
+                        val errorString = response.errorBody()?.string()
+
+                        if (errorString.isNullOrEmpty()) {
+
+                            Log.d(TAG, "error str $errorString")
+
+                            val persons = response.body()
+
+                            if (persons != null) {
+
+                                doAsync {
+                                    for (mother in persons) {
+
+                                        var imgUrl =
+                                            "https://www.tinygraphs.com/squares/" + mother.identificationNumber.toString() + "?theme=heatwave&numcolors=4&size=50&fmt=png"
+                                        var p: Person = Person(
+                                            mother.identificationNumber.toString(),
+                                            mother.firstName.toString(),
+                                            mother.lastName.toString(),
+                                            mother.id!!,
+                                            1,
+                                            imgUrl
+                                        )
+                                        database.personDao().insertPerson(p)
+                                        updateLastRetrievedRow(PEOPLE, mother.id!!)
+                                    }
+
+                                    checkForNewPosts()
+                                }
+                            }
+                        }
+                    }
+                })
+            }
+
+            GlobalScope.launch(Dispatchers.Main) {
+                val request = endpoints!!.getMotherAsync(getLastRow(PEOPLE))
+                try {
+                    val response = request.await()
+                    for (mother in response.body().orEmpty()) {
+
+                    }
+                    if(response.body().orEmpty().isNotEmpty())
+                        triggerNotification(999,StandStrong.applicationContext().resources.getString(com.hsd.avh.standstrong.R.string.notification_description_people))
+                } catch (e: HttpException) {
+                    Crashlytics.logException(e)
+                } catch (e: Throwable) {
+                    Crashlytics.logException(e)
+                } catch (e: Exception) {
+                    Crashlytics.logException(e)
+                }
+            }
+        }
+
         @JvmStatic fun checkForNewPeople() {
             GlobalScope.launch(Dispatchers.Main) {
                 val request = endpoints!!.getMotherAsync(getLastRow(PEOPLE))
@@ -182,7 +248,7 @@ class SSUtils {
                     val thisMomsId = Integer.parseInt(mom.split("**")[0])
                     val thisMomsDate = SimpleDateFormat("yyyy-MM-dd").parse(mom.split("**")[1])
 
-                    GlobalScope.launch(Dispatchers.Main) {
+                    doAsync {
 
                         try {
                             ssId = provideSSid(thisMomsId)
@@ -201,10 +267,8 @@ class SSUtils {
                                     StandStrong.applicationContext().getString(pstTitle) + " " + ssId,
                                     StandStrong.applicationContext().getString(pstTxt)
                                 )
-                                //Makes sure to tell the UI when we are done so t can update live data
-                                withContext(Dispatchers.IO) {
-                                    database.postDao().insertPost(p)
-                                }
+
+                                database.postDao().insertPost(p)
                             }
                         } catch (e: HttpException) {
                             Crashlytics.logException(e)
@@ -320,7 +384,12 @@ class SSUtils {
                     try {
                         val request = endpoints!!.getMotherByIdAsync(momId)
                         val response = request.await()
-                        ssId = response.body()!!.identificationNumber!!
+                        val mother = response.body()!!
+                        ssId = mother.identificationNumber!!
+                        var imgUrl = "https://www.tinygraphs.com/squares/"+mother.identificationNumber.toString()+"?theme=heatwave&numcolors=4&size=50&fmt=png"
+                        var p: Person = Person(mother.identificationNumber.toString(),mother.firstName.toString(),mother.lastName.toString(),  mother.id!!,1,imgUrl)
+                        val res = database.personDao().insertPerson(p)
+                        Log.d(TAG, "mom inserted $res")
                     } catch (e: HttpException) {
                         Log.d("SSS",e.code().toString())
                     } catch (e: Throwable) {
@@ -374,40 +443,39 @@ class SSUtils {
 
                                 if (!awards.isNullOrEmpty()) {
 
-                                    for (award in awards) {
-
-                                        var ssId = provideSSid(award.mother!!.id!!)
-
-                                        if (ssId != null) {
-                                            var a: Award = Award(
-                                                award.mother!!.id!!,
-                                                SimpleDateFormat("yyyy-MM-dd").parse(award.awardForDate),
-                                                ssId,
-                                                "@drawable/" + switchAward(award.awardType!!) + "_l" + Integer.toString(
-                                                    award.awardLevel!!
-                                                )
-                                            )
-                                            var p: Post = Post(
-                                                ssId,
-                                                a.motherId,
-                                                Date(),
-                                                "https://www.tinygraphs.com/squares/" + a.motherId + "?theme=heatwave&numcolors=4&size=50&fmt=png",
-                                                StandStrong.applicationContext().getString(R.string.card_title_award),
-                                                ssId,
-                                                NEW_AWARD,
-                                                false,
-                                                0,
-                                                StandStrong.POST_CARD_AWARD,
-                                                ssId + " " + StandStrong.applicationContext().getString(R.string.post_title_award),
-                                                StandStrong.applicationContext().getString(R.string.post_subtitle_award)
-                                            )
-
-                                            awardsToSave.add(a)
-                                            postsToSave.add(p)
-                                        }
-                                    }
-
                                     doAsync {
+                                        for (award in awards) {
+
+                                            var ssId = provideSSid(award.mother!!.id!!)
+
+                                            if (ssId != null) {
+                                                var a: Award = Award(
+                                                    award.mother!!.id!!,
+                                                    SimpleDateFormat("yyyy-MM-dd").parse(award.awardForDate),
+                                                    ssId,
+                                                    "@drawable/" + switchAward(award.awardType!!) + "_l" + Integer.toString(
+                                                        award.awardLevel!!
+                                                    )
+                                                )
+                                                var p: Post = Post(
+                                                    ssId,
+                                                    a.motherId,
+                                                    Date(),
+                                                    "https://www.tinygraphs.com/squares/" + a.motherId + "?theme=heatwave&numcolors=4&size=50&fmt=png",
+                                                    StandStrong.applicationContext().getString(R.string.card_title_award),
+                                                    ssId,
+                                                    NEW_AWARD,
+                                                    false,
+                                                    0,
+                                                    StandStrong.POST_CARD_AWARD,
+                                                    ssId + " " + StandStrong.applicationContext().getString(R.string.post_title_award),
+                                                    StandStrong.applicationContext().getString(R.string.post_subtitle_award)
+                                                )
+
+                                                awardsToSave.add(a)
+                                                postsToSave.add(p)
+                                            }
+                                        }
 
                                         database.awardDao().insertAll(awardsToSave)
                                         database.postDao().insertAll(postsToSave)
@@ -431,19 +499,18 @@ class SSUtils {
             }
         }
 
-        private val ssIdsByMother = mutableMapOf<Int, String>()
-
         private fun provideSSid(motherId: Int?): String? {
 
             if (motherId == null)
                 return null
 
-            var ssId = ssIdsByMother[motherId]
+            var ssId = database.personDao().getPersonByMotherIdSync(motherId)?.ssId
+
+            Log.d(TAG, "ssid $ssId")
 
             if (ssId.isNullOrEmpty()) {
 
                 ssId = getSsId(motherId)
-                ssIdsByMother[motherId] = ssId
             }
 
             return ssId
@@ -532,34 +599,35 @@ class SSUtils {
 
         private fun saveMessage(apiMessage: ApiMessage) {
 
-            var ssId = provideSSid(apiMessage.mother!!.id)
-
-            if (ssId != null) {
-                var threadId = apiMessage.threadId!!
-                val dateMsg = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(apiMessage.postedDate)
-
                 doAsync {
 
-                    if (apiMessage.direction == StandStrong.MESSAGE_DIRECTION_IN) {
-                        createMessagePostLocally(apiMessage, ssId, dateMsg)
-                    }
+                    var ssId = provideSSid(apiMessage.mother!!.id)
 
-                    val m = Message(
-                        apiMessage.mother!!.id!!,
-                        apiMessage.message!!,
-                        apiMessage.direction!!,
-                        threadId,
-                        dateMsg
-                    )
+                    if (ssId != null) {
+                        var threadId = apiMessage.threadId!!
+                        val dateMsg = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(apiMessage.postedDate)
 
-                    try {
-                        database.messageDao().insertMessage(m)
-                        Log.d(TAG, "message inserted $m")
-                    } catch (e: Exception) {
-                        Log.d("SSS", "Error")
+
+                        if (apiMessage.direction == StandStrong.MESSAGE_DIRECTION_IN) {
+                            createMessagePostLocally(apiMessage, ssId, dateMsg)
+                        }
+
+                        val m = Message(
+                            apiMessage.mother!!.id!!,
+                            apiMessage.message!!,
+                            apiMessage.direction!!,
+                            threadId,
+                            dateMsg
+                        )
+
+                        try {
+                            database.messageDao().insertMessage(m)
+                            Log.d(TAG, "message inserted $m")
+                        } catch (e: Exception) {
+                            Log.d("SSS", "Error")
+                        }
                     }
                 }
-            }
         }
 
         private fun createMessagePostLocally(r: ApiMessage, ssId: String, dateMsg: Date): Int {

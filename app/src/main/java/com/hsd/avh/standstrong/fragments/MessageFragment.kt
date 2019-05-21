@@ -8,6 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.hsd.avh.standstrong.adapters.MessageAdapter
 import com.hsd.avh.standstrong.fragments.baseFragments.BaseFragment
 import com.hsd.avh.standstrong.utilities.FirebaseTrackingUtil
@@ -34,6 +37,7 @@ class MessageFragment : BaseFragment() {
 
         val adapter = MessageAdapter()
         binding.messageList.adapter = adapter
+        binding.messageList.addItemDecoration(DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL))
         binding.viewmodel = viewModel
 
         subscribeUi(adapter)

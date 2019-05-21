@@ -41,7 +41,7 @@ class MessageViewModel internal constructor(
     val database = AppDatabase.getInstance(StandStrong.applicationContext())
 
     init {
-        val liveMessageList = messageRepository.getMessageByPostId(postId)
+        val liveMessageList = messageRepository.getMessagesByPerson(motherId)
         messageList.addSource(liveMessageList, messageList::setValue)
     }
 

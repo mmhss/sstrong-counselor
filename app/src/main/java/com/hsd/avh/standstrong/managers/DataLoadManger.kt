@@ -8,9 +8,6 @@ class DataLoadManger constructor(val app: Application) {
 
     fun updateAll() {
 
-        SSUtils.checkForNewProximity()
-        SSUtils.checkForNewGPS()
-        SSUtils.checkForNewMessages()
-        SSUtils.checkForNewActivity()
+        SSUtils.loadPeople()
     }
 }

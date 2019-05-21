@@ -21,7 +21,7 @@ interface MessageDao {
 
 
     @Query("SELECT * FROM messages WHERE mother_id = :motherId")
-    fun getMessagesForMotherId(motherId: Int): LiveData<Message>
+    fun getMessagesForMotherId(motherId: Int): LiveData<List<Message>>
 
     @Query("SELECT count(*) FROM posts WHERE person_id = :personId")
     fun getMessageCountForPerson(personId: String): LiveData<Int>

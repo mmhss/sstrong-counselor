@@ -25,7 +25,7 @@ interface PersonDao {
     fun getImmutablePersonByMotherSsId(ssId: String): Person
 
     @Query("SELECT ss_id FROM people WHERE id = :motherId")
-    fun getMotherSsId(motherId: Int): String
+    fun getMotherSsId(motherId: Int): String?
 
 
     @Query("SELECT count(*) FROM people")
@@ -43,7 +43,7 @@ interface PersonDao {
 //    fun getPlantAndGardenPlantings(): LiveData<List<PlantAndGardenPlantings>>
 
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPerson(person: Person): Long
 
     @Delete
@@ -59,4 +59,7 @@ interface PersonDao {
 
     @Query("SELECT * FROM people ORDER BY ss_id")
     fun getAllPeopleList(): List<Person>
+
+    @Query("SELECT * FROM people WHERE mother_id = :motherId")
+    fun getPersonByMotherIdSync(motherId: Int): Person?
 }

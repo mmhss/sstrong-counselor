@@ -50,5 +50,8 @@ interface ApiEndpoints{
     @POST("/api/auth/signin")
     fun login(@Body loginBody: LoginBody) : Call<SignInResponse>
 
+    @GET("/api/mothers?")
+    fun getPeopleAsync(@Query("search")lastRow: String) : Call<List<ApiPerson>>
+
 
 }
