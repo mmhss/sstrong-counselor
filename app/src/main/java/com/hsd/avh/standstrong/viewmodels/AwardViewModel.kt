@@ -17,4 +17,9 @@ class AwardViewModel internal constructor(
 
         return awardRepository.getAwards()
     }
+
+    fun subscribeOnAward(id: String) : LiveData<Award> {
+
+        return awardRepository.getAwardById(id)
+    }
 }

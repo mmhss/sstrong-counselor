@@ -9,7 +9,9 @@
         android:id="@+id/tab_awards"
         android:name="com.hsd.avh.standstrong.fragments.AwardFragment"
         android:label="Sample"
-        tools:layout="@layout/fragment_awards" />
+        tools:layout="@layout/fragment_awards" >
+        <action android:id="@+id/action_tab_awards_to_awardPostFragment" app:destination="@id/awardPostFragment"/>
+    </fragment>
 
     <fragment
         android:id="@+id/tab_posts"
@@ -58,6 +60,7 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action android:id="@+id/action_tab_posts_to_awardPostFragment" app:destination="@id/awardPostFragment"/>
     </fragment>
     <fragment
         android:id="@+id/tab_people"
@@ -126,6 +129,8 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action android:id="@+id/action_people_detail_fragment_to_awardPostFragment"
+                app:destination="@id/awardPostFragment"/>
     </fragment>
 
     <fragment
@@ -189,7 +194,11 @@
             android:name="postId"
             app:argType="integer" />
     </fragment>
-
+    <fragment android:id="@+id/awardPostFragment"
+              android:name="com.hsd.avh.standstrong.fragments.AwardPostFragment"
+              android:label="fragment_award_post">
+        <argument android:name="awardId" app:argType="string"/>
+    </fragment>
 
 
 </navigation>

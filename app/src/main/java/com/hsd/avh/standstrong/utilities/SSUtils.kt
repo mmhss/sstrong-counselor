@@ -469,7 +469,7 @@ class SSUtils {
                                                     0,
                                                     StandStrong.POST_CARD_AWARD,
                                                     ssId + " " + StandStrong.applicationContext().getString(R.string.post_title_award),
-                                                    StandStrong.applicationContext().getString(R.string.post_subtitle_award)
+                                                    StandStrong.applicationContext().getString(R.string.post_subtitle_award), a.awardId
                                                 )
 
                                                 awardsToSave.add(a)

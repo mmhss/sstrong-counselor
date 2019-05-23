@@ -61,8 +61,12 @@ class PostsPagedAdapter(val context: Context, val analyticsManager: AnalyticsMan
                     it.findNavController().navigate(PostListFragmentDirections.actionPostListToPostDetail(post.postId))
                 StandStrong.POST_CARD_MESSAGE->
                     it.findNavController().navigate(PostListFragmentDirections.actionPostListToMessages( post.motherId,post.postId))
-                StandStrong.POST_CARD_AWARD->
-                    it.findNavController().navigate(PostListFragmentDirections.actionPostListToAwards())
+                StandStrong.POST_CARD_AWARD-> {
+
+                    val bundle = Bundle()
+                    bundle.putString("awardId", post.awardId)
+                    it.findNavController().navigate(R.id.awardPostFragment, bundle)
+                }
                 StandStrong.POST_CARD_ACTIVITY ->
                     it.findNavController().navigate(PostListFragmentDirections.actionPostListToDataActivity(post.motherId,post.postDate.time))
                 StandStrong.POST_CARD_GPS ->

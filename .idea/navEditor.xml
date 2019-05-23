@@ -8,6 +8,18 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
+                  <entry key="awardPostFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="6" />
+                            <option name="y" value="77" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="message_fragment">
                     <value>
                       <LayoutPositions>
@@ -31,6 +43,11 @@
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="action_people_detail_fragment_to_awardPostFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_post_list_to_awards">
                               <value>
                                 <LayoutPositions />
@@ -83,8 +100,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-142" />
-                            <option name="y" value="-192" />
+                            <option name="x" value="-153" />
+                            <option name="y" value="-284" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -122,6 +139,15 @@
                             <option name="x" value="-226" />
                             <option name="y" value="392" />
                           </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_tab_awards_to_awardPostFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -184,6 +210,11 @@
                               </value>
                             </entry>
                             <entry key="action_post_list_to_post_detail">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_tab_posts_to_awardPostFragment">
                               <value>
                                 <LayoutPositions />
                               </value>

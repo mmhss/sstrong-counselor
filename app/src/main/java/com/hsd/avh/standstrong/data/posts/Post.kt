@@ -28,9 +28,11 @@ data class Post(
         @ColumnInfo(name = "type")val type: Int,
         @ColumnInfo(name = "post_header")val postHeader: String,
         @ColumnInfo(name = "post_sub_header")val postSubHeader: String,
+        @ColumnInfo(name = "award_id") val awardId: String = "",
         @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val postId: Int = 0
 
 ) {
+
     fun printThis(): String {
         return "Post(personId='$personId', motherId=$motherId, postDate=$postDate, avatarUrl='$avatarUrl', cardHeader='$cardHeader', cardSubHeader='$cardSubHeader', mediaUrl='$mediaUrl', liked=$liked, commentCount=$commentCount, type=$type, postHeader='$postHeader', postSubHeader='$postSubHeader', postId=$postId)"
     }

@@ -9,9 +9,13 @@
     <string name="no_posts">No posts yet available...</string>
     <string name="no_posts_long">New posts will show up here as data begins to be collected from your clients.</string>
     <string name="no_people">No people</string>
-    <string name="no_people_long">No people are yet connected to your account. People will show up as they are connected to you.</string>
+    <string name="no_people_long">No people are yet connected to your account. People will show up as they are connected
+        to you.
+    </string>
     <string name="no_awards">No Awards</string>
-    <string name="no_awards_long">None of your participants have unlocked awards yet. Keep checking back and be the first to congratulate them.</string>
+    <string name="no_awards_long">None of your participants have unlocked awards yet. Keep checking back and be the
+        first to congratulate them.
+    </string>
 
     <string name="login_code">LOGIN CODE</string>
     <string name="login_message">Please enter your 4 digit password to begin.</string>
@@ -26,8 +30,8 @@
     <!-- String plurals and their related prefix / suffix strings -->
     <string name="post_prefix">Posts:</string>
     <plurals name="post_suffix">
-        <item quantity="one" >post</item>
-        <item quantity="other" >%d posts</item>
+        <item quantity="one">post</item>
+        <item quantity="other">%d posts</item>
     </plurals>
 
     <!-- Proximity Chart-->
@@ -43,11 +47,20 @@
     <string name="post_title_edu_post_3">Title 3</string>
     <string name="post_title_edu_post_4">Title 4</string>
     <string name="post_title_edu_post_5">Title 5</string>
-    <string name="post_subtitle_edu_post_1">Sub Title 1. सन्देश पढ्न र जवाफ दिनका लागि कमेन्टमा  क्लिक गर्नुहोस्।</string>
-    <string name="post_subtitle_edu_post_2">Sub Title 2. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
-    <string name="post_subtitle_edu_post_3">Sub Title 3. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
-    <string name="post_subtitle_edu_post_4">Sub Title 4. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
-    <string name="post_subtitle_edu_post_5">Sub Title 5. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
+    <string name="post_subtitle_edu_post_1">Sub Title 1. सन्देश पढ्न र जवाफ दिनका लागि कमेन्टमा क्लिक गर्नुहोस्।
+    </string>
+    <string name="post_subtitle_edu_post_2">Sub Title 2. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+        eiusmod tempor incididunt ut labore et dolore magna aliqua.
+    </string>
+    <string name="post_subtitle_edu_post_3">Sub Title 3. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+        eiusmod tempor incididunt ut labore et dolore magna aliqua.
+    </string>
+    <string name="post_subtitle_edu_post_4">Sub Title 4. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+        eiusmod tempor incididunt ut labore et dolore magna aliqua.
+    </string>
+    <string name="post_subtitle_edu_post_5">Sub Title 5. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+        eiusmod tempor incididunt ut labore et dolore magna aliqua.
+    </string>
 
     <string name="card_title_award">New Award</string>
     <string name="post_title_award">has unlocked a new award</string>
@@ -55,19 +68,19 @@
 
 
     <string name="card_title_proximity">New Data</string>
-    <string name="post_title_proximity">Proximity data for </string>
+    <string name="post_title_proximity">Proximity data for</string>
     <string name="post_subtitle_proximity">Tap on this post to learn more about the proximity data avaialbe.</string>
 
     <string name="card_title_gps">New Data</string>
-    <string name="post_title_gps">GPS data for </string>
+    <string name="post_title_gps">GPS data for</string>
     <string name="post_subtitle_gps">Tap on this post to learn more about the GPS data avaialbe.</string>
 
     <string name="card_title_activity">New Data</string>
-    <string name="post_title_activity">Activity data for </string>
+    <string name="post_title_activity">Activity data for</string>
     <string name="post_subtitle_activity">Tap on this post to learn more about the movement data avaialbe.</string>
 
     <string name="card_title_msg">New Message</string>
-    <string name="post_title_msg">You have been sent a new message from </string>
+    <string name="post_title_msg">You have been sent a new message from</string>
     <string name="post_subtitle_msg">Click the comment icon to read the message and to reply.</string>
     <string name="send">Send</string>
 
@@ -84,5 +97,8 @@
     <string name="login_failed">Login failed</string>
     <string name="login_success">Login success</string>
     <string name="open_dialog">Open dialog</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

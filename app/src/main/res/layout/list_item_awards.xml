@@ -6,6 +6,7 @@
         <variable
             name="clickListenerAward"
             type="android.view.View.OnClickListener"/>
+
         <variable
             name="awardFragment"
             type="com.hsd.avh.standstrong.data.awards.Award"/>
