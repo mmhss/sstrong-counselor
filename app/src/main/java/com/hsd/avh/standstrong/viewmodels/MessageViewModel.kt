@@ -60,7 +60,7 @@ class MessageViewModel internal constructor(
                         Date())
 
                 val id = database.messageDao().insertMessage(m)
-                database.postDao().updateCommentCount(postId)
+//                database.postDao().updateCommentCount(postId)
 
                 Log.d(TAG, "message added locally $id")
 

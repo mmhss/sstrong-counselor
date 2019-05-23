@@ -24,6 +24,9 @@ class ApiMessage {
     @SerializedName("mother")
     @Expose
     var mother: Mother? = null
+    @SerializedName("status")
+    @Expose
+    var status: String? = null
 
     /**
      * No args constructor for use in serialization

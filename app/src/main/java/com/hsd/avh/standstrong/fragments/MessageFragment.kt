@@ -16,6 +16,7 @@ import com.hsd.avh.standstrong.fragments.baseFragments.BaseFragment
 import com.hsd.avh.standstrong.utilities.FirebaseTrackingUtil
 import com.hsd.avh.standstrong.utilities.InjectorUtils
 import com.hsd.avh.standstrong.viewmodels.MessageViewModel
+import kotlinx.android.synthetic.main.fragment_message.*
 
 class MessageFragment : BaseFragment() {
 
@@ -42,7 +43,6 @@ class MessageFragment : BaseFragment() {
 
         subscribeUi(adapter)
 
-
         setHasOptionsMenu(false)
         return binding.root
     }
@@ -50,7 +50,10 @@ class MessageFragment : BaseFragment() {
 
     private fun subscribeUi(adapter: MessageAdapter) {
         viewModel.getMessages().observe(viewLifecycleOwner, Observer { msg->
-            if (msg != null) adapter.submitList(msg)
+            if (msg != null) {
+                adapter.submitList(msg.sortedBy { it.msgDate.time })
+                message_list.scrollToPosition(msg.size)
+            }
         })
 
         /*viewModel.txtMessage.observe(viewLifecycleOwner, Observer { msg->

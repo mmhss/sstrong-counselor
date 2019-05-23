@@ -506,8 +506,6 @@ class SSUtils {
 
             var ssId = database.personDao().getPersonByMotherIdSync(motherId)?.ssId
 
-            Log.d(TAG, "ssid $ssId")
-
             if (ssId.isNullOrEmpty()) {
 
                 ssId = getSsId(motherId)
@@ -544,6 +542,8 @@ class SSUtils {
         @JvmStatic fun uploadMessage(message : ApiMessage) {
 
             var endpoints: ApiEndpoints? = ApiService.service
+
+            message.status = "PENDING"
 
             doAsync {
                 endpoints?.sendMessageToServer(message)?.enqueue(object : Callback<Message> {

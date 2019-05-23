@@ -1,6 +1,7 @@
 package com.hsd.avh.standstrong.fragments;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,6 +24,7 @@ import com.hornet.dateconverter.DatePicker.DatePickerDialog;
 import com.hornet.dateconverter.Model;
 import com.hsd.avh.standstrong.R;
 import com.hsd.avh.standstrong.StandStrong;
+import com.hsd.avh.standstrong.interfaces.MessagesInterface;
 import com.hsd.avh.standstrong.managers.AnalyticsManager;
 import com.hsd.avh.standstrong.utilities.FirebaseTrackingUtil;
 import com.hsd.avh.standstrong.utilities.InjectorUtils;
@@ -59,10 +61,13 @@ public class FilterPersonFabFragment extends AAH_FabulousFragment implements Dat
 
     @Inject
     AnalyticsManager analyticsManager;
+    private MessagesInterface messagesInterface;
+    private int motherId;
 
-    public static FilterPersonFabFragment newInstance(String personId) {
+    public static FilterPersonFabFragment newInstance(String personId, int motherId) {
         FilterPersonFabFragment f = new FilterPersonFabFragment();
         f.personId = personId;
+        f.motherId = motherId;
         return f;
     }
 
@@ -269,17 +274,16 @@ public class FilterPersonFabFragment extends AAH_FabulousFragment implements Dat
 
     private void inflateLayoutWithMessage(ViewGroup layout) {
         final Button sendBtn  = ((Button) layout.findViewById(R.id.sendNewMessageBtn));
-        final EditText newMsg  = ((EditText) layout.findViewById(R.id.messageText));
 
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Calendar now = Calendar.getInstance();
-                Log.d(TAG, "clicked");
-                viewModel.newMessage(newMsg.getText().toString());
-                Bundle args = new Bundle();
-                args.putString("To", personId);
-                analyticsManager.trackEvent("Message sent", args);
+
+                Log.d(TAG, "onClick: clicked " + messagesInterface);
+
+                if (messagesInterface != null)
+                    messagesInterface.showMessages(motherId);
+
                 closeFilter(person_filters);
             }
         });
@@ -434,8 +438,15 @@ public class FilterPersonFabFragment extends AAH_FabulousFragment implements Dat
 
             fbl.addView(subchild);
         }
+    }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
 
+        if (context instanceof MessagesInterface) {
+            messagesInterface = (MessagesInterface) context;
+        }
     }
 
     private void addToSelectedMap(String key, String value) {

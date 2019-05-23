@@ -81,6 +81,9 @@
         <argument
             android:name="personId"
             app:argType="string" />
+        <argument
+            android:name="motherId"
+            app:argType="integer" />
         <action
             android:id="@+id/action_post_list_to_awards"
             app:destination="@id/tab_awards"

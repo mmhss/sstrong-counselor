@@ -23,7 +23,7 @@ class PeopleAdapter(val analyticsManager: AnalyticsManager) : ListAdapter<Person
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val person = getItem(position)
         holder.apply {
-            bind(createOnClickListener(person.ssId), person)
+            bind(createOnClickListener(person), person)
             itemView.tag = person
         }
     }
@@ -33,21 +33,21 @@ class PeopleAdapter(val analyticsManager: AnalyticsManager) : ListAdapter<Person
                 LayoutInflater.from(parent.context), parent, false))
     }
 
-    private fun createOnClickListener(personId: String): View.OnClickListener {
+    private fun createOnClickListener(person: Person): View.OnClickListener {
         return View.OnClickListener {
 
             val bundle = Bundle()
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, personId)
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, person.ssId)
             bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Person Viewed")
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "person")
             StandStrong.firebaseInstance().logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle)
 
             val args = Bundle()
-            args.putString("id", personId)
+            args.putString("id", person.ssId)
 
             analyticsManager.trackEvent("on person click", args)
 
-            val direction = PeopleFragmentDirections.actionPeopleListToPersonDetail(personId)
+            val direction = PeopleFragmentDirections.actionPeopleListToPersonDetail(person.ssId, person.mother_id)
             it.findNavController().navigate(direction)
         }
     }

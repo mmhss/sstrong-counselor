@@ -40,6 +40,7 @@ class PeopleDetailFragment : BaseFragment() {
             savedInstanceState: Bundle?
     ): View? {
         val personId = PeopleDetailFragmentArgs.fromBundle(arguments).personId
+        val motherId = PeopleDetailFragmentArgs.fromBundle(arguments).motherId
         binding = FragmentPeopleDetailsBinding.inflate(inflater, container, false)
         val context = context ?: return binding.root
         val factory = InjectorUtils.providePersonDetailViewModelFactory(requireActivity(), personId)
@@ -68,7 +69,7 @@ class PeopleDetailFragment : BaseFragment() {
 
         val fab =  binding.fab3
         fab.setOnClickListener{
-            val dialogFrag = FilterPersonFabFragment.newInstance(personId)
+            val dialogFrag = FilterPersonFabFragment.newInstance(personId, motherId)
             dialogFrag.setParentFab(fab)
             dialogFrag.show(fragmentManager, dialogFrag.tag)
 

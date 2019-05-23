@@ -83,5 +83,6 @@
     <string name="password">Password</string>
     <string name="login_failed">Login failed</string>
     <string name="login_success">Login success</string>
+    <string name="open_dialog">Open dialog</string>
 
 </resources>
