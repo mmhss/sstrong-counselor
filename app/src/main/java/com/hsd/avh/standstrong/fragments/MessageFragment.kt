@@ -2,6 +2,7 @@ package com.hsd.avh.standstrong.fragments
 
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,7 +53,11 @@ class MessageFragment : BaseFragment() {
         viewModel.getMessages().observe(viewLifecycleOwner, Observer { msg->
             if (msg != null) {
                 adapter.submitList(msg.sortedBy { it.msgDate.time })
-                message_list.scrollToPosition(msg.size)
+
+                Handler().postDelayed({
+
+                    message_list.layoutManager?.scrollToPosition(msg.size - 1)
+                }, 200)
             }
         })
 

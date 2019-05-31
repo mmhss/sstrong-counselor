@@ -13,6 +13,7 @@ import com.hsd.avh.standstrong.R
 import com.hsd.avh.standstrong.databinding.ListItemAwardsBinding
 import com.hsd.avh.standstrong.utilities.InjectorUtils
 import com.hsd.avh.standstrong.viewmodels.AwardViewModel
+import java.text.SimpleDateFormat
 
 class AwardPostFragment : Fragment() {
 
@@ -44,6 +45,8 @@ class AwardPostFragment : Fragment() {
         viewModel.subscribeOnAward(awardId).observe(viewLifecycleOwner, Observer {
 
             binding.awardFragment = it
+
+            binding.awardDate.text = SimpleDateFormat("yyyy-MM-dd HH:mm").format(it.awardDate)
         })
     }
 

@@ -47,6 +47,16 @@
 -->
 
                     <TextView
+                            android:id="@+id/award_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_bold"
+                            android:gravity="start"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="4dp"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption" />
+
+                    <TextView
                         android:id="@+id/award_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
