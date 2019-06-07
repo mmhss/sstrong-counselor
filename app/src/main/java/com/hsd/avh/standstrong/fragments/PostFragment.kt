@@ -74,6 +74,7 @@ class PostListFragment : BaseFragment() {
         viewModel.getPostsPaged().observe(this, Observer {
             if (it != null) {
                 adapter.submitList(it)
+                binding.postList.scrollToPosition(0)
                 binding.noPosts.visibility =  View.GONE;
             }
             if (it.isNullOrEmpty()){

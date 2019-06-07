@@ -44,6 +44,6 @@ interface ApiEndpoints{
     @GET("/api/gpss/find")
     fun getGPSDataAsync(@Query("search") searchId: String, @Query("offset") offset: Int = 0, @Query("limit") limit: Int): Deferred<Response<List<ApiGPS>>>
 
-    @GET("/api/proximities/proximity-charts/{proximitySyncId}/{limit}")
+    @GET("/api/proximities/proximity-charts/{proximitySyncId}/limit/{limit}")
     fun getProximityDataAsync(@Path("proximitySyncId") searchId:Int, @Path("limit") limit: Int): Deferred<Response<List<ApiProximity>>>
 }

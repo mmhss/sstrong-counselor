@@ -39,8 +39,8 @@ import java.util.*
 class SSUtils {
 
     companion object {
-        private val ACTIVITY_LIMIT: Int = 500
-        private val ITEMS_LIMIT: Int = 20
+        private val ACTIVITY_LIMIT: Int = 1000
+        private val ITEMS_LIMIT: Int = 200
         const val TAG = "SSUtils"
         const val SOCIAL_SUPPORT= "SocialSupport"
         const val SELF_CARE = "SelfCare"
