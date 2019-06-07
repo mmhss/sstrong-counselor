@@ -39,6 +39,8 @@ import java.util.*
 class SSUtils {
 
     companion object {
+        private val ACTIVITY_LIMIT: Int = 500
+        private val ITEMS_LIMIT: Int = 20
         const val TAG = "SSUtils"
         const val SOCIAL_SUPPORT= "SocialSupport"
         const val SELF_CARE = "SelfCare"
@@ -286,7 +288,7 @@ class SSUtils {
         fun checkForNewProximity() {
             GlobalScope.launch(Dispatchers.Main) {
                 val motherIds = ArrayList<String>()
-                val request = endpoints!!.getProximityDataAsync(getLastProxyRow(PROXIMITY))
+                val request = endpoints!!.getProximityDataAsync(getLastProxyRow(PROXIMITY), limit = ITEMS_LIMIT)
                 try {
                     val response = request.await()
 
@@ -306,6 +308,7 @@ class SSUtils {
                     }
                     if (response.body().orEmpty().isNotEmpty()) {
                         createDataPost(motherIds, R.string.card_title_proximity, DATA_ROUTINE, R.string.post_title_proximity, R.string.post_subtitle_proximity,StandStrong.POST_CARD_PROXIMITY)
+                        checkForNewProximity()
                     }
                 } catch (e: HttpException) {
                     Crashlytics.logException(e)
@@ -321,10 +324,11 @@ class SSUtils {
         @JvmStatic fun checkForNewGPS() {
             GlobalScope.launch(Dispatchers.Main) {
                 val motherIds = ArrayList<String>()
-                val request = endpoints!!.getGPSDataAsync(getLastRow(GPS))
+                val request = endpoints!!.getGPSDataAsync(getLastRow(GPS), limit = ACTIVITY_LIMIT)
                 try {
                     val response = request.await()
-                    for (r in response.body().orEmpty()) {
+                    val gpssArr = response.body().orEmpty()
+                    for (r in gpssArr) {
                         motherIds.add(Integer.toString(r.mother!!.id!!)+"**"+ r.captureDate!!.split(" ")[0])
                         //"captureDate": "2019-02-01 13:10:19",
                         val date =   SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(r.captureDate)
@@ -336,6 +340,7 @@ class SSUtils {
                     }
                     if (response.body().orEmpty().isNotEmpty()) {
                         createDataPost(motherIds, R.string.card_title_gps,DATA_GPS,R.string.post_title_gps,R.string.post_subtitle_gps,StandStrong.POST_CARD_GPS)
+                        checkForNewGPS()
                     }
                 } catch (e: HttpException) {
                     Crashlytics.logException(e)
@@ -350,10 +355,11 @@ class SSUtils {
         @JvmStatic fun checkForNewActivity() {
             GlobalScope.launch(Dispatchers.Main) {
                 val motherIds = ArrayList<String>()
-                val request = endpoints!!.getActivityDataAsync(getLastRow(ACTIVITY))
+                val request = endpoints!!.getActivityDataAsync(getLastRow(ACTIVITY), limit = ACTIVITY_LIMIT)
                 try {
                     val response = request.await()
-                    for (r in response.body().orEmpty()) {
+                    val activities = response.body().orEmpty()
+                    for (r in activities) {
                         motherIds.add(Integer.toString(r.mother!!.id!!)+"**"+ r.captureDate!!.split(" ")[0])
                         //"captureDate": "2019-02-01 13:10:19",
                         val date =   SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(r.captureDate)
@@ -366,6 +372,10 @@ class SSUtils {
                     if (response.body().orEmpty().isNotEmpty()) {
                         createDataPost(motherIds, R.string.card_title_activity, DATA_ACTIVITY,R.string.post_title_activity,R.string.post_subtitle_activity,StandStrong.POST_CARD_ACTIVITY)
                     }
+
+                    if (activities.isNotEmpty())
+                        checkForNewActivity()
+
                 } catch (e: HttpException) {
                     Crashlytics.logException(e)
                 } catch (e: Throwable) {
@@ -421,7 +431,7 @@ class SSUtils {
 
             doAsync {
 
-                    endpoints!!.getAwardsList(getLastRow(AWARDS)).enqueue(object : Callback<List<ApiAward>> {
+                    endpoints!!.getAwardsList(getLastRow(AWARDS), 0, ITEMS_LIMIT).enqueue(object : Callback<List<ApiAward>> {
                         override fun onFailure(call: Call<List<ApiAward>>, t: Throwable) {
 
                             Log.e(TAG, "error while get awards: " + Log.getStackTraceString(t))
@@ -480,6 +490,10 @@ class SSUtils {
                                         database.awardDao().insertAll(awardsToSave)
                                         database.postDao().insertAll(postsToSave)
                                         updateLastRetrievedRow(AWARDS, awards.last().id!!)
+
+                                        if (awards.isNotEmpty()) {
+                                            getAllAwards()
+                                        }
                                     }
                                 }
                             } else {
@@ -567,7 +581,7 @@ class SSUtils {
 
             doAsync {
 
-                endpoints!!.getMessagesAsync(getLastRow(MESSAGES)).enqueue(object : Callback<List<ApiMessage>> {
+                endpoints!!.getMessagesAsync(getLastRow(MESSAGES), limit = ITEMS_LIMIT).enqueue(object : Callback<List<ApiMessage>> {
                     override fun onFailure(call: Call<List<ApiMessage>>, t: Throwable) {
 
                         Log.e(TAG, "error while get messages " + Log.getStackTraceString(t))
@@ -576,7 +590,9 @@ class SSUtils {
                     override fun onResponse(call: Call<List<ApiMessage>>, response: Response<List<ApiMessage>>) {
 
                         val motherIds = ArrayList<Int>()
-                        for (apiMessage in response.body().orEmpty()) {
+                        val apiMessages = response.body().orEmpty()
+
+                        for (apiMessage in apiMessages) {
 
                             Log.d(TAG, "r $apiMessage")
 
@@ -591,6 +607,9 @@ class SSUtils {
                             if(uniqueMomIds.isNotEmpty())
                                 triggerNotification(999,StandStrong.applicationContext().resources.getString(R.string.notification_description_message))
                         }
+
+                        if (apiMessages.isNotEmpty())
+                            checkForNewMessages()
                     }
 
                 })

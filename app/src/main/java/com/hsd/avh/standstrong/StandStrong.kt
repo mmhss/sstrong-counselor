@@ -16,6 +16,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.hsd.avh.standstrong.dagger.components.DaggerManagerComponent
 import com.hsd.avh.standstrong.dagger.components.ManagerComponent
 import com.hsd.avh.standstrong.dagger.modules.ManagerModule
+import com.hsd.avh.standstrong.utilities.SSUtils
 import com.hsd.avh.standstrong.utilities.UserAuthentication
 import com.hsd.avh.standstrong.utilities.UserTypes
 import com.hsd.avh.standstrong.workers.ScheduleEduPostWorker

@@ -19,7 +19,7 @@ object ApiService {
             if (endpoints == null) {
 
                 val interceptor = HttpLoggingInterceptor()
-                interceptor.level = HttpLoggingInterceptor.Level.BASIC
+                interceptor.level = HttpLoggingInterceptor.Level.BODY
 
                 val client = OkHttpClient.Builder()
                         .addInterceptor(interceptor)

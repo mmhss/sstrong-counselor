@@ -45,7 +45,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <ImageView
+                        android:id="@+id/alonePic"
+                        williamchart:layout_constraintStart_toStartOf="parent"
+                        android:adjustViewBounds="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        williamchart:layout_constraintTop_toTopOf="@id/electric_text"
+                        williamchart:layout_constraintBottom_toBottomOf="@id/electric_text"
+                        android:src="@drawable/alone"/>
             <TextView
+                    williamchart:layout_constraintTop_toTopOf="parent"
+                    williamchart:layout_constraintStart_toEndOf="@id/alonePic"
                     android:id="@+id/electric_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -53,13 +68,31 @@
                     android:textColor="#870000"
                     android:textSize="18sp" />
 
-            <TextView
-                    android:id="@+id/fuel_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/proximity_together"
-                    android:textColor="#f9683a"
-                    android:textSize="18sp" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <ImageView
+                        android:id="@+id/togetherPic"
+                        williamchart:layout_constraintStart_toStartOf="parent"
+                        android:adjustViewBounds="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        williamchart:layout_constraintTop_toTopOf="@id/togetherText"
+                        williamchart:layout_constraintBottom_toBottomOf="@id/togetherText"
+                        android:src="@drawable/together"/>
+                <TextView
+                        williamchart:layout_constraintTop_toTopOf="parent"
+                        williamchart:layout_constraintStart_toEndOf="@id/togetherPic"
+                        android:id="@+id/togetherText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/proximity_together"
+                        android:textColor="#f9683a"
+                        android:textSize="18sp" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
 
