@@ -65,6 +65,8 @@ class PostRepository private constructor(
         SSUtils.checkForNewMessages()
     }
 
+    fun getProximityByDateSync(motherId: Int, sDate: Long, eDate: Long) = proximityDao.getProximityByDateSync(motherId,sDate,eDate)
+
     companion object {
 
         // For Singleton instantiation

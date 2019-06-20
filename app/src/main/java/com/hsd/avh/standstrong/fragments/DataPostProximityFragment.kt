@@ -20,13 +20,18 @@ import kotlinx.android.synthetic.main.fragment_data_proximity.view.*
 import android.util.Log
 import androidx.lifecycle.Observer
 import com.db.chart.renderer.AxisRenderer
+import com.hsd.avh.standstrong.fragments.baseFragments.BaseFragment
+import com.hsd.avh.standstrong.utilities.Const
 import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
-class DataPostProximityFragment : Fragment() {
+class DataPostProximityFragment : BaseFragment() {
 
     //https://github.com/diogobernardino/WilliamChart
     private lateinit var vm: DataPostViewModel
+    private val TAG = javaClass.simpleName
 
     /* private val mLabels = arrayOf("8AM", "9AM","10AM","11AM","12AM", "1PM","2PM","3PM","4PM", "5PM")
 
@@ -54,6 +59,7 @@ class DataPostProximityFragment : Fragment() {
         val binding = DataBindingUtil.inflate<FragmentDataProximityBinding>(
             inflater, R.layout.fragment_data_proximity, container, false).apply {
             vm = dataPostViewModel
+            dateString = SimpleDateFormat(Const.DEFAULT_DATE_FORMAT).format(Date(postDate))
             setLifecycleOwner(this@DataPostProximityFragment)
         }
 
@@ -116,13 +122,22 @@ class DataPostProximityFragment : Fragment() {
                 binding.root.chart.addData(dataset)
 
                 binding.root.chart.setAxisBorderValues((-1).toFloat(), 1F, 1F)
-                    .show(Animation().setInterpolator(DecelerateInterpolator())) //.withEndAction(action)
+                    .show()
+//                    .show(Animation().setInterpolator(DecelerateInterpolator())) //.withEndAction(action)
 
                 binding.root.chart.setXLabels(AxisRenderer.LabelPosition.OUTSIDE)
-                    .show(Animation().setInterpolator(DecelerateInterpolator()))
+                    .show()
+//                    .show(Animation().setInterpolator(DecelerateInterpolator()))
 
             }
         })
+
+
+        initPerson(motherId).observe(this, Observer {
+
+            binding.person = it
+        })
+
 
         return binding.root
     }
