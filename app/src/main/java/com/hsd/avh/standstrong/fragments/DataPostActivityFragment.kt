@@ -102,19 +102,11 @@ class DataPostActivityFragment : BaseFragment() {
             }
         })
 
-        initPerson(motherId)
-
-        return binding.root
-    }
-
-    private fun initPerson(motherId: Int) {
-
-        val factory = InjectorUtils.providePersonViewModelFactory(requireContext())
-        val viewModel = ViewModelProviders.of(this, factory).get(PeopleViewModel::class.java)
-
-        viewModel.subscribeOnPersonByMotherId(motherId).observe(this, Observer {
+        initPerson(motherId).observe(this, Observer {
 
             binding.person = it
         })
+
+        return binding.root
     }
 }

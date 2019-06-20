@@ -33,7 +33,9 @@ import android.text.method.LinkMovementMethod
 import com.google.android.gms.maps.model.TileOverlayOptions
 import com.hsd.avh.standstrong.data.posts.Gps
 import com.hsd.avh.standstrong.fragments.baseFragments.BaseFragment
+import com.hsd.avh.standstrong.utilities.Const
 import java.io.InputStream
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -126,6 +128,7 @@ class DataPostGpsFragment : BaseFragment(), OnMapReadyCallback {
         val binding = DataBindingUtil.inflate<FragmentDataGpsBinding>(
                 inflater, R.layout.fragment_data_gps, container, false).apply {
             vm = dataPostViewModel
+            dateString = SimpleDateFormat(Const.DEFAULT_DATE_FORMAT).format(Date(postDate))
             setLifecycleOwner(this@DataPostGpsFragment)
         }
 
@@ -141,7 +144,10 @@ class DataPostGpsFragment : BaseFragment(), OnMapReadyCallback {
         mMapView?.onCreate(savedInstanceState);
         mMapView?.getMapAsync(this)
 
+        initPerson(motherId).observe(this, Observer {
 
+            binding.person = it
+        })
 
         return binding.root
     }

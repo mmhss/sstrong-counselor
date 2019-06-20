@@ -17,7 +17,6 @@
         android:layout_height="match_parent">
 
         <include
-
                 android:id="@+id/subDataLayout"
                 layout="@layout/person_header"
                 app:dateString="@{dateString}"

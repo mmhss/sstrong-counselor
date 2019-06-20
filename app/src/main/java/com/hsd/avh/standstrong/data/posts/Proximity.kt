@@ -22,4 +22,8 @@ data class Proximity (
             "chartHour": "18",*/
         //var dt = this.chartDay +  " " + this.chartHour + ":00"
         //this.chartDate =   SimpleDateFormat("yyyy-MM-dd HH:mm").parse(dt)
-){}
+){
+        override fun toString(): String {
+                return "Proximity(chartEvent=$chartEvent, chartValue=$chartValue, motherId=$motherId, chartDate=$chartDate, id=$id)"
+        }
+}
