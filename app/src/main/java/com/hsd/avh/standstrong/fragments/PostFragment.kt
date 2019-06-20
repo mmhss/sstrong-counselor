@@ -2,19 +2,14 @@ package com.hsd.avh.standstrong.fragments
 
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.hsd.avh.standstrong.adapters.PostAdapter
 import com.hsd.avh.standstrong.adapters.PostsPagedAdapter
-import com.hsd.avh.standstrong.data.posts.Post
 import com.hsd.avh.standstrong.databinding.FragmentPostBinding
 import com.hsd.avh.standstrong.fragments.baseFragments.BaseFragment
-import com.hsd.avh.standstrong.utilities.FirebaseTrackingUtil
 import com.hsd.avh.standstrong.utilities.InjectorUtils
 import com.hsd.avh.standstrong.viewmodels.PostListViewModel
 

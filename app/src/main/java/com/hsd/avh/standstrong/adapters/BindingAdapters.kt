@@ -5,51 +5,71 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.hornet.dateconverter.DateConverter
 import com.hsd.avh.standstrong.StandStrong
 import com.hsd.avh.standstrong.utilities.InjectorUtils
 import java.text.SimpleDateFormat
 import java.util.*
 
+class BindingAdapters {
 
-@BindingAdapter("isGone")
-fun bindIsGone(view: View, isGone: Boolean) {
-    view.visibility = if (isGone) {
-        View.GONE
-    } else {
-        View.VISIBLE
-    }
-}
+    companion object {
 
-@BindingAdapter("imageFromUrl")
-fun bindImageFromUrl(view: ImageView, imageUrl: String?) {
-    if (!imageUrl.isNullOrEmpty()) {
-        Glide.with(view.context)
-                .load(imageUrl)
-                .into(view)
-        //.transition(DrawableTransitionOptions.withCrossFade())
-    }
-}
+        val dc = DateConverter()
 
-@BindingAdapter("srcFromDrawable")
-fun setImageDrawable(view: ImageView, imageStr: String?) {
-    if (imageStr.isNullOrEmpty()) {
-        view.setImageURI(null)
-    } else {
-        //Note (1): no path (and no extension, in case of images).
-        //Note (2): use "drawable" for drawables, "string" for strings, .
-        val resId = InjectorUtils.getResourceID(imageStr, "drawable", StandStrong.applicationContext())
-        //view.setImageResource(resId)
-        Glide.with(view.context)
-                .load(resId)
-                .into(view)
-    }
-}
+        @BindingAdapter("isGone")
+        @JvmStatic
+        fun bindIsGone(view: View, isGone: Boolean) {
+            view.visibility = if (isGone) {
+                View.GONE
+            } else {
+                View.VISIBLE
+            }
+        }
 
-@BindingAdapter("readableDate")
-fun bindServerDate(textView: TextView, date: Date?) {
+        @BindingAdapter("imageFromUrl")
+        @JvmStatic
+        fun bindImageFromUrl(view: ImageView, imageUrl: String?) {
+            if (!imageUrl.isNullOrEmpty()) {
+                Glide.with(view.context)
+                    .load(imageUrl)
+                    .into(view)
+                //.transition(DrawableTransitionOptions.withCrossFade())
+            }
+        }
 
-    if (date != null) {
-        var sdfDate = SimpleDateFormat("EEE, MMM d, yyyy")
-        textView.text = sdfDate.format(date)
+        @BindingAdapter("srcFromDrawable")
+        @JvmStatic
+        fun setImageDrawable(view: ImageView, imageStr: String?) {
+            if (imageStr.isNullOrEmpty()) {
+                view.setImageURI(null)
+            } else {
+                //Note (1): no path (and no extension, in case of images).
+                //Note (2): use "drawable" for drawables, "string" for strings, .
+                val resId = InjectorUtils.getResourceID(imageStr, "drawable", StandStrong.applicationContext())
+                //view.setImageResource(resId)
+                Glide.with(view.context)
+                    .load(resId)
+                    .into(view)
+            }
+        }
+
+        @BindingAdapter("readableDate")
+        @JvmStatic
+        fun bindServerDate(textView: TextView, date: Date?) {
+
+            if (date != null) {
+                var sdfDate = SimpleDateFormat("EEE, MMM d, yyyy")
+                val cal = Calendar.getInstance()
+                cal.timeInMillis = date.time
+
+                val model = dc.getNepaliDate(cal)
+
+                cal.clear()
+                cal.set(model.year, model.month, model.day)
+
+                textView.text = sdfDate.format(date) + "\nNepali date: " + sdfDate.format(Date(cal.timeInMillis))
+            }
+        }
     }
 }
