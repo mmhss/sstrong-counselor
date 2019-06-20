@@ -26,5 +26,11 @@
         <item name="colorPrimary">@android:color/white</item>
         <item name="colorAccent">@android:color/white</item>
     </style>
+    <style name="BaseTextStyle">
+
+        <item name="android:padding">4dp</item>
+        <item name="android:textSize">16sp</item>
+
+    </style>
 
 </resources>

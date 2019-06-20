@@ -113,6 +113,10 @@ class PersonRepository private constructor(
         return postDao.getAllPaged()
     }
 
+    fun getPersonByMotherId(motherId: Int): LiveData<Person> {
+        return personDao.getPersonByMotherId(motherId)
+    }
+
 
     companion object {
 

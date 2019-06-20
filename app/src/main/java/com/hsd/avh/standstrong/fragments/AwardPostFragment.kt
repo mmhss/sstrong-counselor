@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.hsd.avh.standstrong.R
 import com.hsd.avh.standstrong.databinding.ListItemAwardsBinding
+import com.hsd.avh.standstrong.utilities.Const
 import com.hsd.avh.standstrong.utilities.InjectorUtils
 import com.hsd.avh.standstrong.viewmodels.AwardViewModel
 import java.text.SimpleDateFormat
@@ -46,7 +47,7 @@ class AwardPostFragment : Fragment() {
 
             binding.awardFragment = it
 
-            binding.awardDate.text = SimpleDateFormat("yyyy-MM-dd HH:mm").format(it.awardDate)
+            binding.awardDate.text = SimpleDateFormat(Const.DEFAULT_DATE_FORMAT).format(it.awardDate)
         })
     }
 

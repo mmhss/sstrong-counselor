@@ -10,6 +10,7 @@ import com.hsd.avh.standstrong.StandStrong
 import com.hsd.avh.standstrong.data.people.Person
 import com.hsd.avh.standstrong.data.people.PersonRepository
 import com.hsd.avh.standstrong.data.posts.*
+import org.jetbrains.anko.doAsync
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -26,6 +27,7 @@ class DataPostViewModel(
     private val activityData = MediatorLiveData<List<Activity>>()
     private val proximityData = MediatorLiveData<List<Proximity>>()
     private val gpsData = MediatorLiveData<List<Gps>>()
+    private val personLD = MutableLiveData<Person>()
 
     init {
 
@@ -58,5 +60,13 @@ class DataPostViewModel(
         cal.set(Calendar.SECOND, s)
         cal.set(Calendar.MILLISECOND, 0)
         return cal.timeInMillis
+    }
+
+    fun getPersonByMotherId() {
+
+        doAsync {
+
+
+        }
     }
 }

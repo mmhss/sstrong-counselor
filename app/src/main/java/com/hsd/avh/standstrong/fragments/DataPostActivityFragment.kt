@@ -10,23 +10,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.hsd.avh.standstrong.R
 import com.hsd.avh.standstrong.StandStrong
 import com.hsd.avh.standstrong.databinding.*
 import com.hsd.avh.standstrong.fragments.baseFragments.BaseFragment
-import com.hsd.avh.standstrong.utilities.FirebaseTrackingUtil
+import com.hsd.avh.standstrong.utilities.Const
 import com.hsd.avh.standstrong.utilities.InjectorUtils
 import com.hsd.avh.standstrong.viewmodels.*
 import kotlinx.android.synthetic.main.fragment_data_activity.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class DataPostActivityFragment : BaseFragment() {
 
     private lateinit var vm: DataPostViewModel
     private val TAG = javaClass.canonicalName
-
+    lateinit var binding: FragmentDataActivityBinding
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -44,9 +45,9 @@ class DataPostActivityFragment : BaseFragment() {
                 .get(DataPostViewModel::class.java)
 
 
-        val binding = DataBindingUtil.inflate<FragmentDataActivityBinding>(
+        binding = DataBindingUtil.inflate<FragmentDataActivityBinding>(
                 inflater, R.layout.fragment_data_activity, container, false).apply {
-            vm = dataPostViewModel
+            dateString = SimpleDateFormat(Const.DEFAULT_DATE_FORMAT).format(Date(postDate))
             setLifecycleOwner(this@DataPostActivityFragment)
         }
         val res : Resources = StandStrong.applicationContext().resources
@@ -101,6 +102,19 @@ class DataPostActivityFragment : BaseFragment() {
             }
         })
 
+        initPerson(motherId)
+
         return binding.root
+    }
+
+    private fun initPerson(motherId: Int) {
+
+        val factory = InjectorUtils.providePersonViewModelFactory(requireContext())
+        val viewModel = ViewModelProviders.of(this, factory).get(PeopleViewModel::class.java)
+
+        viewModel.subscribeOnPersonByMotherId(motherId).observe(this, Observer {
+
+            binding.person = it
+        })
     }
 }

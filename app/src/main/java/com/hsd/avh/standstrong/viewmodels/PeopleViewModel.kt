@@ -34,4 +34,6 @@ class PeopleViewModel internal constructor(
         return peopleRepository.getAllPeople()
     }
 
+    fun subscribeOnPersonByMotherId(motherId: Int) = peopleRepository.getPersonByMotherId(motherId)
+
 }

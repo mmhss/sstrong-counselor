@@ -5,8 +5,10 @@
 
     <data>
         <variable
-            name="vm"
-            type="com.hsd.avh.standstrong.viewmodels.DataPostViewModel" />
+            name="person"
+            type="com.hsd.avh.standstrong.data.people.Person" />
+
+        <variable name="dateString" type="String" />
     </data>
 
 
@@ -14,9 +16,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <include
+
+                android:id="@+id/subDataLayout"
+                layout="@layout/person_header"
+                app:dateString="@{dateString}"
+                app:person="@{person}"/>
+
         <com.neo.arcchartview.ArcChartView
+            app:layout_constraintTop_toBottomOf="@id/subDataLayout"
             android:id="@+id/arc_chart_view"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
