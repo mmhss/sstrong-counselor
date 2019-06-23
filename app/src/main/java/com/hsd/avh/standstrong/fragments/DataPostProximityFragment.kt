@@ -94,7 +94,9 @@ class DataPostProximityFragment : BaseFragment() {
                 for (label in allLabels) {
                     var found = false;
                     for (d in data) {
-                        if(dFormat.format(d.chartDate) == label) {
+                        var hour = dFormat.format(d.chartDate);
+                        hour = hour.replace(".", "");
+                        if(hour.equals(label,true)) {
                             togetherPoints[index] = d.chartValue!!.toFloat()
                             if (togetherPoints[index] == 1f) {
                                 apartPoints[index] = 0f
