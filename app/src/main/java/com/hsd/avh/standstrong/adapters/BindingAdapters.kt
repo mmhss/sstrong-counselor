@@ -59,17 +59,26 @@ class BindingAdapters {
         fun bindServerDate(textView: TextView, date: Date?) {
 
             if (date != null) {
-                var sdfDate = SimpleDateFormat("EEE, MMM d, yyyy")
-                val cal = Calendar.getInstance()
-                cal.timeInMillis = date.time
 
-                val model = dc.getNepaliDate(cal)
+                val nepaliDate = provideNepaliString(date)
 
-                cal.clear()
-                cal.set(model.year, model.month, model.day)
-
-                textView.text = sdfDate.format(date) + "\nNepali date: " + sdfDate.format(Date(cal.timeInMillis))
+                textView.text = nepaliDate
             }
+        }
+
+        @JvmStatic
+        fun provideNepaliString(date: Date?) : String {
+
+            var sdfDate = SimpleDateFormat("EEE, MMM d, yyyy")
+            val cal = Calendar.getInstance()
+            cal.timeInMillis = date?.time ?: Date().time
+
+            val model = dc.getNepaliDate(cal)
+
+            cal.clear()
+            cal.set(model.year, model.month, model.day)
+
+            return sdfDate.format(cal.time)
         }
     }
 }

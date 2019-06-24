@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.fragment_data_proximity.view.*
 import android.util.Log
 import androidx.lifecycle.Observer
 import com.db.chart.renderer.AxisRenderer
+import com.hsd.avh.standstrong.adapters.BindingAdapters
 import com.hsd.avh.standstrong.fragments.baseFragments.BaseFragment
 import com.hsd.avh.standstrong.utilities.Const
 import java.text.SimpleDateFormat
@@ -59,7 +60,7 @@ class DataPostProximityFragment : BaseFragment() {
         val binding = DataBindingUtil.inflate<FragmentDataProximityBinding>(
             inflater, R.layout.fragment_data_proximity, container, false).apply {
             vm = dataPostViewModel
-            dateString = SimpleDateFormat(Const.DEFAULT_DATE_FORMAT).format(Date(postDate))
+            dateString = BindingAdapters.provideNepaliString(Date(postDate))
             setLifecycleOwner(this@DataPostProximityFragment)
         }
 

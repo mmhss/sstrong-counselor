@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.hsd.avh.standstrong.R
+import com.hsd.avh.standstrong.adapters.BindingAdapters
 import com.hsd.avh.standstrong.databinding.ListItemAwardsBinding
 import com.hsd.avh.standstrong.utilities.Const
 import com.hsd.avh.standstrong.utilities.InjectorUtils
@@ -47,7 +49,7 @@ class AwardPostFragment : Fragment() {
 
             binding.awardFragment = it
 
-            binding.awardDate.text = SimpleDateFormat(Const.DEFAULT_DATE_FORMAT).format(it.awardDate)
+            binding.awardDate.text = BindingAdapters.provideNepaliString(it.awardDate)
         })
     }
 

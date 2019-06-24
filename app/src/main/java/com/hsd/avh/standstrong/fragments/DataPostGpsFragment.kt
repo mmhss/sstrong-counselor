@@ -31,6 +31,7 @@ import com.google.maps.android.heatmaps.Gradient
 import android.graphics.Color
 import android.text.method.LinkMovementMethod
 import com.google.android.gms.maps.model.TileOverlayOptions
+import com.hsd.avh.standstrong.adapters.BindingAdapters
 import com.hsd.avh.standstrong.data.posts.Gps
 import com.hsd.avh.standstrong.fragments.baseFragments.BaseFragment
 import com.hsd.avh.standstrong.utilities.Const
@@ -128,7 +129,7 @@ class DataPostGpsFragment : BaseFragment(), OnMapReadyCallback {
         val binding = DataBindingUtil.inflate<FragmentDataGpsBinding>(
                 inflater, R.layout.fragment_data_gps, container, false).apply {
             vm = dataPostViewModel
-            dateString = SimpleDateFormat(Const.DEFAULT_DATE_FORMAT).format(Date(postDate))
+            dateString = BindingAdapters.provideNepaliString(Date(postDate))
             setLifecycleOwner(this@DataPostGpsFragment)
         }
 

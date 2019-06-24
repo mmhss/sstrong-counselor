@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.hsd.avh.standstrong.R
 import com.hsd.avh.standstrong.StandStrong
+import com.hsd.avh.standstrong.adapters.BindingAdapters
 import com.hsd.avh.standstrong.databinding.*
 import com.hsd.avh.standstrong.fragments.baseFragments.BaseFragment
 import com.hsd.avh.standstrong.utilities.Const
@@ -47,7 +48,7 @@ class DataPostActivityFragment : BaseFragment() {
 
         binding = DataBindingUtil.inflate<FragmentDataActivityBinding>(
                 inflater, R.layout.fragment_data_activity, container, false).apply {
-            dateString = SimpleDateFormat(Const.DEFAULT_DATE_FORMAT).format(Date(postDate))
+            dateString = BindingAdapters.provideNepaliString(Date(postDate))
             setLifecycleOwner(this@DataPostActivityFragment)
         }
         val res : Resources = StandStrong.applicationContext().resources
