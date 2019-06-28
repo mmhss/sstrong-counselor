@@ -66,7 +66,11 @@ class BindingAdapters {
         }
 
         val sdfDateEng = SimpleDateFormat("EEE, MMM d, yyyy", Locale.ENGLISH)
-        val sdfDateNep = SimpleDateFormat("EEE, MMM d, yyyy", Locale("ne"))
+        val sdfDateDay = SimpleDateFormat("EEE", Locale.ENGLISH)
+
+        val sdfDateNepMonth = SimpleDateFormat("MM", Locale("ne_EN"))
+        val sdfDateNepDate = SimpleDateFormat("d, yyyy", Locale("ne"))
+
         val dc = DateConverter()
 
         @JvmStatic
@@ -76,13 +80,55 @@ class BindingAdapters {
             cal.timeInMillis = date?.time ?: System.currentTimeMillis()
 
             var result = sdfDateEng.format(cal.time)
+            var day = sdfDateDay.format(cal.time)
 
             val model = dc.getNepaliDate(cal)
 
             cal.clear()
             cal.set(model.year, model.month, model.day)
 
-            result += "; " + sdfDateNep.format(cal.time)
+            result += "; "
+            result += " " + translateToNepaliDay(day)
+            result += ", " + translateToNepaliMonth(sdfDateNepMonth.format(cal.time))
+            result += " " + sdfDateNepDate.format(cal.time)
+
+
+            return result
+        }
+
+        @JvmStatic
+        private fun translateToNepaliMonth(monthNumber: String?): Any? {
+            var result = when (monthNumber) {
+                "01" -> "बैसाख"
+                "02" -> "जेठ"
+                "03" -> "असार"
+                "04" -> "साउन"
+                "05" -> "भाद्र"
+                "06" -> "असोज"
+                "07" -> "कार्तिक"
+                "08" -> "मंसिर"
+                "09" -> "पुष"
+                "10" -> "माघ"
+                "11" -> "फाल्गुन"
+                "12" -> "चैत्र"
+                else -> monthNumber
+            }
+
+            return result
+        }
+
+        @JvmStatic
+        private fun translateToNepaliDay(day: String?): Any? {
+            var result = when (day) {
+                "Sun" -> "आइत"
+                "Mon" -> "सोम"
+                "Tue" -> "मगल"
+                "Wed" -> "बुध"
+                "Thu" -> "बिहि"
+                "Fri" -> "शुक्र"
+                "Sat" -> "शनि"
+                else -> day
+            }
 
             return result
         }
