@@ -126,6 +126,7 @@ class PostsPagedAdapter(val context: Context, val analyticsManager: AnalyticsMan
                 clickListener = listener
                 commentClickListener = commentListener
                 post = item
+                date.text = BindingAdapters.provideNepaliString(item.postDate)
                 executePendingBindings()
             }
         }

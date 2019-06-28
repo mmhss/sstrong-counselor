@@ -3,6 +3,7 @@ package com.hsd.avh.standstrong.adapters
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.os.LocaleListCompat
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.hornet.dateconverter.DateConverter
@@ -14,8 +15,6 @@ import java.util.*
 class BindingAdapters {
 
     companion object {
-
-        val dc = DateConverter()
 
         @BindingAdapter("isGone")
         @JvmStatic
@@ -66,19 +65,26 @@ class BindingAdapters {
             }
         }
 
+        val sdfDateEng = SimpleDateFormat("EEE, MMM d, yyyy", Locale.ENGLISH)
+        val sdfDateNep = SimpleDateFormat("EEE, MMM d, yyyy", Locale("ne"))
+        val dc = DateConverter()
+
         @JvmStatic
         fun provideNepaliString(date: Date?) : String {
 
-            var sdfDate = SimpleDateFormat("EEE, MMM d, yyyy")
             val cal = Calendar.getInstance()
-            cal.timeInMillis = date?.time ?: Date().time
+            cal.timeInMillis = date?.time ?: System.currentTimeMillis()
+
+            var result = sdfDateEng.format(cal.time)
 
             val model = dc.getNepaliDate(cal)
 
             cal.clear()
             cal.set(model.year, model.month, model.day)
 
-            return sdfDate.format(cal.time)
+            result += "; " + sdfDateNep.format(cal.time)
+
+            return result
         }
     }
 }
