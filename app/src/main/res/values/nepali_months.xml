@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="m01">बैसाख</string>
+    <string name="m02">जेठ</string>
+    <string name="m03">असार</string>
+    <string name="m04">साउन</string>
+    <string name="m05">भाद्र</string>
+    <string name="m06">असोज</string>
+    <string name="m07">कार्तिक</string>
+    <string name="m08">मंसिर</string>
+    <string name="m09">पुष</string>
+    <string name="m10">माघ</string>
+    <string name="m11">फाल्गुन</string>
+    <string name="m12">चैत्र</string>
+</resources>
