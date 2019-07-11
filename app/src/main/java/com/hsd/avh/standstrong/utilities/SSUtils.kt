@@ -463,10 +463,7 @@ class SSUtils {
                                                     award.mother!!.id!!,
                                                     SimpleDateFormat("yyyy-MM-dd").parse(award.awardForDate),
                                                     ssId,
-                                                    "@drawable/" + switchAward(award.awardType!!) + "_l" + Integer.toString(
-                                                        award.awardLevel!!
-                                                    )
-                                                )
+                                                    "@drawable/" + switchAward(award.awardType!!) + "_l" + Integer.toString(award.awardLevel!!))
                                                 var p: Post = Post(
                                                     ssId,
                                                     a.motherId,
@@ -474,7 +471,7 @@ class SSUtils {
                                                     "https://www.tinygraphs.com/squares/" + a.motherId + "?theme=heatwave&numcolors=4&size=50&fmt=png",
                                                     StandStrong.applicationContext().getString(R.string.card_title_award),
                                                     ssId,
-                                                    NEW_AWARD,
+                                                    "@drawable/" + switchAward(award.awardType!!) + "_l" + Integer.toString(award.awardLevel!!),
                                                     false,
                                                     0,
                                                     StandStrong.POST_CARD_AWARD,
