@@ -100,10 +100,10 @@
                 <ImageView
                     android:id="@+id/postImage"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/award_pic_height"
                     android:adjustViewBounds="true"
                     android:background="@color/lightgrey"
-                    android:scaleType="fitCenter"
+                    android:scaleType="centerCrop"
                     app:srcFromDrawable="@{post.mediaUrl}" />
 
                 <LinearLayout
@@ -195,12 +195,11 @@
                         android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:readableDate="@{post.postDate}"
-                        android:textColor="@color/fontColor"
-                        android:textSize="12sp" />
+                            android:id="@+id/date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:textSize="12sp" />
                 </LinearLayout>
 
             </LinearLayout>

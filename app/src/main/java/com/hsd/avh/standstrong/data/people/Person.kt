@@ -32,5 +32,8 @@ data class Person(
 
 
     override fun toString() = personId
+
+        fun printMe(): String { return "Person(ssId='$ssId', firstName='$firstName', lastName='$lastName', mother_id=$mother_id, type=$type, imgUrl='$imgUrl', personId='$personId')" }
+
 }
 

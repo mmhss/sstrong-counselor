@@ -2,11 +2,12 @@ package com.hsd.avh.standstrong.data.messages
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.hsd.avh.standstrong.utilities.Const
+import java.text.SimpleDateFormat
 
 class ApiMessage {
 
     @SerializedName("id")
-    @Expose
     var id: Int? = null
     @SerializedName("message")
     @Expose
@@ -16,13 +17,16 @@ class ApiMessage {
     var postedDate: String? = null
     @SerializedName("threadId")
     @Expose
-    var threadId: Int? = null
+    var threadId: Long = 1
     @SerializedName("direction")
     @Expose
     var direction: String? = null
     @SerializedName("mother")
     @Expose
     var mother: Mother? = null
+    @SerializedName("status")
+    @Expose
+    var status: String? = null
 
     /**
      * No args constructor for use in serialization
@@ -39,16 +43,29 @@ class ApiMessage {
      * @param threadId
      * @param direction
      */
-    constructor(id: Int?, message: String, postedDate: String, threadId: Int?, direction: String, mother: Mother) : super() {
+    constructor(id: Int?, message: String, postedDate: String, threadId: Long?, direction: String, mother: Mother) : super() {
         this.id = id
         this.message = message
         this.postedDate = postedDate
-        this.threadId = threadId
         this.direction = direction
         this.mother = mother
     }
 
-    inner class Mother {
+    constructor(message: String, postedDate: String, threadId: Long?, direction: String, mother: Mother) : super() {
+        this.message = message
+        this.postedDate = postedDate
+        this.direction = direction
+        this.mother = mother
+    }
+
+    constructor(dbMessage: Message) {
+        this.message = dbMessage.msg
+        this.postedDate = SimpleDateFormat(Const.MESSAGE_DATE_FORMAT).format(dbMessage.msgDate)
+        this.direction = dbMessage.direction
+        this.mother = Mother(dbMessage.motherId)
+    }
+
+    class Mother {
 
         @SerializedName("id")
         @Expose
@@ -68,5 +85,13 @@ class ApiMessage {
             this.id = id
         }
 
+        override fun toString(): String {
+            return "Mother(id=$id)"
+        }
+
+    }
+
+    override fun toString(): String {
+        return "ApiMessage(id=$id, message=$message, postedDate=$postedDate, threadId=$threadId, direction=$direction, mother=$mother)"
     }
 }

@@ -21,6 +21,15 @@
     <color name="centerGradient">#fb360c</color>
     <color name="endGradient">#870000</color>
 
+    <color name="filters_buttons">#FFFFAB00</color>
+    <color name="filters_buttons_selected">#32FFAB00</color>
+    <color name="filter_chip">#FF8F6B</color>
+
+
+
+    <color name="bg">#f5f5f5</color>
+    <color name="orange">#ff5722</color>
+    <color name="brown">#795548</color>
 
 
     <!-- Other Colors -->

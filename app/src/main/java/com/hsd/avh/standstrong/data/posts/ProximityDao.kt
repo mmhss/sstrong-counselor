@@ -17,7 +17,7 @@ interface ProximityDao {
     @Query("SELECT * FROM proximity where chart_event='Visibility' and mother_id = :motherId and chart_date BETWEEN :dayst AND :dayet ORDER BY chart_date DESC")
     fun getProximityByDate(motherId:Int,dayst:Long,dayet:Long): LiveData<List<Proximity>>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertProximity(proxy: Proximity): Long
 
     @Delete
@@ -28,5 +28,8 @@ interface ProximityDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(proximity: List<Proximity>)
+
+    @Query("SELECT * FROM proximity where chart_event='Visibility' and mother_id = :motherId and chart_date BETWEEN :dayst AND :dayet ORDER BY chart_date DESC")
+    fun getProximityByDateSync(motherId:Int,dayst:Long,dayet:Long): List<Proximity>
 
 }

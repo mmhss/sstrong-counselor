@@ -1,0 +1,96 @@
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/mdtp_white"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:padding="5dp"
+    android:weightSum="3"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        android:layout_weight="1"
+        android:id="@+id/llA"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            app:srcCompat="@drawable/ic_chat_black_24dp"
+            android:tint="@android:color/black" />
+
+        <TextView
+            android:id="@+id/messageCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:padding="5dp"
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        android:layout_weight="1"
+        android:id="@+id/llB"
+        android:gravity="center"
+        android:orientation="vertical"
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            app:srcCompat="@drawable/ic_insert_chart_black_24dp"
+            android:tint="@android:color/black" />
+
+        <TextView
+            android:id="@+id/postCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:padding="5dp"
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        android:layout_weight="1"
+        android:id="@+id/llC"
+        android:gravity="center"
+        android:orientation="vertical"
+        >
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:padding="5dp"
+            app:srcCompat="@drawable/ic_award"
+            android:tint="@android:color/black" />
+
+        <TextView
+            android:id="@+id/awardCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:padding="5dp"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

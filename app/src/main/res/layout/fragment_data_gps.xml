@@ -3,20 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-<!--
     <data>
         <variable
-            name="vm"
-            type="com.hsd.avh.standstrong.viewmodels.PersonDetailViewModel" />
+                name="person"
+                type="com.hsd.avh.standstrong.data.people.Person" />
+
+        <variable name="dateString" type="String" />
     </data>
-
--->
-
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <include
+                android:id="@+id/subDataLayout"
+                layout="@layout/person_header"
+                app:dateString="@{dateString}"
+                app:person="@{person}"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -28,21 +33,6 @@
             android:paddingBottom="@dimen/activity_horizontal_margin2"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
 
-<!--
-        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/map"
-            android:name="com.hsd.avh.standstrong.fragments.DataPostGpsFragment" />
--->
-
-<!--
-        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/map2"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
--->
 
         <com.google.android.gms.maps.MapView
             android:id="@+id/map3"

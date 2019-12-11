@@ -38,8 +38,8 @@ android {
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        versionCode 3
-        versionName "0.3"
+        versionCode 4
+        versionName "0.4"
         vectorDrawables.useSupportLibrary true
         multiDexEnabled true
     }
@@ -56,7 +56,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
+    configurations {
+        cleanedAnnotations
+        compile.exclude group: 'org.jetbrains' , module:'annotations'
+    }
     buildToolsVersion '28.0.3'
 }
 
@@ -68,7 +71,7 @@ dependencies {
     implementation "android.arch.work:work-runtime:1.0.0-beta01"
     implementation "com.google.android.material:material:1.0.0-rc01"
     kapt "androidx.room:room-compiler:$rootProject.roomVersion"
-    kapt "com.github.bumptech.glide:compiler:$rootProject.glideVersion"
+
     implementation "android.arch.navigation:navigation-fragment-ktx:$rootProject.navigationVersion"
     implementation "android.arch.navigation:navigation-ui-ktx:$rootProject.navigationVersion"
     implementation "android.arch.work:work-runtime-ktx:$rootProject.workVersion"
@@ -80,7 +83,9 @@ dependencies {
     implementation "androidx.room:room-runtime:$rootProject.roomVersion"
     implementation "com.squareup.retrofit2:retrofit:2.4.0"
     implementation "com.squareup.retrofit2:converter-gson:2.4.0"
-    implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
+    def glide_version = "4.8.0"
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    kapt "com.github.bumptech.glide:compiler:$glide_version"
     implementation "com.google.android.material:material:$rootProject.materialVersion"
     implementation "com.google.code.gson:gson:$rootProject.gsonVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$rootProject.kotlinVersion"
@@ -97,6 +102,9 @@ dependencies {
     implementation "com.google.android.gms:play-services-maps:$googlePlayVersion"
     implementation "com.google.android.gms:play-services-location:$googlePlayVersion"
     implementation 'com.diogobernardino:williamchart:2.5.0'
+    implementation 'com.allattentionhere:fabulousfilter:0.0.5'
+    implementation 'com.github.keyrunHORNET:date_picker_converter:2.2'
+    implementation 'com.google.android:flexbox:1.1.0'
     // Testing dependencies
     androidTestImplementation "androidx.arch.core:core-testing:$rootProject.coreTestingVersion"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$rootProject.espressoVersion"
@@ -104,4 +112,17 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-intents:$rootProject.espressoVersion"
     androidTestImplementation "androidx.test.uiautomator:uiautomator:$rootProject.uiAutomatorVersion"
     testImplementation "junit:junit:$rootProject.junitVersion"
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
+    //anko
+    implementation "org.jetbrains.anko:anko:$anko_version"
+
+
+    //paging
+    implementation "android.arch.paging:runtime:1.0.1"
+
+    //dagger
+    implementation 'com.google.dagger:dagger:2.15'
+    kapt 'com.google.dagger:dagger-compiler:2.15'
+
+    implementation 'com.github.AnyChart:AnyChart-Android:1.1.2'
 }

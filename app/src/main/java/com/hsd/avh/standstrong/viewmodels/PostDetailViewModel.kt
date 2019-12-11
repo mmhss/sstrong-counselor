@@ -1,6 +1,7 @@
 package com.hsd.avh.standstrong.viewmodels
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hsd.avh.standstrong.StandStrong
 import com.hsd.avh.standstrong.data.posts.Post
@@ -12,6 +13,5 @@ class PostDetailViewModel(
 ) : ViewModel() {
 
     val post: LiveData<Post> = postRepository.getPost(postId)
-
 
 }

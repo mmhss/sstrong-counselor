@@ -1,6 +1,8 @@
 package com.hsd.avh.standstrong.api
 
 
+import com.hsd.avh.standstrong.data.LoginBody
+import com.hsd.avh.standstrong.data.SignInResponse
 import com.hsd.avh.standstrong.data.awards.ApiAward
 import com.hsd.avh.standstrong.data.messages.ApiMessage
 import com.hsd.avh.standstrong.data.messages.Message
@@ -20,26 +22,28 @@ interface ApiEndpoints{
     @GET("/api/mothers/{id}")
     fun getMotherByIdAsync(@Path("id") id:Int): Deferred<Response<ApiPerson>>
 
-
-    @GET("/api/awards?")
-    fun getAwardsAsync(@Query("search") searchId:String ): Deferred<Response<List<ApiAward>>>  // e.g id>2
-
-
-    @GET("/api/gpss?")
-    fun getGPSDataAsync(@Query("search") searchId:String ): Deferred<Response<List<ApiGPS>>>
-
-    @GET("/api/proximities/proximity-charts/{proximitySyncId}")
-    fun getProximityDataAsync(@Path("proximitySyncId") searchId:Int): Deferred<Response<List<ApiProximity>>>
-
-    @GET("/api/activities?")
-    fun getActivityDataAsync(@Query("search") searchId:String ): Deferred<Response<List<ApiActivity>>>
-
     @POST("/api/posts")
-    @FormUrlEncoded
-    fun postMessages(@Body msg: Message): Call<Message>
+    fun sendMessageToServer(@Body msg: ApiMessage): Call<Message>
 
-    @GET("/api/posts?")
-    fun getMessagesAsync(@Query("search") searchId:String ): Deferred<Response<List<ApiMessage>>>
+    @POST("/api/auth/signin")
+    fun login(@Body loginBody: LoginBody) : Call<SignInResponse>
 
+    @GET("/api/mothers?")
+    fun getPeopleAsync(@Query("search")lastRow: String) : Call<List<ApiPerson>>
 
+    //get data
+    @GET("/api/posts/find")
+    fun getMessagesAsync(@Query("search") searchId: String, @Query("offset") offset: Int = 0, @Query("limit") limit: Int): Call<List<ApiMessage>>
+
+    @GET("/api/awards/find")
+    fun getAwardsList(@Query("search") searchId: String, @Query("offset") offset: Int = 0, @Query("limit") limit: Int): Call<List<ApiAward>>
+
+    @GET("/api/activities/find")
+    fun getActivityDataAsync(@Query("search") searchId: String, @Query("offset") offset: Int = 0, @Query("limit") limit: Int): Deferred<Response<List<ApiActivity>>>
+
+    @GET("/api/gpss/find")
+    fun getGPSDataAsync(@Query("search") searchId: String, @Query("offset") offset: Int = 0, @Query("limit") limit: Int): Deferred<Response<List<ApiGPS>>>
+
+    @GET("/api/proximities/proximity-charts/{proximitySyncId}/limit/{limit}")
+    fun getProximityDataAsync(@Path("proximitySyncId") searchId:Int, @Path("limit") limit: Int): Deferred<Response<List<ApiProximity>>>
 }

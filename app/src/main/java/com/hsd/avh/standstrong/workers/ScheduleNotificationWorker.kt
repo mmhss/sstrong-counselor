@@ -1,6 +1,7 @@
 package com.hsd.avh.standstrong.workers
 
 import android.content.Context
+import android.util.Log
 import androidx.work.*
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -20,6 +21,8 @@ class ScheduleNotificationWorker(context : Context, params : WorkerParameters)
 
     override fun doWork(): Result {
 
+        Log.d("Worker", "dataload init")
+
         queryAPIForNewData()
         setupNextScheduledNotification()
         return Result.success()
@@ -30,7 +33,6 @@ class ScheduleNotificationWorker(context : Context, params : WorkerParameters)
 
         getPeople()
         getAwards()
-        getEducationPosts()
         getPosts()
     }
 
@@ -38,38 +40,20 @@ class ScheduleNotificationWorker(context : Context, params : WorkerParameters)
         SSUtils.checkForNewPosts()
     }
 
-
-    private fun getEducationPosts() {
-        val cardTitle = StandStrong.applicationContext().getString(R.string.card_title_education)
-        val mediaUrl = "@drawable/"+SSUtils.getNextEducationalPost()
-        val avatarUrl = "https://www.tinygraphs.com/squares/Education?theme=heatwave&numcolors=4&size=50&fmt=png"
-        val postTitle = SSUtils.getEducationalPostTitle(SSUtils.getNextEducationalPost())
-        val postTxt =SSUtils.getEducationalPostText(SSUtils.getNextEducationalPost())
-        val p: Post = Post( "All",99999,Date(),avatarUrl,cardTitle,"",mediaUrl,false,0,StandStrong.POST_CARD_CONTENT,postTitle,postTxt)
-
-        GlobalScope.launch(Dispatchers.Main) {
-            withContext(Dispatchers.IO){
-                database.postDao().insertPost(p)
-            }
-        }
-
-
-    }
-
     private fun getPeople() {
         SSUtils.checkForNewPeople()
     }
 
     private fun getAwards() {
-      SSUtils.checkForNewAwards()
+        SSUtils.getAllAwards()
     }
 
     private fun setupNextScheduledNotification(){
         val notificationWork = OneTimeWorkRequest.Builder(ScheduleNotificationWorker::class.java)
-                .setInitialDelay(24,TimeUnit.HOURS)
-                .addTag(StandStrong.TAG)
+                .setInitialDelay(StandStrong.NEW_DATA_CHECK_FREQUENCY_DAYS.toLong(),TimeUnit.HOURS)
+                .addTag(StandStrong.TAG_SCHEDULE)
                 .build()
-        WorkManager.getInstance().enqueueUniqueWork(StandStrong.TAG, ExistingWorkPolicy.REPLACE ,notificationWork)
+        WorkManager.getInstance().enqueueUniqueWork(StandStrong.TAG_SCHEDULE, ExistingWorkPolicy.REPLACE ,notificationWork)
     }
 
 

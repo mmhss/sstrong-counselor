@@ -18,223 +18,206 @@
     android:paddingStart="16dp"
     android:paddingEnd="16dp">
 
-   <!-- <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:animateLayoutChanges="true">
--->
-        <!--<com.google.android.material.appbar.AppBarLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:background="@android:color/white"-->
-            <!--android:paddingTop="@dimen/appbar_padding_top"-->
-            <!--android:theme="@style/AppTheme.AppBarOverlay">-->
-
-            <!--<androidx.appcompat.widget.Toolbar-->
-                <!--android:id="@+id/toolbar_reader"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="56dp"-->
-                <!--android:background="@android:color/white"-->
-                <!--android:theme="@style/ThemeOverlay.AppCompat.Light"-->
-                <!--app:layout_scrollFlags="scroll|enterAlways">-->
-
-                <!--<de.hdodenhof.circleimageview.CircleImageView-->
-                    <!--android:id="@+id/toolbar_profile"-->
-                    <!--android:layout_width="36dp"-->
-                    <!--android:layout_height="36dp"-->
-                    <!--android:src="@drawable/mp6"-->
-                    <!--tools:src="@tools:sample/avatars" />-->
-
-                <!--<LinearLayout-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:gravity="center_vertical"-->
-                    <!--android:orientation="vertical"-->
-                    <!--android:paddingStart="16dp"-->
-                    <!--android:paddingEnd="16dp">-->
-
-                    <!--<TextView-->
-                        <!--android:id="@+id/toolbar_title"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:text="@string/app_name"-->
-                        <!--android:textColor="@color/colorPrimaryDark" />-->
-
-                    <!--<TextView-->
-                        <!--android:id="@+id/toolbar_subtitle"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:textColor="@color/fontColor"-->
-                        <!--android:textSize="12sp"-->
-                        <!--tools:text="@tools:sample/lorem" />-->
-
-                <!--</LinearLayout>-->
-
-            <!--</androidx.appcompat.widget.Toolbar>-->
-
-        <!--</com.google.android.material.appbar.AppBarLayout>-->
-
-        <!-- Actual layout -->
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/nested1"
+        <ImageView
+            android:id="@+id/reader_image_head"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_bold"
-                    android:gravity="start"
-                    android:paddingStart="@dimen/activity_horizontal_margin"
-                    android:paddingTop="@dimen/activity_horizontal_margin2"
-                    android:paddingEnd="@dimen/activity_horizontal_margin"
-                    android:paddingBottom="@dimen/activity_horizontal_margin2"
-                    android:text="@{vm.post.postHeader}"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
-
-                <ImageView
-                    android:id="@+id/reader_image_head"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/activity_horizontal_margin2"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
-                    app:imageFromUrl="@{vm.post.mediaUrl}" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/poppins"
-                    android:padding="4dp"
-                    android:text="@{vm.post.mediaUrl}"
-                    android:textSize="12sp" />
-
-                <View
-                    android:layout_width="100dp"
-                    android:layout_height="5dp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/activity_horizontal_margin2"
-                    android:background="@drawable/dashed_line"
-                    android:layerType="software" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins"
-                    android:gravity="start"
-                    android:lineSpacingExtra="1.5dp"
-                    android:paddingStart="@dimen/activity_horizontal_margin"
-                    android:paddingTop="@dimen/activity_horizontal_margin2"
-                    android:paddingEnd="@dimen/activity_horizontal_margin"
-                    android:paddingBottom="@dimen/activity_horizontal_margin2"
-                    android:text="@{vm.post.postSubHeader}"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                    android:textColor="@color/colorPrimary" />
-
-                <View
-                    android:layout_width="100dp"
-                    android:layout_height="5dp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/activity_horizontal_margin2"
-                    android:background="@drawable/dashed_line"
-                    android:layerType="software" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/activity_horizontal_margin2">
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
-                        android:layout_gravity="center_vertical"
-                        android:src="@drawable/mp6" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/activity_horizontal_margin2"
-                        android:layout_marginEnd="@dimen/activity_horizontal_margin2"
-                        android:orientation="vertical"
-                        android:paddingStart="12dp"
-                        android:paddingEnd="12dp">
-
-                        <TextView
-                            android:id="@+id/publisher_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="2dp"
-                            android:text="@string/app_name"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                            android:textColor="@color/colorPrimaryDark"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/publisher_about"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:padding="2dp"
-                            android:singleLine="true"
-                            android:text="Post detail view"
-                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-                            android:textColor="@color/fontColor" />
-
-
-                    </LinearLayout>
-
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </androidx.core.widget.NestedScrollView>
-
-        <!-- Mask layout -->
-<!--
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/nested2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white">
-
-            <ProgressBar
-                android:id="@+id/reader_progress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:indeterminate="true"
-                android:indeterminateBehavior="cycle"
-                android:indeterminateTint="@color/colorPrimary" />
-
-        </androidx.core.widget.NestedScrollView>
--->
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            android:backgroundTint="@android:color/white"
-            app:srcCompat="@drawable/ic_thumb_up_black_24dp"
-            android:tint="@color/fontColor"
-            app:borderWidth="0dp"
-            app:fabSize="normal" />
+            android:layout_marginBottom="@dimen/activity_horizontal_margin2"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            app:imageFromUrl="@{vm.post.mediaUrl}" />
 
+        <WebView
+            android:id="@+id/webview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
     </LinearLayout>
-   <!-- </androidx.coordinatorlayout.widget.CoordinatorLayout>-->
+    <!-- <androidx.coordinatorlayout.widget.CoordinatorLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:animateLayoutChanges="true">
+         &lt;!&ndash;<com.google.android.material.appbar.AppBarLayout&ndash;&gt;
+             &lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;
+             &lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;
+             &lt;!&ndash;android:background="@android:color/white"&ndash;&gt;
+             &lt;!&ndash;android:paddingTop="@dimen/appbar_padding_top"&ndash;&gt;
+             &lt;!&ndash;android:theme="@style/AppTheme.AppBarOverlay">&ndash;&gt;
+
+             &lt;!&ndash;<androidx.appcompat.widget.Toolbar&ndash;&gt;
+                 &lt;!&ndash;android:id="@+id/toolbar_reader"&ndash;&gt;
+                 &lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;
+                 &lt;!&ndash;android:layout_height="56dp"&ndash;&gt;
+                 &lt;!&ndash;android:background="@android:color/white"&ndash;&gt;
+                 &lt;!&ndash;android:theme="@style/ThemeOverlay.AppCompat.Light"&ndash;&gt;
+                 &lt;!&ndash;app:layout_scrollFlags="scroll|enterAlways">&ndash;&gt;
+
+                 &lt;!&ndash;<de.hdodenhof.circleimageview.CircleImageView&ndash;&gt;
+                     &lt;!&ndash;android:id="@+id/toolbar_profile"&ndash;&gt;
+                     &lt;!&ndash;android:layout_width="36dp"&ndash;&gt;
+                     &lt;!&ndash;android:layout_height="36dp"&ndash;&gt;
+                     &lt;!&ndash;android:src="@drawable/mp6"&ndash;&gt;
+                     &lt;!&ndash;tools:src="@tools:sample/avatars" />&ndash;&gt;
+
+                 &lt;!&ndash;<LinearLayout&ndash;&gt;
+                     &lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;
+                     &lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;
+                     &lt;!&ndash;android:gravity="center_vertical"&ndash;&gt;
+                     &lt;!&ndash;android:orientation="vertical"&ndash;&gt;
+                     &lt;!&ndash;android:paddingStart="16dp"&ndash;&gt;
+                     &lt;!&ndash;android:paddingEnd="16dp">&ndash;&gt;
+
+                     &lt;!&ndash;<TextView&ndash;&gt;
+                         &lt;!&ndash;android:id="@+id/toolbar_title"&ndash;&gt;
+                         &lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;
+                         &lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;
+                         &lt;!&ndash;android:text="@string/app_name"&ndash;&gt;
+                         &lt;!&ndash;android:textColor="@color/colorPrimaryDark" />&ndash;&gt;
+
+                     &lt;!&ndash;<TextView&ndash;&gt;
+                         &lt;!&ndash;android:id="@+id/toolbar_subtitle"&ndash;&gt;
+                         &lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;
+                         &lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;
+                         &lt;!&ndash;android:textColor="@color/fontColor"&ndash;&gt;
+                         &lt;!&ndash;android:textSize="12sp"&ndash;&gt;
+                         &lt;!&ndash;tools:text="@tools:sample/lorem" />&ndash;&gt;
+
+                 &lt;!&ndash;</LinearLayout>&ndash;&gt;
+
+             &lt;!&ndash;</androidx.appcompat.widget.Toolbar>&ndash;&gt;
+
+         &lt;!&ndash;</com.google.android.material.appbar.AppBarLayout>&ndash;&gt;
+
+         &lt;!&ndash; Actual layout &ndash;&gt;
+         <androidx.core.widget.NestedScrollView
+             android:id="@+id/nested1"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@android:color/white"
+             app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+             <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:orientation="vertical">
+
+                 <TextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:fontFamily="@font/poppins_bold"
+                     android:gravity="start"
+                     android:paddingStart="@dimen/activity_horizontal_margin"
+                     android:paddingTop="@dimen/activity_horizontal_margin2"
+                     android:paddingEnd="@dimen/activity_horizontal_margin"
+                     android:paddingBottom="@dimen/activity_horizontal_margin2"
+                     android:text="@{vm.post.postHeader}"
+                     android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
+
+                 <ImageView
+                     android:id="@+id/reader_image_head"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_marginBottom="@dimen/activity_horizontal_margin2"
+                     android:adjustViewBounds="true"
+                     android:scaleType="centerCrop"
+                     app:imageFromUrl="@{vm.post.mediaUrl}" />
+
+                 <TextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_gravity="center"
+                     android:fontFamily="@font/poppins"
+                     android:padding="4dp"
+                     android:text="@{vm.post.mediaUrl}"
+                     android:textSize="12sp" />
+
+                 <View
+                     android:layout_width="100dp"
+                     android:layout_height="5dp"
+                     android:layout_gravity="center"
+                     android:layout_marginTop="@dimen/activity_horizontal_margin2"
+                     android:background="@drawable/dashed_line"
+                     android:layerType="software" />
+
+                 <TextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:fontFamily="@font/poppins"
+                     android:gravity="start"
+                     android:lineSpacingExtra="1.5dp"
+                     android:paddingStart="@dimen/activity_horizontal_margin"
+                     android:paddingTop="@dimen/activity_horizontal_margin2"
+                     android:paddingEnd="@dimen/activity_horizontal_margin"
+                     android:paddingBottom="@dimen/activity_horizontal_margin2"
+                     android:text="@{vm.post.postSubHeader}"
+                     android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                     android:textColor="@color/colorPrimary" />
+
+                 <View
+                     android:layout_width="100dp"
+                     android:layout_height="5dp"
+                     android:layout_gravity="center"
+                     android:layout_marginTop="@dimen/activity_horizontal_margin2"
+                     android:background="@drawable/dashed_line"
+                     android:layerType="software" />
+
+                 <LinearLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_gravity="center_horizontal"
+                     android:layout_marginTop="10dp"
+                     android:layout_marginBottom="10dp"
+                     android:gravity="center_horizontal"
+                     android:orientation="horizontal"
+                     android:padding="@dimen/activity_horizontal_margin2">
+
+                     <de.hdodenhof.circleimageview.CircleImageView
+                         android:layout_width="56dp"
+                         android:layout_height="56dp"
+                         android:layout_gravity="center_vertical"
+                         android:src="@drawable/mp6" />
+
+                     <LinearLayout
+                         android:layout_width="match_parent"
+                         android:layout_height="match_parent"
+                         android:layout_marginStart="@dimen/activity_horizontal_margin2"
+                         android:layout_marginEnd="@dimen/activity_horizontal_margin2"
+                         android:orientation="vertical"
+                         android:paddingStart="12dp"
+                         android:paddingEnd="12dp">
+
+                         <TextView
+                             android:id="@+id/publisher_name"
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:padding="2dp"
+                             android:text="@string/app_name"
+                             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                             android:textColor="@color/colorPrimaryDark"
+                             android:textStyle="bold" />
+
+
+                     </LinearLayout>
+
+
+                 </LinearLayout>
+
+             </LinearLayout>
+
+         </androidx.core.widget.NestedScrollView>
+
+
+         <com.google.android.material.floatingactionbutton.FloatingActionButton
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_gravity="bottom|end"
+             android:layout_margin="@dimen/fab_margin"
+             android:backgroundTint="@android:color/white"
+             app:srcCompat="@drawable/ic_thumb_up_black_24dp"
+             android:tint="@color/fontColor"
+             app:borderWidth="0dp"
+             app:fabSize="normal" />
+
+     </LinearLayout>
+    -->
 </layout>

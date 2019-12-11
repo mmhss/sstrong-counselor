@@ -8,13 +8,25 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
+                  <entry key="awardPostFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="6" />
+                            <option name="y" value="77" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="message_fragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="446" />
-                            <option name="y" value="254" />
+                            <option name="x" value="417" />
+                            <option name="y" value="-232" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -25,12 +37,37 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="188" />
-                            <option name="y" value="319" />
+                            <option name="x" value="123" />
+                            <option name="y" value="-226" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="action_people_detail_fragment_to_awardPostFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_post_list_to_awards">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_post_list_to_data_activity">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_post_list_to_data_gps">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_post_list_to_data_proximity">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_post_list_to_messages">
                               <value>
                                 <LayoutPositions />
@@ -51,8 +88,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="12" />
+                            <option name="x" value="-221" />
+                            <option name="y" value="32" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -63,8 +100,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="168" />
-                            <option name="y" value="12" />
+                            <option name="x" value="-153" />
+                            <option name="y" value="-284" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -75,8 +112,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="324" />
-                            <option name="y" value="12" />
+                            <option name="x" value="282" />
+                            <option name="y" value="78" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -87,8 +124,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="440" />
-                            <option name="y" value="-36" />
+                            <option name="x" value="601" />
+                            <option name="y" value="-8" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -99,9 +136,18 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-13" />
-                            <option name="y" value="12" />
+                            <option name="x" value="-226" />
+                            <option name="y" value="392" />
                           </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_tab_awards_to_awardPostFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -111,8 +157,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="14" />
-                            <option name="y" value="329" />
+                            <option name="x" value="258" />
+                            <option name="y" value="409" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -132,8 +178,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="168" />
-                            <option name="y" value="12" />
+                            <option name="x" value="5" />
+                            <option name="y" value="396" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -164,6 +210,11 @@
                               </value>
                             </entry>
                             <entry key="action_post_list_to_post_detail">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_tab_posts_to_awardPostFragment">
                               <value>
                                 <LayoutPositions />
                               </value>

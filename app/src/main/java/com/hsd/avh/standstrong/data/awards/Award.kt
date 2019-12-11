@@ -29,5 +29,8 @@ data class Award(
     @ColumnInfo(name = "filename")val fileName: String,
     @PrimaryKey(autoGenerate = false) @ColumnInfo(name = "id") var awardId: String = UUID.randomUUID().toString()
 ) {
+    override fun toString(): String {
+        return "Award(motherId=$motherId, awardDate=$awardDate, displayString='$displayString', fileName='$fileName', awardId='$awardId')"
+    }
 
 }

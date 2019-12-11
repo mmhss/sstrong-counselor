@@ -8,14 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.snackbar.Snackbar
 import com.hsd.avh.standstrong.R
 import com.hsd.avh.standstrong.databinding.*
+import com.hsd.avh.standstrong.fragments.baseFragments.BaseFragment
 import com.hsd.avh.standstrong.utilities.FirebaseTrackingUtil
 import com.hsd.avh.standstrong.utilities.InjectorUtils
 import com.hsd.avh.standstrong.viewmodels.*
 
-class PostDetailFragment : Fragment() {
+class PostDetailFragment : BaseFragment() {
 
     private lateinit var vm: PostDetailViewModel
 
@@ -42,15 +45,12 @@ class PostDetailFragment : Fragment() {
             setLifecycleOwner(this@PostDetailFragment)
         }
 
-        /*vm.post.observe(this, Observer { post->
-            Snackbar.make(binding.root, "Post", Snackbar.LENGTH_LONG).show()
-        })*/
-        return binding.root
-    }
 
-    override fun onResume() {
-        super.onResume()
-        //StandStrong.firebaseInstance().setCurrentScreen(this!!.activity!!, activity?.javaClass?.simpleName, activity?.javaClass?.simpleName);
-        FirebaseTrackingUtil(activity!!).track(FirebaseTrackingUtil.Screens.PostDetails)
+        vm.post.observe(this, Observer { post->
+            val postHtml = "file:///android_asset/post_" + post.cardHeader.substring(post.cardHeader.length - 1, post.cardHeader.length) +".html"
+            binding.webview.loadUrl(postHtml)
+        })
+
+        return binding.root
     }
 }

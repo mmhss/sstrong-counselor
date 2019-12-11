@@ -10,21 +10,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.hsd.avh.standstrong.R
 import com.hsd.avh.standstrong.StandStrong
+import com.hsd.avh.standstrong.adapters.BindingAdapters
 import com.hsd.avh.standstrong.databinding.*
-import com.hsd.avh.standstrong.utilities.FirebaseTrackingUtil
+import com.hsd.avh.standstrong.fragments.baseFragments.BaseFragment
+import com.hsd.avh.standstrong.utilities.Const
 import com.hsd.avh.standstrong.utilities.InjectorUtils
 import com.hsd.avh.standstrong.viewmodels.*
 import kotlinx.android.synthetic.main.fragment_data_activity.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 
-class DataPostActivityFragment : Fragment() {
+class DataPostActivityFragment : BaseFragment() {
 
     private lateinit var vm: DataPostViewModel
-
+    private val TAG = javaClass.canonicalName
+    lateinit var binding: FragmentDataActivityBinding
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -42,9 +46,9 @@ class DataPostActivityFragment : Fragment() {
                 .get(DataPostViewModel::class.java)
 
 
-        val binding = DataBindingUtil.inflate<FragmentDataActivityBinding>(
+        binding = DataBindingUtil.inflate<FragmentDataActivityBinding>(
                 inflater, R.layout.fragment_data_activity, container, false).apply {
-            vm = dataPostViewModel
+            dateString = BindingAdapters.provideNepaliString(Date(postDate))
             setLifecycleOwner(this@DataPostActivityFragment)
         }
         val res : Resources = StandStrong.applicationContext().resources
@@ -62,17 +66,31 @@ class DataPostActivityFragment : Fragment() {
             Snackbar.make(binding.root, "Post", Snackbar.LENGTH_LONG).show()
         })*/
 
+        binding.root.arc_chart_view.setSectionValue(0,0)
+        binding.root.arc_chart_view.setSectionValue(1,0)
+        binding.root.arc_chart_view.setSectionValue(2,0)
+        binding.root.arc_chart_view.setSectionValue(3,0)
+        binding.root.arc_chart_view.setSectionValue(4,0)
+        binding.root.arc_chart_view.setSectionValue(5,0)
+        binding.root.arc_chart_view.setSectionValue(6,0)
+
+
         vm.getActivityData().observe(viewLifecycleOwner, Observer { data->
             if (data != null) {
                 val byActivity = data.groupBy { it.activityType }
                 var total = 0
 
+                Log.d(TAG, "by ${byActivity.keys}")
+                Log.d(TAG, "by vals ${byActivity.values}")
+
                 byActivity.forEach { (key, value) -> total += value.size }
 
                 byActivity.forEach { (key, value) ->
-                    var rings = ((value.size / total)*10)
+
+                    var rings = ((value.size.toFloat() / total.toFloat())*10f).toInt()
+
                     when (key) {
-                        StandStrong.ACTIVITY_BICYCLE -> binding.root.arc_chart_view.setSectionValue(0,rings )
+                        StandStrong.ACTIVITY_BICYCLE -> binding.root.arc_chart_view.setSectionValue(0,rings)
                         StandStrong.ACTIVITY_RUNNING -> binding.root.arc_chart_view.setSectionValue(1,rings)
                         StandStrong.ACTIVITY_STILL -> binding.root.arc_chart_view.setSectionValue(2,rings)
                         StandStrong.ACTIVITY_TILTING -> binding.root.arc_chart_view.setSectionValue(3,rings)
@@ -85,12 +103,11 @@ class DataPostActivityFragment : Fragment() {
             }
         })
 
-        return binding.root
-    }
+        initPerson(motherId).observe(this, Observer {
 
-    override fun onResume() {
-        super.onResume()
-        //StandStrong.firebaseInstance().setCurrentScreen(this!!.activity!!, activity?.javaClass?.simpleName, activity?.javaClass?.simpleName);
-        FirebaseTrackingUtil(activity!!).track(FirebaseTrackingUtil.Screens.ActivityData)
+            binding.person = it
+        })
+
+        return binding.root
     }
 }

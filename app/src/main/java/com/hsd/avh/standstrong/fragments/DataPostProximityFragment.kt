@@ -1,7 +1,5 @@
 package com.hsd.avh.standstrong.fragments
 
-
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,40 +20,47 @@ import kotlinx.android.synthetic.main.fragment_data_proximity.view.*
 import android.util.Log
 import androidx.lifecycle.Observer
 import com.db.chart.renderer.AxisRenderer
+import com.hsd.avh.standstrong.adapters.BindingAdapters
+import com.hsd.avh.standstrong.fragments.baseFragments.BaseFragment
+import com.hsd.avh.standstrong.utilities.Const
 import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
-class DataPostProximityFragment : Fragment() {
+class DataPostProximityFragment : BaseFragment() {
 
     //https://github.com/diogobernardino/WilliamChart
     private lateinit var vm: DataPostViewModel
+    private val TAG = javaClass.simpleName
 
-   /* private val mLabels = arrayOf("8AM", "9AM","10AM","11AM","12AM", "1PM","2PM","3PM","4PM", "5PM")
+    /* private val mLabels = arrayOf("8AM", "9AM","10AM","11AM","12AM", "1PM","2PM","3PM","4PM", "5PM")
 
-    private val mValues = arrayOf(floatArrayOf(1f, 0f, 0f, 1f, 1f, 1f, 1f, 0f, 0f, 0f),
-            floatArrayOf(0f, -1f, -1f, 0f, 0f, 0f, 0f, -1f, -1f, -1f))
-*/
+     private val mValues = arrayOf(floatArrayOf(1f, 0f, 0f, 1f, 1f, 1f, 1f, 0f, 0f, 0f),
+             floatArrayOf(0f, -1f, -1f, 0f, 0f, 0f, 0f, -1f, -1f, -1f))
+ */
 
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         //Post Id is
         val motherId = DataPostActivityFragmentArgs.fromBundle(arguments).motherId
         val postDate = DataPostActivityFragmentArgs.fromBundle(arguments).postDate
         val factory = InjectorUtils.providePostDataViewModelFactory(requireActivity(), motherId,postDate)
         vm = ViewModelProviders.of(this, factory)
-                .get(DataPostViewModel::class.java)
+            .get(DataPostViewModel::class.java)
 
         val dataPostViewModel = ViewModelProviders.of(this, factory)
-                .get(DataPostViewModel::class.java)
+            .get(DataPostViewModel::class.java)
 
 
         val binding = DataBindingUtil.inflate<FragmentDataProximityBinding>(
-                inflater, R.layout.fragment_data_proximity, container, false).apply {
+            inflater, R.layout.fragment_data_proximity, container, false).apply {
             vm = dataPostViewModel
+            dateString = BindingAdapters.provideNepaliString(Date(postDate))
             setLifecycleOwner(this@DataPostProximityFragment)
         }
 
@@ -90,7 +95,9 @@ class DataPostProximityFragment : Fragment() {
                 for (label in allLabels) {
                     var found = false;
                     for (d in data) {
-                        if(dFormat.format(d.chartDate) == label) {
+                        var hour = dFormat.format(d.chartDate);
+                        hour = hour.replace(".", "");
+                        if(hour.equals(label,true)) {
                             togetherPoints[index] = d.chartValue!!.toFloat()
                             if (togetherPoints[index] == 1f) {
                                 apartPoints[index] = 0f
@@ -118,20 +125,24 @@ class DataPostProximityFragment : Fragment() {
                 binding.root.chart.addData(dataset)
 
                 binding.root.chart.setAxisBorderValues((-1).toFloat(), 1F, 1F)
-                        .show(Animation().setInterpolator(DecelerateInterpolator())) //.withEndAction(action)
+                    .show()
+//                    .show(Animation().setInterpolator(DecelerateInterpolator())) //.withEndAction(action)
 
                 binding.root.chart.setXLabels(AxisRenderer.LabelPosition.OUTSIDE)
-                        .show(Animation().setInterpolator(DecelerateInterpolator()))
+                    .show()
+//                    .show(Animation().setInterpolator(DecelerateInterpolator()))
 
             }
         })
 
+
+        initPerson(motherId).observe(this, Observer {
+
+            binding.person = it
+        })
+
+
         return binding.root
     }
 
-    override fun onResume() {
-        super.onResume()
-        //StandStrong.firebaseInstance().setCurrentScreen(this!!.activity!!, activity?.javaClass?.simpleName, activity?.javaClass?.simpleName);
-        FirebaseTrackingUtil(activity!!).track(FirebaseTrackingUtil.Screens.ProximityData)
-    }
 }

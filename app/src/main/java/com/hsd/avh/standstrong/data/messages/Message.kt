@@ -1,6 +1,8 @@
 package com.hsd.avh.standstrong.data.messages
 
 import androidx.room.*
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 import com.hsd.avh.standstrong.data.people.Person
 import java.util.*
 
@@ -23,7 +25,7 @@ data class Message(
         @ColumnInfo(name = "mother_id") val motherId: Int,
         @ColumnInfo(name = "msg") val msg: String,
         @ColumnInfo(name = "direction") val direction: String,
-        @ColumnInfo(name = "thread") val msgThread: Int,
+        @ColumnInfo(name = "thread") val msgThread: Long,
         @ColumnInfo(name = "submitted_date") val msgDate: Date,
        // @ColumnInfo(name = "sent") val sent: Boolean,
         @PrimaryKey(autoGenerate = false) @ColumnInfo(name = "id") var id: String = UUID.randomUUID().toString()

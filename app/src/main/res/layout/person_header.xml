@@ -1,0 +1,75 @@
+<layout>
+
+    <data>
+
+        <variable name="person" type="com.hsd.avh.standstrong.data.people.Person" />
+        <variable name="dateString" type="String" />
+
+    </data>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:padding="@dimen/activity_horizontal_margin2"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:id="@+id/subDataLayout"
+        android:orientation="vertical" xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+            android:id="@+id/detail_image"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            app:imageFromUrl="@{person.imgUrl}"/>
+
+
+    <LinearLayout
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/detail_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:gravity="center"
+            android:orientation="vertical">
+
+        <TextView
+                android:id="@+id/content_sub"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="@{person.firstName, default = Sumitra}"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp" />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginTop="2dp"
+                android:id="@+id/content_desc"
+                android:text="@{person.ssId, default = SS0011}"
+                android:textColor="@color/fontColor"
+                android:textSize="16sp" />
+
+        <TextView
+                android:id="@+id/postDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="@{dateString, default = 2019_18_02_00_00}"
+                android:textSize="12sp" />
+
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

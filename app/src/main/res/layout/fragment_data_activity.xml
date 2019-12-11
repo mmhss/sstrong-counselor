@@ -5,23 +5,31 @@
 
     <data>
         <variable
-            name="vm"
-            type="com.hsd.avh.standstrong.viewmodels.DataPostViewModel" />
+            name="person"
+            type="com.hsd.avh.standstrong.data.people.Person" />
+
+        <variable name="dateString" type="String" />
     </data>
 
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
+
+        <include
+                android:id="@+id/subDataLayout"
+                layout="@layout/person_header"
+                app:dateString="@{dateString}"
+                app:person="@{person}"/>
 
         <com.neo.arcchartview.ArcChartView
+            app:layout_constraintTop_toBottomOf="@id/subDataLayout"
             android:id="@+id/arc_chart_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:paddingTop="16dp"
             app:acv_icon_size="64dp"
             app:acv_lines_count="10"
@@ -30,5 +38,5 @@
             app:acv_mid_start_extra_offset="12dp"
             app:acv_sections_count="7"
             app:acv_sections_space="2dp" />
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

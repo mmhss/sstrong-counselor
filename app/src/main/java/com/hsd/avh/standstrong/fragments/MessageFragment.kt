@@ -2,18 +2,24 @@ package com.hsd.avh.standstrong.fragments
 
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.hsd.avh.standstrong.adapters.MessageAdapter
+import com.hsd.avh.standstrong.fragments.baseFragments.BaseFragment
 import com.hsd.avh.standstrong.utilities.FirebaseTrackingUtil
 import com.hsd.avh.standstrong.utilities.InjectorUtils
 import com.hsd.avh.standstrong.viewmodels.MessageViewModel
+import kotlinx.android.synthetic.main.fragment_message.*
 
-class MessageFragment : Fragment() {
+class MessageFragment : BaseFragment() {
 
     private lateinit var viewModel: MessageViewModel
 
@@ -33,10 +39,10 @@ class MessageFragment : Fragment() {
 
         val adapter = MessageAdapter()
         binding.messageList.adapter = adapter
+        binding.messageList.addItemDecoration(DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL))
         binding.viewmodel = viewModel
 
         subscribeUi(adapter)
-
 
         setHasOptionsMenu(false)
         return binding.root
@@ -45,7 +51,14 @@ class MessageFragment : Fragment() {
 
     private fun subscribeUi(adapter: MessageAdapter) {
         viewModel.getMessages().observe(viewLifecycleOwner, Observer { msg->
-            if (msg != null) adapter.submitList(msg)
+            if (msg != null) {
+                adapter.submitList(msg.sortedBy { it.msgDate.time })
+
+                Handler().postDelayed({
+
+                    message_list.layoutManager?.scrollToPosition(msg.size - 1)
+                }, 200)
+            }
         })
 
         /*viewModel.txtMessage.observe(viewLifecycleOwner, Observer { msg->
@@ -53,11 +66,4 @@ class MessageFragment : Fragment() {
         })*/
 
     }
-
-    override fun onResume() {
-        super.onResume()
-        //StandStrong.firebaseInstance().setCurrentScreen(this!!.activity!!, activity?.javaClass?.simpleName, activity?.javaClass?.simpleName);
-        FirebaseTrackingUtil(activity!!).track(FirebaseTrackingUtil.Screens.Messages)
-    }
-
 }

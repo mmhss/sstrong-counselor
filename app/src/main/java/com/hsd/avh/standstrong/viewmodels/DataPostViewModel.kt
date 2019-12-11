@@ -10,15 +10,16 @@ import com.hsd.avh.standstrong.StandStrong
 import com.hsd.avh.standstrong.data.people.Person
 import com.hsd.avh.standstrong.data.people.PersonRepository
 import com.hsd.avh.standstrong.data.posts.*
+import org.jetbrains.anko.doAsync
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 
 class DataPostViewModel(
-        postRepository: PostRepository,
-        motherId: Int,
-        pDate: Long
+        val postRepository: PostRepository,
+        val motherId: Int,
+        val pDate: Long
 ) : ViewModel() {
 
     var postDate = pDate
@@ -26,6 +27,8 @@ class DataPostViewModel(
     private val activityData = MediatorLiveData<List<Activity>>()
     private val proximityData = MediatorLiveData<List<Proximity>>()
     private val gpsData = MediatorLiveData<List<Gps>>()
+    private val personLD = MutableLiveData<Person>()
+    private val proximityLD = MutableLiveData<List<Proximity>>()
 
     init {
 
@@ -45,7 +48,22 @@ class DataPostViewModel(
 
     fun getActivityData() = activityData
 
-    fun getProximityData() = proximityData
+    fun getProximityData() : LiveData<List<Proximity>> {
+
+        loadProximity()
+        return proximityLD
+    }
+
+    private fun loadProximity() {
+
+        doAsync {
+
+            val sDate: Long = setTime(pDate,0,0,0)
+            val eDate: Long  = setTime(pDate,23,59,59)
+
+            proximityLD.postValue(postRepository.getProximityByDateSync(motherId,sDate,eDate))
+        }
+    }
 
     fun getGPSData() = gpsData
 
@@ -58,5 +76,13 @@ class DataPostViewModel(
         cal.set(Calendar.SECOND, s)
         cal.set(Calendar.MILLISECOND, 0)
         return cal.timeInMillis
+    }
+
+    fun getPersonByMotherId() {
+
+        doAsync {
+
+
+        }
     }
 }

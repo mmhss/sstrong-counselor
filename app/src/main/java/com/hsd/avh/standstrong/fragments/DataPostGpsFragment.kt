@@ -31,12 +31,16 @@ import com.google.maps.android.heatmaps.Gradient
 import android.graphics.Color
 import android.text.method.LinkMovementMethod
 import com.google.android.gms.maps.model.TileOverlayOptions
+import com.hsd.avh.standstrong.adapters.BindingAdapters
 import com.hsd.avh.standstrong.data.posts.Gps
+import com.hsd.avh.standstrong.fragments.baseFragments.BaseFragment
+import com.hsd.avh.standstrong.utilities.Const
 import java.io.InputStream
+import java.text.SimpleDateFormat
 import java.util.*
 
 
-class DataPostGpsFragment : Fragment(), OnMapReadyCallback {
+class DataPostGpsFragment : BaseFragment(), OnMapReadyCallback {
 
     /**
      * Alternative radius for convolution
@@ -78,7 +82,7 @@ class DataPostGpsFragment : Fragment(), OnMapReadyCallback {
         //mMap!!.moveCamera(CameraUpdateFactory.newLatLng(sydney))
 
         vm.getGPSData().observe(viewLifecycleOwner, Observer { data->
-            if (data != null) {
+            if (data != null && data.isNotEmpty()) {
                 val point = LatLng(data[0].latitude!!, data[0].longitude!!)
                 mMap!!.moveCamera( CameraUpdateFactory.newLatLngZoom(point , 14.0f) );
 
@@ -125,6 +129,7 @@ class DataPostGpsFragment : Fragment(), OnMapReadyCallback {
         val binding = DataBindingUtil.inflate<FragmentDataGpsBinding>(
                 inflater, R.layout.fragment_data_gps, container, false).apply {
             vm = dataPostViewModel
+            dateString = BindingAdapters.provideNepaliString(Date(postDate))
             setLifecycleOwner(this@DataPostGpsFragment)
         }
 
@@ -140,7 +145,10 @@ class DataPostGpsFragment : Fragment(), OnMapReadyCallback {
         mMapView?.onCreate(savedInstanceState);
         mMapView?.getMapAsync(this)
 
+        initPerson(motherId).observe(this, Observer {
 
+            binding.person = it
+        })
 
         return binding.root
     }
@@ -155,8 +163,6 @@ class DataPostGpsFragment : Fragment(), OnMapReadyCallback {
 
     override fun onResume() {
         super.onResume()
-        //StandStrong.firebaseInstance().setCurrentScreen(this!!.activity!!, activity?.javaClass?.simpleName, activity?.javaClass?.simpleName);
-        FirebaseTrackingUtil(activity!!).track(FirebaseTrackingUtil.Screens.GpsData)
         mMapView?.onResume()
     }
 

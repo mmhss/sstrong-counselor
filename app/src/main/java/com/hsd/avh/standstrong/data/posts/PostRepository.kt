@@ -1,6 +1,9 @@
 package com.hsd.avh.standstrong.data.posts
 
 import android.net.ProxyInfo
+import androidx.collection.ArrayMap
+import androidx.paging.DataSource
+import androidx.sqlite.db.SimpleSQLiteQuery
 import com.crashlytics.android.Crashlytics
 import com.hsd.avh.standstrong.data.people.ApiPerson
 import com.hsd.avh.standstrong.data.people.Person
@@ -28,6 +31,18 @@ class PostRepository private constructor(
 
     fun getRAPosts() = postDao.getRAPosts()
 
+    fun getAllPaged(): DataSource.Factory<Int, Post> {
+        return postDao.getAllPaged()
+    }
+
+    fun getFilteredPagedPosts(sql:SimpleSQLiteQuery) = postDao.getFilteredPostsPaged(sql)
+
+    fun getRAPostsPaged() = postDao.getRAPostsPaged()
+
+    //fun getFilteredPosts(filter: List<Int>) =  postDao.getFilteredPosts(filter)
+
+    fun getFilteredPosts(sql:SimpleSQLiteQuery) =  postDao.getFilteredPosts(sql)
+
     fun getPost(postId: Int) = postDao.getPost(postId)
 
     //fun getRAPost(postId: Int) = postDao.getRAPost(postId)
@@ -45,6 +60,12 @@ class PostRepository private constructor(
     fun refreshPostList() {
        SSUtils.checkForNewPosts()
     }
+
+    fun refreshMessagesList() {
+        SSUtils.checkForNewMessages()
+    }
+
+    fun getProximityByDateSync(motherId: Int, sDate: Long, eDate: Long) = proximityDao.getProximityByDateSync(motherId,sDate,eDate)
 
     companion object {
 

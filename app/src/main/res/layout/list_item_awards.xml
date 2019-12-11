@@ -6,6 +6,7 @@
         <variable
             name="clickListenerAward"
             type="android.view.View.OnClickListener"/>
+
         <variable
             name="awardFragment"
             type="com.hsd.avh.standstrong.data.awards.Award"/>
@@ -46,6 +47,16 @@
 -->
 
                     <TextView
+                            android:id="@+id/award_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_bold"
+                            android:gravity="start"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="4dp"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption" />
+
+                    <TextView
                         android:id="@+id/award_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -68,10 +79,10 @@
                     <ImageView
                         android:id="@+id/pin_image"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/award_pic_height"
                         android:adjustViewBounds="true"
                         android:background="@color/lightgrey"
-                        android:scaleType="fitCenter"
+                        android:scaleType="centerCrop"
                         app:srcFromDrawable="@{awardFragment.fileName}" />
                 </LinearLayout>
 

@@ -36,4 +36,7 @@ interface AwardDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(awards: List<Award>)
+
+    @Query("SELECT * FROM awards")
+    fun getAwardsList(): List<Award>
 }
